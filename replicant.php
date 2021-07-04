@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Replicant
- * Plugin URI:        https://github.com/evokelektrique/proxima
+ * Plugin URI:        https://github.com/evokelektrique/replicant
  * Description:       This plugin replicates posts and content in your wordpress websites
  * Version:           0.1.0
  * Requires at least: 5.2
@@ -31,16 +31,17 @@ class Replicant {
     */
    private static $instance;
 
+
    private function __construct() {
       $files = [
-         "hooks/*.php",
+         "includes/*.php",
          "includes/admin/*.php"
       ];
 
       $this->load_files($files);
-      
 
-      // new Replicant\Admin\Panel();
+      new Replicant\Config();
+      new Replicant\Admin\Panel();
    }
 
    /**
@@ -75,4 +76,4 @@ class Replicant {
 
 }
 
-$GLOBALS["proxima"] = Replicant::get_instance();
+$GLOBALS["replicant"] = Replicant::get_instance();
