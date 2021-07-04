@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       Proxima
+ * Plugin Name:       Replicant
  * Plugin URI:        https://github.com/evokelektrique/proxima
- * Description:       Proxima unifies posts and content in your websites
+ * Description:       This plugin replicates posts and content in your wordpress websites
  * Version:           0.1.0
  * Requires at least: 5.2
  * Requires PHP:      5.6
@@ -10,14 +10,14 @@
  * Author URI:        https://github.com/evokelektrique/
  * License:           AGPL3
  * License URI:       https://www.gnu.org/licenses/agpl-3.0.txt
- * Text Domain:       proxima
+ * Text Domain:       replicant
  * Domain Path:       /languages
  */
 
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit; 
 
-class Proxima {
+class Replicant {
 
    /**
     * @access public
@@ -33,10 +33,14 @@ class Proxima {
 
    private function __construct() {
       $files = [
-         "hooks/*.php"
+         "hooks/*.php",
+         "includes/admin/*.php"
       ];
 
       $this->load_files($files);
+      
+
+      // new Replicant\Admin\Panel();
    }
 
    /**
@@ -50,7 +54,7 @@ class Proxima {
       if(!isset(self::$instance)) {
 
          // Create and set object to instance
-         self::$instance = new Proxima();
+         self::$instance = new Replicant();
       }
 
       return self::$instance;
@@ -71,5 +75,4 @@ class Proxima {
 
 }
 
-$proxima = Proxima::get_instance();
-$GLOBALS["proxima"] = $proxima;
+$GLOBALS["proxima"] = Replicant::get_instance();
