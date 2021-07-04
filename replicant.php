@@ -31,17 +31,40 @@ class Replicant {
     */
    private static $instance;
 
-
+   /**
+    * Load Files And Initialize Classes
+    */
    private function __construct() {
       $files = [
          "includes/*.php",
-         "includes/admin/*.php"
+         "includes/admin/*.php",
+         "includes/database/*.php"
       ];
-
       $this->load_files($files);
+      $this->init_db(self::$version);      
 
       new Replicant\Config();
       new Replicant\Admin\Panel();
+   }
+
+   /**
+    * Initializes Database Tables
+    *
+    * @param string $version Current Plugin Version
+    */
+   private function init_db($version) {
+      // Require wordpress database files
+      global $wpdb;
+      require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+      // Initialize Schema Class
+      $schema = new Replicant\Database\Schema($wpdb);
+
+      // Get Table Schemas 
+      // And Create Them
+      $settings_table = $schema::settings();
+      var_dump($settings_table);
+      // dbDelta( $sql );
    }
 
    /**
