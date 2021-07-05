@@ -13,7 +13,7 @@ class Panel {
          __("Replicant", "replicant"), 
          "manage_options", 
          "replicant-settings", 
-         [$this, "menu_page"], 
+         [$this, "handle_page_menu"], 
          "dashicon-tagcloud", 
          6
       );
@@ -29,7 +29,7 @@ class Panel {
       }
    }
 
-   public static function menu_page() {
+   public static function handle_page_menu() {
       $file_path = \Replicant\Config::$ROOT_DIR . "admin/layout/panel.php";
 
       if(is_file($file_path)) {

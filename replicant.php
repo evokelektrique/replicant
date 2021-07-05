@@ -64,6 +64,7 @@ class Replicant {
       // And Create Them
       $settings_table = $schema::settings();
       var_dump($settings_table);
+      var_dump(get_option("replicant_db_version"));
       // dbDelta( $sql );
    }
 
@@ -73,11 +74,7 @@ class Replicant {
     * @return class
     */
    public static function get_instance() {
-
-      // Check if $instance has been set
       if(!isset(self::$instance)) {
-
-         // Create and set object to instance
          self::$instance = new Replicant();
       }
 
