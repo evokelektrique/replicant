@@ -9,8 +9,8 @@
  * Requires PHP:      5.6
  * Author:            EVOKE
  * Author URI:        https://github.com/evokelektrique/
- * License:           AGPL3
- * License URI:       https://www.gnu.org/licenses/agpl-3.0.txt
+ * License:           GPL 3
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain:       replicant
  * Domain Path:       /languages
  */
@@ -27,16 +27,16 @@ class Replicant {
    private static $instance;
 
    /**
-    * @access public
-    * @static string $version Current version of plugin
-    */
-   public static $version = "0.1";
-
-   /**
     * @access private
     * @static float $db_version Current database migration version
     */
    private static $db_version = 0.1;
+
+   /**
+    * @access public
+    * @static string $version Current version of plugin
+    */
+   public static $version = "0.1";
 
    /**
     * Load Files And Initialize Classes
