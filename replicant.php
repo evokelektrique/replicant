@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name:       Replicant
  * Plugin URI:        https://github.com/evokelektrique/replicant
@@ -49,14 +50,18 @@ class Replicant {
       ];
       $this->load_files($files);
 
+      // Initialize Classes In Order
+      new Replicant\Config();
+
       // Initialize Database
       $option_db_version = get_option("replicant_db_version");
       if($option_db_version === false || $option_db_version < self::$db_version) {
          $this->init_db();
       }
 
-      // Initialize Classes In Order
-      new Replicant\Config();
+      // $default = new Replicant\Database\Defaults();
+      // $default::key();
+
       new Replicant\Admin\Panel();
    }
 
@@ -65,19 +70,20 @@ class Replicant {
     */
    private function init_db() {
       // Require wordpress database files
-      global $wpdb;
       require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
       update_option( "replicant_db_version", self::$db_version );
 
-      // Initialize Schema Class
-      $schema = new Replicant\Database\Schema($wpdb);
+      // Initialize Schema Generator Class
+      $schema_generator = new Replicant\Database\Schema();
 
-      // Get Table Schemas 
-      // And Create Them
-      $settings_table_name = "replicant_settings";
-      $settings_table = $schema::settings($settings_table_name);
+      // Get Table Schemas And Insert Them Into an Array
+      $schemas = [];
+      $schemas[] = $schema_generator::settings($settings_table_name);
 
-      dbDelta( $settings_table );
+      // Iterate over schemas and create them
+      foreach($schemas as &$schema) {
+         dbDelta( $schema );
+      }
    }
 
    /**

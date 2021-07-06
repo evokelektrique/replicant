@@ -1,7 +1,9 @@
 <?php
+
 namespace Replicant\Admin;
 
 class Panel {
+   
    public function __construct() {
       add_action( 'admin_enqueue_scripts', [&$this, 'admin_assets']);
       add_action( 'admin_menu', [&$this, "add_menu"] );
