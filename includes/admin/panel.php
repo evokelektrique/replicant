@@ -23,7 +23,7 @@ class Panel {
       if ( isset( $_GET["page"] ) && ! empty( $_GET["page"] ) && "replicant-settings" === $_GET["page"] ) {
          wp_register_script( 
             'replicant_js', 
-            \Replicant\Config::$ROOT_URL . "../assets/scripts.js"
+            \Replicant\Config::$ROOT_URL . "../dist/scripts.js"
          );
          wp_enqueue_script( 'replicant_js' );
       }

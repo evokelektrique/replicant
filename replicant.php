@@ -3,7 +3,7 @@
  * Plugin Name:       Replicant
  * Plugin URI:        https://github.com/evokelektrique/replicant
  * Description:       This plugin replicates posts and content in your wordpress websites
- * Version:           0.1.0
+ * Version:           0.1
  * Requires at least: 5.2
  * Requires PHP:      5.6
  * Author:            EVOKE
@@ -20,52 +20,64 @@ if(!defined( 'ABSPATH' )) exit;
 class Replicant {
 
    /**
-    * @access public
-    * @static string $version Current version of plugin
-    */
-   public static $version = "0.1.0";
-
-   /**
     * @access private
     * @static class $isntance Singleton class instance
     */
    private static $instance;
 
    /**
+    * @access public
+    * @static string $version Current version of plugin
+    */
+   public static $version = "0.1";
+
+   /**
+    * @access private
+    * @static float $db_version Current database migration version
+    */
+   private static $db_version = 0.1;
+
+   /**
     * Load Files And Initialize Classes
     */
    private function __construct() {
+      // Load necessary files 
       $files = [
          "includes/*.php",
          "includes/admin/*.php",
          "includes/database/*.php"
       ];
       $this->load_files($files);
-      $this->init_db(self::$version);      
 
+      // Initialize Database
+      $option_db_version = get_option("replicant_db_version");
+      if($option_db_version === false || $option_db_version < self::$db_version) {
+         $this->init_db();
+      }
+
+      // Initialize Classes In Order
       new Replicant\Config();
       new Replicant\Admin\Panel();
    }
 
    /**
     * Initializes Database Tables
-    *
-    * @param string $version Current Plugin Version
     */
-   private function init_db($version) {
+   private function init_db() {
       // Require wordpress database files
       global $wpdb;
       require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+      update_option( "replicant_db_version", self::$db_version );
 
       // Initialize Schema Class
       $schema = new Replicant\Database\Schema($wpdb);
 
       // Get Table Schemas 
       // And Create Them
-      $settings_table = $schema::settings();
-      var_dump($settings_table);
-      var_dump(get_option("replicant_db_version"));
-      // dbDelta( $sql );
+      $settings_table_name = "replicant_settings";
+      $settings_table = $schema::settings($settings_table_name);
+
+      dbDelta( $settings_table );
    }
 
    /**
@@ -93,7 +105,6 @@ class Replicant {
          }
       }
    }
-
 }
 
 $GLOBALS["replicant"] = Replicant::get_instance();
