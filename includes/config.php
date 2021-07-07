@@ -14,7 +14,6 @@ class Config {
       self::$ROOT_URL = plugins_url( "/", __FILE__ );
 
       $this->set_tables();
-      var_dump(\Replicant::$version);
    }
 
    private function set_tables() {

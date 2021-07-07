@@ -24,10 +24,15 @@ class Panel {
    public static function admin_assets() {
       if ( isset( $_GET["page"] ) && ! empty( $_GET["page"] ) && "replicant-settings" === $_GET["page"] ) {
          wp_register_script( 
-            'replicant_js', 
+            "replicant_js", 
             \Replicant\Config::$ROOT_URL . "../dist/scripts.js"
          );
-         wp_enqueue_script( 'replicant_js' );
+         wp_register_style( 
+            "replicant_css", 
+            \Replicant\Config::$ROOT_URL . "../dist/styles.css" 
+         );
+         wp_enqueue_style( "replicant_css" );
+         wp_enqueue_script( "replicant_js" );
       }
    }
 

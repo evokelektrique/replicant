@@ -18,6 +18,8 @@
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit; 
 
+require_once __DIR__ . "/vendor/autoload.php";
+
 class Replicant {
 
    /**
@@ -39,6 +41,12 @@ class Replicant {
    public static $version = "0.1";
 
    /**
+    * @access public
+    * @static class $default Database Default Values Class Instance
+    */
+   public static $default;
+
+   /**
     * Load Files And Initialize Classes
     */
    private function __construct() {
@@ -46,7 +54,8 @@ class Replicant {
       $files = [
          "includes/*.php",
          "includes/admin/*.php",
-         "includes/database/*.php"
+         "includes/database/*.php",
+         "includes/hooks/*.php"
       ];
       $this->load_files($files);
 
@@ -59,9 +68,11 @@ class Replicant {
          $this->init_db();
       }
 
-      // $default = new Replicant\Database\Defaults();
-      // $default::key();
+      // Insert Default Values Into Database
+      self::$default = new Replicant\Database\Defaults();
+      self::$default::authorization();
 
+      // Initialize Menu on Dashboard and Pages
       new Replicant\Admin\Panel();
    }
 
@@ -87,7 +98,7 @@ class Replicant {
    }
 
    /**
-    * Retrieve class instance
+    * Retrieve singleton class instance
     *
     * @return class
     */
@@ -106,7 +117,7 @@ class Replicant {
     */
    private function load_files(array $files) {
       foreach($files as &$file) {
-         foreach(glob(plugin_dir_path( __FILE__ ).$file) as $filename) {
+         foreach(glob(plugin_dir_path(__FILE__) . $file) as $filename) {
             require_once($filename);
          }
       }

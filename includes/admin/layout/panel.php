@@ -1,16 +1,46 @@
+<?php global $replicant; ?>
+
 <div class="wrap">
    <h3>Settings</h3>
    <hr>
+   
+   <span replicant-tab="one"class="replicant-nav-tab active">
+      one
+   </span>
 
-<?php
+   <span replicant-tab="two"class="replicant-nav-tab">
+      two
+   </span>
 
-$default = new Replicant\Database\Defaults();
-var_dump($default::authorization());
+   <span replicant-tab="three"class="replicant-nav-tab">
+      three
+   </span>
 
-?>
+
+   <div id="one" class="replicant-tab active">
+     tab one content
+   </div>
+
+   <div id="two" class="replicant-tab">
+     tab two content
+   </div>
+
+   <div id="three" class="replicant-tab">
+     tab three content
+   </div>
+
+
 
    <form id="panel_settings">
-      <input type="text" name="replicant_key" id="replicant_key" placeholder="<?= __( "Authorization Key", "replicant" );?>" />
+      <label>Authorization Key:</label>
+
+      <input type="text" 
+         name="replicant_key" 
+         id="replicant_key"
+         value="<?= $replicant::$default::authorization()->value ?>"
+         placeholder="<?= __( "Authorization Key", "replicant" );?>" 
+      />
+
       <br>
       <br>
       <button class="button-primary"><?= __("Submit", "replicant") ?></button>

@@ -33,13 +33,13 @@ class Defaults {
       $table_name = \Replicant\Config::$TABLES["settings"];
       $option = "authorization";
       
-      $find_query = self::$wpdb->get_var(self::$wpdb->prepare(
+      $find_query = self::$wpdb->get_row(self::$wpdb->prepare(
          "SELECT * FROM $table_name WHERE `option` = %s",
          $option
       ));
       
       // If already exists, Don't continue
-      if($find_query && $find_query >= 0) {
+      if(!empty($find_query)) {
          return $find_query;
       }
 
