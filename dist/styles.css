@@ -16,3 +16,18 @@
 .replicant-nav-tab.active {
   color: #ff4200;
 }
+
+#panel_settings {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+#panel_settings .right_side {
+  flex: 1;
+  text-align: center;
+  margin-left: 5px;
+}
+#panel_settings .left_side {
+  margin-right: 5px;
+  width: 80%;
+}

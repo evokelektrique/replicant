@@ -16,7 +16,7 @@ class Panel {
          "manage_options", 
          "replicant-settings", 
          [$this, "handle_page_menu"], 
-         "dashicon-tagcloud", 
+         \Replicant\Config::$ROOT_URL . "../dist/images/icon_16x16.png", 
          6
       );
    }

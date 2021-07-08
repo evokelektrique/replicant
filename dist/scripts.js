@@ -5,7 +5,7 @@
 /*!******************************!*\
   !*** ./resources/scripts.js ***!
   \******************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -19,7 +19,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-// const PLUGIN_ICON = require("icon_16x16.png")
+var PLUGIN_ICON = __webpack_require__(/*! ./icon_16x16.png */ "./resources/icon_16x16.png");
+
 var Tabs = {
   bind: function bind() {
     _toConsumableArray(document.querySelectorAll('[replicant-tab]')).forEach(function (element) {
@@ -47,6 +48,21 @@ window.onload = function () {
   //    console.log(...new FormData(form.target));
   // })
 };
+
+/***/ }),
+
+/***/ "./resources/icon_16x16.png":
+/*!**********************************!*\
+  !*** ./resources/icon_16x16.png ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/icon_16x16.png?7b6c549196ff0a67bacd66cdac2955f0");
 
 /***/ }),
 
@@ -121,6 +137,18 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 				}
 /******/ 			}
 /******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
 /******/ 		};
 /******/ 	})();
 /******/ 	

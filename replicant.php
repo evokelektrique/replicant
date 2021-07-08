@@ -29,16 +29,16 @@ class Replicant {
    private static $instance;
 
    /**
-    * @access private
-    * @static float $db_version Current database migration version
-    */
-   private static $db_version = 0.1;
-
-   /**
     * @access public
     * @static string $version Current version of plugin
     */
-   public static $version = "0.1";
+   public static $version = 0.1;
+
+   /**
+    * @access private
+    * @static float $db_version Current database migration version
+    */
+   private static $db_version = 0.2;
 
    /**
     * @access public
@@ -54,8 +54,7 @@ class Replicant {
       $files = [
          "includes/*.php",
          "includes/admin/*.php",
-         "includes/database/*.php",
-         "includes/hooks/*.php"
+         "includes/database/*.php"
       ];
       $this->load_files($files);
 
@@ -74,6 +73,10 @@ class Replicant {
 
       // Initialize Menu on Dashboard and Pages
       new Replicant\Admin\Panel();
+
+
+      $node = new Replicant\Node();
+      // var_dump($node->get_by("name", "test"));
    }
 
    /**
@@ -89,10 +92,12 @@ class Replicant {
 
       // Get Table Schemas And Insert Them Into an Array
       $schemas = [];
-      $schemas[] = $schema_generator::settings($settings_table_name);
+      $schemas[] = $schema_generator::settings();
+      $schemas[] = $schema_generator::nodes();
 
       // Iterate over schemas and create them
       foreach($schemas as &$schema) {
+         // var_dump($schema);
          dbDelta( $schema );
       }
    }

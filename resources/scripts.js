@@ -1,4 +1,4 @@
-// const PLUGIN_ICON = require("icon_16x16.png")
+const PLUGIN_ICON = require("./icon_16x16.png")
 
 let Tabs = {
    bind() {
