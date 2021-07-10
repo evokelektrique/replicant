@@ -25,6 +25,10 @@ class Node {
     */
    public $name;
 
+   /**
+    * WordPress database instance
+    * @var class
+    */
    private $wpdb;
 
    public function __construct() {
@@ -32,6 +36,12 @@ class Node {
       $this->wpdb = $wpdb;
    }
 
+   /**
+    * Search for by custom Key and Value in "nodes" table
+    * @param  string|null $key   WHERE key in sql query
+    * @param  string|null $value WHERE value in sql query
+    * @return array              Single row returned by $wpdb
+    */
    public function get_by(string $key = null, $value = null) {
       if(!$value) {
          return;
