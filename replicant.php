@@ -54,7 +54,8 @@ class Replicant {
       $files = [
          "includes/*.php",
          "includes/admin/*.php",
-         "includes/database/*.php"
+         "includes/database/*.php",
+         "includes/tables/nodes/*.php"
       ];
       $this->load_files($files);
 

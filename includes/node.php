@@ -31,8 +31,13 @@ class Node {
     */
    private $wpdb;
 
-   public function __construct() {
+   public function __construct(Node $node = null) {
       global $wpdb;
+      
+      if($node) {
+         var_dump($node);
+      }
+
       $this->wpdb = $wpdb;
    }
 
