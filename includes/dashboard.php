@@ -1,14 +1,17 @@
 <?php
 
-namespace Replicant\Admin;
+namespace Replicant;
 
-class Panel {
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit; 
+
+class Dashboard {
    
    /**
-    * Attach panel menus to hooks
+    * Attach dashboard functions to hooks
     */
    public function __construct() {
-      add_action( 'admin_enqueue_scripts', [&$this, 'admin_assets']);
+      add_action( 'admin_enqueue_scripts', [&$this, 'admin_assets'] );
       add_action( 'admin_menu', [&$this, "add_menus"] );
    }
 
@@ -26,8 +29,8 @@ class Panel {
       }
 
       // Initialize Classes
-      new \Replicant\Admin\Menus\MainMenu();
-      new \Replicant\Admin\Menus\NodesMenu();
+      new \Replicant\Menus\MainMenu();
+      new \Replicant\Menus\NodesMenu();
    }
 
    /**

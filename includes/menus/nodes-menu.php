@@ -1,6 +1,9 @@
 <?php
 
-namespace Replicant\Admin\Menus;
+namespace Replicant\Menus;
+
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit; 
 
 class NodesMenu {
 
@@ -22,19 +25,19 @@ class NodesMenu {
       switch ($action) {
           case 'view':
 
-              $template = \Replicant\Config::$ROOT_DIR . "admin/layout/nodes/single.php";
+              $template = \Replicant\Config::$ROOT_DIR . "views/nodes/single.php";
               break;
 
           case 'edit':
-              $template = \Replicant\Config::$ROOT_DIR . "admin/layout/nodes/edit.php";
+              $template = \Replicant\Config::$ROOT_DIR . "views/nodes/edit.php";
               break;
 
           case 'new':
-              $template = \Replicant\Config::$ROOT_DIR . "admin/layout/nodes/new.php";
+              $template = \Replicant\Config::$ROOT_DIR . "views/nodes/new.php";
               break;
 
           default:
-              $template = \Replicant\Config::$ROOT_DIR . "admin/layout/nodes/list.php";
+              $template = \Replicant\Config::$ROOT_DIR . "views/nodes/list.php";
               break;
       }
 

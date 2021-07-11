@@ -2,6 +2,9 @@
 
 namespace Replicant;
 
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit; 
+
 /**
  * This file is the main basis for building a server
  */
@@ -9,24 +12,28 @@ class Node {
 
    /**
     * Server hostname
+    * 
     * @var string
     */
    public $host;
 
    /**
     * Server port
+    * 
     * @var integer
     */
    public $port;
 
    /**
     * Server nickname
+    * 
     * @var string
     */
    public $name;
 
    /**
     * WordPress database instance
+    * 
     * @var class
     */
    private $wpdb;
@@ -43,6 +50,7 @@ class Node {
 
    /**
     * Search for by custom Key and Value in "nodes" table
+    * 
     * @param  string|null $key   WHERE key in sql query
     * @param  string|null $value WHERE value in sql query
     * @return array              Single row returned by $wpdb

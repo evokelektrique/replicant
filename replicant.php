@@ -55,7 +55,8 @@ class Replicant {
          "includes/*.php",
          "includes/admin/*.php",
          "includes/database/*.php",
-         "includes/tables/nodes/*.php"
+         "includes/tables/nodes/*.php",
+         "includes/forms/nodes/*.php"
       ];
       $this->load_files($files);
 
@@ -72,11 +73,16 @@ class Replicant {
       self::$default = new Replicant\Database\Defaults();
       self::$default::authorization();
 
-      // Initialize Menu on Dashboard and Pages
-      new Replicant\Admin\Panel();
+      // Display menus on dashboard and other pages
+      new Replicant\Dashboard();
+
+      // Initialize Forms
+      new Replicant\Forms\Nodes\Handler();
 
 
-      $node = new Replicant\Node();
+
+
+      // $node = new Replicant\Node();
       // var_dump($node->get_by("name", "test"));
    }
 

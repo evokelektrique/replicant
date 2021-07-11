@@ -2,19 +2,22 @@
 
 namespace Replicant\Database;
 
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit; 
+
 /**
- * Generate Specific SQL Queries
+ * Generates pre defined specific SQL Queries
  */
 class Schema {
 
    /**
-    * @access private
-    * @static class $wpdb Wordpress Database Object Instance
+    * Wordpress Database Object Instance
+    * @var class
     */
    private static $wpdb;
 
    /**
-    * Set $wpdb class variable
+    * Sets $wpdb class variable
     */
    public function __construct() {
       global $wpdb;
@@ -22,10 +25,8 @@ class Schema {
    }
 
    /**
-    * @access public
-    * @static
-    * @param $table_name="settings" string Settings Table Name
-    * @return $sql string
+    * Generates schema of "replicant_settings" table
+    * @return string Create table SQL query
     */
    public static function settings() {
       $table_name = \Replicant\Config::$TABLES["settings"];
@@ -42,8 +43,9 @@ class Schema {
    }
 
    /**
-    * Generates nodes table
-    * @return string Sql query
+    * Generates schema of "replicant_nodes" table
+    * 
+    * @return string Create table SQL query
     */
    public static function nodes() {
       $table_name = \Replicant\Config::$TABLES["nodes"];

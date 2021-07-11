@@ -1,6 +1,9 @@
 <?php
 
-namespace Replicant\Admin\Menus;
+namespace Replicant\Menus;
+
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit; 
 
 class MainMenu {
 
@@ -17,7 +20,7 @@ class MainMenu {
    }  
    
    public static function handle() {
-      $file_path = \Replicant\Config::$ROOT_DIR . "admin/layout/panel.php";
+      $file_path = \Replicant\Config::$ROOT_DIR . "views/dashboard.php";
 
       if(is_file($file_path)) {
          require_once $file_path;

@@ -2,6 +2,9 @@
 
 namespace Replicant;
 
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit; 
+
 class Config {
    
    private static $TABLES_PREFIX = "replicant_";
