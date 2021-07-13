@@ -23,22 +23,27 @@ class NodesMenu {
       $id     = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : 0;
 
       switch ($action) {
-          case 'view':
+         case "view":
+            $template = \Replicant\Config::$ROOT_DIR . "views/nodes/single.php";
+            break;
 
-              $template = \Replicant\Config::$ROOT_DIR . "views/nodes/single.php";
-              break;
+         case "edit":
+            $template = \Replicant\Config::$ROOT_DIR . "views/nodes/edit.php";
+            break;
 
-          case 'edit':
-              $template = \Replicant\Config::$ROOT_DIR . "views/nodes/edit.php";
-              break;
+         case "new":
+            $template = \Replicant\Config::$ROOT_DIR . "views/nodes/new.php";
+            break;
 
-          case 'new':
-              $template = \Replicant\Config::$ROOT_DIR . "views/nodes/new.php";
-              break;
+         // case "delete":
+         //    $location = $_SERVER["HTTP_REFERER"];
+         //    wp_redirect( $location );
+         //    break;
+            // wp_safe_redirect($location);
 
-          default:
-              $template = \Replicant\Config::$ROOT_DIR . "views/nodes/list.php";
-              break;
+         default:
+            $template = \Replicant\Config::$ROOT_DIR . "views/nodes/list.php";
+            break;
       }
 
       if ( file_exists( $template ) ) {

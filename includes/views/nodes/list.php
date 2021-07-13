@@ -14,9 +14,9 @@
         <input type="hidden" name="page" value="ttest_list_table">
 
         <?php
-           $list_table = new \Replicant\Tables\Nodes\TableList();
+           $list_table = new \Replicant\Tables\Nodes\ListTable();
            $list_table->prepare_items();
-           $list_table->search_box( 'search', 'search_id' );
+           $list_table->search_box(__('Search'), 'search_id');
            $list_table->display();
         ?>
     </form>

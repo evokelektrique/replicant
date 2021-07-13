@@ -14,7 +14,7 @@ class Functions {
     *
     * @return array
     */
-   public static function get_all( $args = array() ) {
+   public static function get_all( $search = null, $args = array() ) {
       global $wpdb;
 
       $defaults = array(
@@ -30,9 +30,16 @@ class Functions {
       $table_name = \Replicant\Config::$TABLES["nodes"];
 
       if ( false === $items ) {
-         $items = $wpdb->get_results( 
-            "SELECT * FROM $table_name ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']} , {$args['number']}" 
-         );
+         if($search && !empty($search)) {
+            $items = $wpdb->get_results(
+               "SELECT * FROM $table_name WHERE name LIKE '%{$search}%' ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']} , {$args['number']}" 
+            );
+
+         } else {
+            $items = $wpdb->get_results(
+               "SELECT * FROM $table_name ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']} , {$args['number']}" 
+            );
+         }
 
          wp_cache_set( $cache_key, $items, 'replicant' );
       }

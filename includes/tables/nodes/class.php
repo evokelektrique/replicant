@@ -5,84 +5,84 @@ namespace Replicant\Tables\Nodes;
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit; 
 
-if ( ! class_exists ( 'WP_List_Table' ) ) {
+if(!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
 /**
  * List table class
  */
-class TableList extends \WP_List_Table {
+class ListTable extends \WP_List_Table {
 
-    function __construct() {
-        parent::__construct( array(
-            'singular' => 'node',
-            'plural'   => 'nodes',
-            'ajax'     => false
-        ) );
-    }
+   function __construct() {
+      parent::__construct( array(
+         'singular' => 'node',
+         'plural'   => 'nodes',
+         'ajax'     => false
+      ) );
+   }
 
-    function get_table_classes() {
-        return array( 'widefat', 'fixed', 'striped', $this->_args['plural'] );
-    }
+   function get_table_classes() {
+      return array( 'widefat', 'fixed', 'striped', $this->_args['plural'] );
+   }
 
-    /**
-     * Message to show if no designation found
-     *
-     * @return void
-     */
-    function no_items() {
-        _e( 'No node found', 'replicant' );
-    }
+   /**
+    * Message to show if no designation found
+    *
+    * @return void
+    */
+   function no_items() {
+      _e( 'No node found', 'replicant' );
+   }
 
-    /**
-     * Default column values if no callback found
-     *
-     * @param  object  $item
-     * @param  string  $column_name
-     *
-     * @return string
-     */
+   /**
+    * Default column values if no callback found
+    *
+    * @param  object  $item
+    * @param  string  $column_name
+    *
+    * @return string
+    */
     function column_default( $item, $column_name ) {
 
-        switch ( $column_name ) {
-            case 'name':
-                return $item->name;
+      switch ( $column_name ) {
+         case 'name':
+            return $item->name;
 
-            case 'host':
-                return $item->host;
+         case 'host':
+            return $item->host;
 
-            default:
-                return isset( $item->$column_name ) ? $item->$column_name : '';
-        }
-    }
+         default:
+            return isset( $item->$column_name ) ? $item->$column_name : '';
+      }
+   }
 
-    /**
-     * Get the column names
-     *
-     * @return array
-     */
+   /**
+    * Get the column names
+    *
+    * @return array
+    */
     function get_columns() {
-        $columns = array(
-            'cb'           => '<input type="checkbox" />',
-            'name'      => __( 'Name', 'replicant' ),
-            'host'      => __( 'Host Name', 'replicant' ),
+      $columns = array(
+         'cb'           => '<input type="checkbox" />',
+         'name'      => __( 'Name', 'replicant' ),
+         'host'      => __( 'Host Name', 'replicant' ),
 
-        );
+      );
 
-        return $columns;
-    }
+      return $columns;
+   }
 
-    /**
-     * Render the designation name column
-     *
-     * @param  object  $item
-     *
-     * @return string
-     */
-    function column_name( $item ) {
+   /**
+    * Render the designation name column
+    *
+    * @param  object  $item
+    *
+    * @return string
+    */
+   function column_name( $item ) {
       $actions           = array();
-      
+
       $actions['edit']   = sprintf( 
          '<a href="%s" data-id="%d" title="%s">%s</a>', 
          admin_url( 'admin.php?page=replicant-nodes&action=edit&id=' . $item->id ), 
@@ -101,79 +101,97 @@ class TableList extends \WP_List_Table {
          $item->name, 
          $this->row_actions( $actions ) 
       );
-    }
+   }
 
-    /**
-     * Get sortable columns
-     *
-     * @return array
-     */
-    function get_sortable_columns() {
-        $sortable_columns = array(
-            'name' => array( 'name', true ),
-        );
+   /**
+    * Get sortable columns
+    *
+    * @return array
+    */
+   function get_sortable_columns() {
+      $sortable_columns = array(
+         'name' => array( 'name', true ),
+      );
+      return $sortable_columns;
+   }
 
-        return $sortable_columns;
-    }
+   /**
+    * Set the bulk actions
+    *
+    * @return array
+    */
+   function get_bulk_actions() {
+      $actions = array(
+         'trash'  => __( 'Move to Trash', 'replicant' ),
+      );
+      return $actions;
+   }
 
-    /**
-     * Set the bulk actions
-     *
-     * @return array
-     */
-    function get_bulk_actions() {
-        $actions = array(
-            'trash'  => __( 'Move to Trash', 'replicant' ),
-        );
-        return $actions;
-    }
+   /**
+    * Render the checkbox column
+    *
+    * @param  object  $item
+    *
+    * @return string
+    */
+   function column_cb( $item ) {
+      return sprintf(
+         '<input type="checkbox" name="node_id[]" value="%d" />', $item->id
+      );
+   }
 
-    /**
-     * Render the checkbox column
-     *
-     * @param  object  $item
-     *
-     * @return string
-     */
-    function column_cb( $item ) {
-        return sprintf(
-            '<input type="checkbox" name="node_id[]" value="%d" />', $item->id
-        );
-    }
+   function process_trash() {
+      if($this->current_action() === 'delete') {
+         var_dump($_GET['id']);
+      }
+   }
 
-    /**
-     * Prepare the class items
-     *
-     * @return void
-     */
-    function prepare_items() {
+   function process_bulk_action() {        
+      if($this->current_action() === 'trash') {
+         foreach ($_POST['node_id'] as &$id) {
+            var_dump($id);
+         }
+      }        
+   }
 
-        $columns               = $this->get_columns();
-        $hidden                = array( );
-        $sortable              = $this->get_sortable_columns();
-        $this->_column_headers = array( $columns, $hidden, $sortable );
+   /**
+    * Prepare the class items
+    *
+    * @return void
+    */
+   function prepare_items() {
+      // Check if user is searching
+      $search = (isset($_REQUEST['s'])) ? $_REQUEST['s'] : false;
 
-        $per_page              = 20;
-        $current_page          = $this->get_pagenum();
-        $offset                = ( $current_page -1 ) * $per_page;
-        $this->page_status     = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '2';
+      $columns               = $this->get_columns();
+      $hidden                = array( );
+      $sortable              = $this->get_sortable_columns();
+      $this->_column_headers = array( $columns, $hidden, $sortable );
 
-        // only ncessary because we have sample data
-        $args = array(
-            'offset' => $offset,
-            'number' => $per_page,
-        );
+      $this->process_bulk_action();
+      $this->process_trash();
 
-        if ( isset( $_REQUEST['orderby'] ) && isset( $_REQUEST['order'] ) ) {
-            $args['orderby'] = $_REQUEST['orderby'];
-            $args['order']   = $_REQUEST['order'] ;
-        }
+      $per_page              = 20;
+      $current_page          = $this->get_pagenum();
+      $offset                = ( $current_page -1 ) * $per_page;
+      $this->page_status     = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '2';
 
-        $this->items = Functions::get_all( $args );
+      // only ncessary because we have sample data
+      $args = array(
+         'offset' => $offset,
+         'number' => $per_page,
+      );
 
-        $this->set_pagination_args( array(
-            'total_items' => Functions::get_count(),
-            'per_page'    => $per_page
-        ) );
-    }
+      if ( isset( $_REQUEST['orderby'] ) && isset( $_REQUEST['order'] ) ) {
+         $args['orderby'] = $_REQUEST['orderby'];
+         $args['order']   = $_REQUEST['order'] ;
+      }
+
+      $this->items = Functions::get_all($search, $args);
+
+      $this->set_pagination_args( array(
+         'total_items' => Functions::get_count(),
+         'per_page'    => $per_page
+      ));
+   }
 }
