@@ -142,14 +142,14 @@ class ListTable extends \WP_List_Table {
 
    function process_trash() {
       if($this->current_action() === 'delete') {
-         var_dump($_GET['id']);
+         Functions::delete(intval($_GET["id"]));
       }
    }
 
    function process_bulk_action() {        
       if($this->current_action() === 'trash') {
          foreach ($_POST['node_id'] as &$id) {
-            var_dump($id);
+            Functions::delete(intval($id));
          }
       }        
    }
@@ -164,23 +164,23 @@ class ListTable extends \WP_List_Table {
       $search = (isset($_REQUEST['s'])) ? $_REQUEST['s'] : false;
 
       $columns               = $this->get_columns();
-      $hidden                = array( );
+      $hidden                = [];
       $sortable              = $this->get_sortable_columns();
-      $this->_column_headers = array( $columns, $hidden, $sortable );
+      $this->_column_headers = [$columns, $hidden, $sortable];
 
       $this->process_bulk_action();
       $this->process_trash();
 
       $per_page              = 20;
       $current_page          = $this->get_pagenum();
-      $offset                = ( $current_page -1 ) * $per_page;
+      $offset                = ( $current_page - 1 ) * $per_page;
       $this->page_status     = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '2';
 
       // only ncessary because we have sample data
-      $args = array(
+      $args = [
          'offset' => $offset,
          'number' => $per_page,
-      );
+      ];
 
       if ( isset( $_REQUEST['orderby'] ) && isset( $_REQUEST['order'] ) ) {
          $args['orderby'] = $_REQUEST['orderby'];
@@ -189,9 +189,9 @@ class ListTable extends \WP_List_Table {
 
       $this->items = Functions::get_all($search, $args);
 
-      $this->set_pagination_args( array(
+      $this->set_pagination_args([
          'total_items' => Functions::get_count(),
          'per_page'    => $per_page
-      ));
+      ]);
    }
 }

@@ -76,4 +76,16 @@ class Functions {
          $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id )
       );
    }
+
+   public static function delete( $id = null ) {
+      if(!$id) {
+         return;
+      }
+
+      global $wpdb;
+      $table_name = \Replicant\Config::$TABLES["nodes"];
+
+      $wpdb->delete( $table_name, ["id" => $id], ["%d"] );
+   }
+
 }
