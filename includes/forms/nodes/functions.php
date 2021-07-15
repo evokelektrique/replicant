@@ -19,7 +19,8 @@ class Functions {
       $defaults = array(
         'id'   => null,
         'name' => '',
-        'host' => ''
+        'host' => '',
+        'port' => ''
       );
 
       $args       = wp_parse_args( $args, $defaults );

@@ -38,6 +38,7 @@ class Handler {
 
       $name = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
       $host = isset( $_POST['host'] ) ? sanitize_text_field( $_POST['host'] ) : '';
+      $port = isset( $_POST['port'] ) ? sanitize_text_field( $_POST['port'] ) : '';
 
       // some basic validation
       if(!$name) {
@@ -45,6 +46,10 @@ class Handler {
       }
 
       if(!$host) {
+         $errors[] = __( 'Error: Host Name is required', 'replicant' );
+      }
+
+      if(!$port) {
          $errors[] = __( 'Error: Host Name is required', 'replicant' );
       }
 
@@ -59,6 +64,7 @@ class Handler {
       $fields = [
          'name' => $name,
          'host' => $host,
+         'port' => $port
       ];
 
       // New or edit?

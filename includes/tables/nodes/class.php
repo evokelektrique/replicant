@@ -52,6 +52,9 @@ class ListTable extends \WP_List_Table {
          case 'host':
             return $item->host;
 
+         case 'port':
+            return $item->port;
+
          default:
             return isset( $item->$column_name ) ? $item->$column_name : '';
       }
@@ -67,7 +70,7 @@ class ListTable extends \WP_List_Table {
          'cb'           => '<input type="checkbox" />',
          'name'      => __( 'Name', 'replicant' ),
          'host'      => __( 'Host Name', 'replicant' ),
-
+         'port'      => __( 'Port', 'replicant' )
       );
 
       return $columns;

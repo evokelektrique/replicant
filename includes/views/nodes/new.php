@@ -16,11 +16,20 @@
                 </tr>
                 <tr class="row-host">
                     <th scope="row">
-                        <label for="host"><?php _e( 'Host Name', 'replicant' ); ?></label>
+                        <label for="host"><?php _e( 'Host Name/IP', 'replicant' ); ?></label>
                     </th>
                     <td>
                         <input type="text" name="host" id="host" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" required="required" />
                         <span class="description"><?php _e('Your Host Name', 'replicant' ); ?></span>
+                    </td>
+                </tr>
+                <tr class="row-host">
+                    <th scope="row">
+                        <label for="host"><?php _e( 'Host Port', 'replicant' ); ?></label>
+                    </th>
+                    <td>
+                        <input type="text" name="port" id="port" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" required="required" />
+                        <span class="description"><?php _e('Your Host Port', 'replicant' ); ?></span>
                     </td>
                 </tr>
              </tbody>
