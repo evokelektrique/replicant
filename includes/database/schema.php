@@ -56,10 +56,27 @@ class Schema {
          `id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
          `name` VARCHAR(255) NOT NULL,
          `host` VARCHAR(255) NOT NULL,
+         `ssl` boolean DEFAULT false NOT NULL,
          `port` INT unsigned NOT NULL,
          PRIMARY KEY  (`id`)
       ) $charset_collate";
 
       return $sql;
+   }
+
+   public static function logs() {
+      $table_name = \Replicant\Config::$TABLES["logs"];
+
+      $charset_collate = self::$wpdb->get_charset_collate();
+
+      $sql = "CREATE TABLE $table_name (
+         `id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
+         `level` INT DEFAULT 0 NOT NULL,
+         `message` TEXT NOT NULL,
+         `node_id` BIGINT unsigned NOT NULL,
+         PRIMARY KEY  (`id`)
+      ) $charset_collate";
+
+      return $sql;  
    }
 }

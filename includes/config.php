@@ -21,8 +21,9 @@ class Config {
 
    private function set_tables() {
       $tables = [
-         "settings" => self::$TABLES_PREFIX . "settings",
-         "nodes" => self::$TABLES_PREFIX . "nodes"
+         "settings"  => self::$TABLES_PREFIX . "settings",
+         "nodes"     => self::$TABLES_PREFIX . "nodes",
+         "logs"      => self::$TABLES_PREFIX . "logs"
       ];
       self::$TABLES = $tables;
    }

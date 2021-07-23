@@ -31,3 +31,15 @@
   margin-right: 5px;
   width: 80%;
 }
+
+.replicant-nodes .replicant-node-ssl {
+  color: white;
+  background: #f44336;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: not-allowed;
+}
+.replicant-nodes .replicant-node-ssl.is-ssl {
+  background: #4caf50;
+  cursor: default;
+}

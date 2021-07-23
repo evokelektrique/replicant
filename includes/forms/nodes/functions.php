@@ -20,6 +20,7 @@ class Functions {
         'id'   => null,
         'name' => '',
         'host' => '',
+        'ssl' => false,
         'port' => ''
       );
 

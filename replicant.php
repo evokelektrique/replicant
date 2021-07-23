@@ -32,13 +32,13 @@ class Replicant {
     * @access public
     * @static string $version Current version of plugin
     */
-   public static $version = 0.1;
+   public static $version = 0.2;
 
    /**
     * @access private
     * @static float $db_version Current database migration version
     */
-   private static $db_version = 0.2;
+   private static $db_version = 0.3;
 
    /**
     * @access public
@@ -78,8 +78,6 @@ class Replicant {
 
       // Initialize Forms
       new Replicant\Forms\Nodes\Handler();
-
-
 
 
       // $node = new Replicant\Node();

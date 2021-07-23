@@ -15,15 +15,15 @@ if(!class_exists('WP_List_Table')) {
 class ListTable extends \WP_List_Table {
 
    function __construct() {
-      parent::__construct( array(
+      parent::__construct([
          'singular' => 'node',
          'plural'   => 'nodes',
          'ajax'     => false
-      ) );
+      ]);
    }
 
    function get_table_classes() {
-      return array( 'widefat', 'fixed', 'striped', $this->_args['plural'] );
+      return ['replicant-nodes', 'widefat', 'fixed', 'striped', $this->_args['plural']];
    }
 
    /**
@@ -55,6 +55,9 @@ class ListTable extends \WP_List_Table {
          case 'port':
             return $item->port;
 
+         case 'ssl':
+            return $this->ssl_html($item->ssl);
+
          default:
             return isset( $item->$column_name ) ? $item->$column_name : '';
       }
@@ -70,7 +73,8 @@ class ListTable extends \WP_List_Table {
          'cb'           => '<input type="checkbox" />',
          'name'      => __( 'Name', 'replicant' ),
          'host'      => __( 'Host Name', 'replicant' ),
-         'port'      => __( 'Port', 'replicant' )
+         'port'      => __( 'Port', 'replicant' ),
+         'ssl'      => __( 'SSL', 'replicant' )
       );
 
       return $columns;
@@ -196,5 +200,14 @@ class ListTable extends \WP_List_Table {
          'total_items' => Functions::get_count(),
          'per_page'    => $per_page
       ]);
+   }
+
+
+   private function ssl_html($ssl) {
+      ?>
+      <span class="replicant-node-ssl <?= $ssl ? "is-ssl" : "" ?>">
+         <?= $ssl ? __( 'Yes', 'replicant' ) : __( 'No', 'replicant' ); ?>
+      </span>
+      <?php
    }
 }

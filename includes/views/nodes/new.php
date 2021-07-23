@@ -11,7 +11,7 @@
                     </th>
                     <td>
                         <input type="text" name="name" id="name" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" required="required" />
-                        <span class="description"><?php _e('desired node name', 'replicant' ); ?></span>
+                        <span class="description"><?php _e('i.e: Shopping Website', 'replicant' ); ?></span>
                     </td>
                 </tr>
                 <tr class="row-host">
@@ -20,16 +20,24 @@
                     </th>
                     <td>
                         <input type="text" name="host" id="host" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" required="required" />
-                        <span class="description"><?php _e('Your Host Name', 'replicant' ); ?></span>
+                        <span class="description"><?php _e('i.e: wordpress.org', 'replicant' ); ?></span>
                     </td>
                 </tr>
-                <tr class="row-host">
+                <tr class="row-ssl">
+                    <th scope="row">
+                        <label for="ssl"><?php _e( 'SSL', 'replicant' ); ?></label>
+                    </th>
+                    <td>
+                        <input type="checkbox" name="ssl" id="ssl" />
+                    </td>
+                </tr>
+                <tr class="row-port">
                     <th scope="row">
                         <label for="host"><?php _e( 'Host Port', 'replicant' ); ?></label>
                     </th>
                     <td>
                         <input type="text" name="port" id="port" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" required="required" />
-                        <span class="description"><?php _e('Your Host Port', 'replicant' ); ?></span>
+                        <span class="description"><?php _e('i.e: 80', 'replicant' ); ?></span>
                     </td>
                 </tr>
              </tbody>

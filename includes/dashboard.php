@@ -34,7 +34,7 @@ class Dashboard {
    }
 
    /**
-    * Load dashboard css/js files
+    * Load dashboard css/js files only for Dashboard/Admin area
     */
    public static function admin_assets() {
       if ( isset( $_GET["page"] ) && ! empty( $_GET["page"] ) && strpos($_GET["page"], "replicant-") !== false  ) {

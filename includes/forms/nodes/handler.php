@@ -32,12 +32,14 @@ class Handler {
         wp_die( __( 'Permission Denied!', 'replicant' ) );
       }
 
-      $errors   = array();
+      $errors   = [];
       $page_url = admin_url( 'admin.php?page=replicant-nodes' );
       $field_id = isset( $_POST['field_id'] ) ? intval( $_POST['field_id'] ) : 0;
 
+      // Fields
       $name = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
       $host = isset( $_POST['host'] ) ? sanitize_text_field( $_POST['host'] ) : '';
+      $ssl  = isset( $_POST['ssl'] ) ? true : false;
       $port = isset( $_POST['port'] ) ? sanitize_text_field( $_POST['port'] ) : '';
 
       // some basic validation
@@ -64,6 +66,7 @@ class Handler {
       $fields = [
          'name' => $name,
          'host' => $host,
+         'ssl' => $ssl,
          'port' => $port
       ];
 
