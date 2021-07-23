@@ -20,8 +20,8 @@ class Functions {
         'id'   => null,
         'name' => '',
         'host' => '',
-        'ssl' => false,
-        'port' => ''
+        'ssl'  => false,
+        'port' => 80
       );
 
       $args       = wp_parse_args( $args, $defaults );
@@ -32,7 +32,10 @@ class Functions {
         return new WP_Error( 'no-name', __( 'No Node Name provided.', 'replicant' ) );
       }
       if(empty( $args['host'] )) {
-        return new WP_Error( 'no-host', __( 'No Host Name provided.', 'replicant' ) );
+        return new WP_Error( 'no-address', __( 'No Address provided.', 'replicant' ) );
+      }
+      if(empty( $args['port'] )) {
+        return new WP_Error( 'no-port', __( 'No Port provided.', 'replicant' ) );
       }
 
       // Remove row id to determine if new or update
@@ -42,11 +45,23 @@ class Functions {
       if(!$row_id) {
         // Insert a new Node
         if($wpdb->insert( $table_name, $args )) {
+            \Replicant\Log::write(
+               sprintf(__("%s successfully created", "replicant"), $args["name"]),
+               $wpdb->insert_id,
+               1 // Info
+            );
+
             return $wpdb->insert_id;
         }
       } else {
          // Do update method here
          if($wpdb->update( $table_name, $args, ['id' => $row_id] )) {
+            \Replicant\Log::write(
+               sprintf(__("%s successfully updated", "replicant"), $args["name"]),
+               $row_id,
+               1 // Info
+            );
+
             return $row_id;
          }
       }

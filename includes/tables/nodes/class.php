@@ -88,7 +88,7 @@ class ListTable extends \WP_List_Table {
     * @return string
     */
    function column_name( $item ) {
-      $actions           = array();
+      $actions           = [];
 
       $actions['edit']   = sprintf( 
          '<a href="%s" data-id="%d" title="%s">%s</a>', 
@@ -116,9 +116,9 @@ class ListTable extends \WP_List_Table {
     * @return array
     */
    function get_sortable_columns() {
-      $sortable_columns = array(
-         'name' => array( 'name', true ),
-      );
+      $sortable_columns = [
+         'name' => ['name', true],
+      ];
       return $sortable_columns;
    }
 
@@ -128,9 +128,9 @@ class ListTable extends \WP_List_Table {
     * @return array
     */
    function get_bulk_actions() {
-      $actions = array(
+      $actions = [
          'trash'  => __( 'Move to Trash', 'replicant' ),
-      );
+      ];
       return $actions;
    }
 
@@ -149,13 +149,16 @@ class ListTable extends \WP_List_Table {
 
    function process_trash() {
       if($this->current_action() === 'delete') {
-         Functions::delete(intval($_GET["id"]));
+         $id = intval($_GET["id"]);
+         \Replicant\Log::purge($id);
+         Functions::delete($id);
       }
    }
 
    function process_bulk_action() {        
       if($this->current_action() === 'trash') {
          foreach ($_POST['node_id'] as &$id) {
+            \Replicant\Log::purge(intval($id));
             Functions::delete(intval($id));
          }
       }        
@@ -175,13 +178,14 @@ class ListTable extends \WP_List_Table {
       $sortable              = $this->get_sortable_columns();
       $this->_column_headers = [$columns, $hidden, $sortable];
 
+      // Deletion processes
       $this->process_bulk_action();
       $this->process_trash();
 
-      $per_page              = 20;
-      $current_page          = $this->get_pagenum();
-      $offset                = ( $current_page - 1 ) * $per_page;
-      $this->page_status     = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '2';
+      $per_page          = 20;
+      $current_page      = $this->get_pagenum();
+      $offset            = ( $current_page - 1 ) * $per_page;
+      $this->page_status = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '2';
 
       // only ncessary because we have sample data
       $args = [

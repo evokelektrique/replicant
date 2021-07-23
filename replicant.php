@@ -79,7 +79,7 @@ class Replicant {
       // Initialize Forms
       new Replicant\Forms\Nodes\Handler();
 
-
+      // Replicant\Log::purge(9);
       // $node = new Replicant\Node();
       // var_dump($node->get_by("name", "test"));
    }
@@ -99,6 +99,7 @@ class Replicant {
       $schemas = [];
       $schemas[] = $schema_generator::settings();
       $schemas[] = $schema_generator::nodes();
+      $schemas[] = $schema_generator::logs();
 
       // Iterate over schemas and create them
       foreach($schemas as &$schema) {

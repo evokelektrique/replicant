@@ -58,12 +58,19 @@ class Schema {
          `host` VARCHAR(255) NOT NULL,
          `ssl` boolean DEFAULT false NOT NULL,
          `port` INT unsigned NOT NULL,
+         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
          PRIMARY KEY  (`id`)
       ) $charset_collate";
 
       return $sql;
    }
 
+   /**
+    * Generates schema of "replicant_logs" table
+    * 
+    * @return string Create table SQL query
+    */
    public static function logs() {
       $table_name = \Replicant\Config::$TABLES["logs"];
 
@@ -74,6 +81,8 @@ class Schema {
          `level` INT DEFAULT 0 NOT NULL,
          `message` TEXT NOT NULL,
          `node_id` BIGINT unsigned NOT NULL,
+         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
          PRIMARY KEY  (`id`)
       ) $charset_collate";
 

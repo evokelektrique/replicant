@@ -33,7 +33,7 @@
                 </tr>
                 <tr class="row-port">
                     <th scope="row">
-                        <label for="host"><?php _e( 'Host Port', 'replicant' ); ?></label>
+                        <label for="port"><?php _e( 'Port', 'replicant' ); ?></label>
                     </th>
                     <td>
                         <input type="text" name="port" id="port" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" required="required" />

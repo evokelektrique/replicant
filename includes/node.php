@@ -53,7 +53,7 @@ class Node {
     * 
     * @param  string|null $key   WHERE key in sql query
     * @param  string|null $value WHERE value in sql query
-    * @return array              Single row returned by $wpdb
+    * @return array              Single row fetched by $wpdb
     */
    public function get_by(string $key = null, $value = null) {
       if(!$value) {
@@ -61,10 +61,10 @@ class Node {
       }
 
       $table_name = \Replicant\Config::$TABLES["nodes"];
-      $query = "SELECT * FROM $table_name WHERE `$key` = %s";
-      $result = $this->wpdb->get_row($this->wpdb->prepare($query, $value));
+      $query      = "SELECT * FROM $table_name WHERE `$key` = %s";
+      $result     = $this->wpdb->get_row($this->wpdb->prepare($query, $value));
 
-      var_dump($result);
+      return $result;
    }
 
 }
