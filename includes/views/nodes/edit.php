@@ -12,17 +12,17 @@
                         <label for="name"><?php _e( 'Node Name', 'replicant' ); ?></label>
                     </th>
                     <td>
-                        <input type="text" name="name" id="name" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="<?php echo esc_attr( $item->name ); ?>" required="required" />
-                        <span class="description"><?php _e('desired node name', 'replicant' ); ?></span>
+                        <input type="text" name="name" id="name" class="regular-text" placeholder="<?= esc_attr( '', 'replicant' ); ?>" value="<?= esc_attr( $item->name ); ?>" required="required" />
+                        <span class="description"><?php _e('i.e: Shopping Website', 'replicant' ); ?></span>
                     </td>
                 </tr>
                 <tr class="row-host">
                     <th scope="row">
-                        <label for="host"><?php _e( 'Host Name', 'replicant' ); ?></label>
+                        <label for="host"><?php _e( 'Address', 'replicant' ); ?></label>
                     </th>
                     <td>
-                        <input type="text" name="host" id="host" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="<?php echo esc_attr( $item->host ); ?>" required="required" />
-                        <span class="description"><?php _e('Your Host Name', 'replicant' ); ?></span>
+                        <input type="text" name="host" id="host" class="regular-text" placeholder="<?= esc_attr( '', 'replicant' ); ?>" value="<?= esc_attr( $item->host ); ?>" required="required" />
+                        <span class="description"><?php _e('i.e: wordpress.org', 'replicant' ); ?></span>
                     </td>
                 </tr>
                 <tr class="row-ssl">
@@ -30,22 +30,22 @@
                         <label for="ssl"><?php _e( 'SSL', 'replicant' ); ?></label>
                     </th>
                     <td>
-                        <input type="checkbox" name="ssl" id="ssl" />
+                        <input type="checkbox" name="ssl" id="ssl" <?= $item->ssl ? "checked" : "" ?> />
                     </td>
                 </tr>
                 <tr class="row-port">
                     <th scope="row">
-                        <label for="port"><?php _e( 'Host Port', 'replicant' ); ?></label>
+                        <label for="port"><?php _e( 'Port', 'replicant' ); ?></label>
                     </th>
                     <td>
-                        <input type="text" name="port" id="port" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" value="<?php echo esc_attr( $item->port ); ?> required="required"  />
-                        <span class="description"><?php _e('Your Host Port', 'replicant' ); ?></span>
+                        <input type="number" name="port" id="port" class="regular-text" placeholder="<?= esc_attr( '', 'replicant' ); ?>" value="<?= esc_attr( intval($item->port) ) ?>" required="required"  />
+                        <span class="description"><?php _e('i.e: 80', 'replicant' ); ?></span>
                     </td>
                 </tr>
              </tbody>
         </table>
 
-        <input type="hidden" name="field_id" value="<?php echo $item->id; ?>">
+        <input type="hidden" name="field_id" value="<?= $item->id; ?>">
 
         <?php wp_nonce_field( '' ); ?>
         <?php submit_button( __( 'Update node', 'replicant' ), 'primary', 'submit_node' ); ?>

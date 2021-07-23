@@ -72,7 +72,7 @@ class ListTable extends \WP_List_Table {
       $columns = array(
          'cb'           => '<input type="checkbox" />',
          'name'      => __( 'Name', 'replicant' ),
-         'host'      => __( 'Host Name', 'replicant' ),
+         'host'      => __( 'Address', 'replicant' ),
          'port'      => __( 'Port', 'replicant' ),
          'ssl'      => __( 'SSL', 'replicant' )
       );

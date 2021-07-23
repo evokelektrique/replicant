@@ -16,7 +16,7 @@
                 </tr>
                 <tr class="row-host">
                     <th scope="row">
-                        <label for="host"><?php _e( 'Host Name/IP', 'replicant' ); ?></label>
+                        <label for="host"><?php _e( 'Address', 'replicant' ); ?></label>
                     </th>
                     <td>
                         <input type="text" name="host" id="host" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" required="required" />
