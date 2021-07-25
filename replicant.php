@@ -35,16 +35,16 @@ class Replicant {
    public static $version = 0.2;
 
    /**
+    * @access public
+    * @static class $default_db Database Default Values Class Instance
+    */
+   public static $default_db;
+
+   /**
     * @access private
     * @static float $db_version Current database migration version
     */
    private static $db_version = 0.3;
-
-   /**
-    * @access public
-    * @static class $default Database Default Values Class Instance
-    */
-   public static $default;
 
    /**
     * Load Files And Initialize Classes
@@ -70,8 +70,8 @@ class Replicant {
       }
 
       // Insert Default Values Into Database
-      self::$default = new Replicant\Database\Defaults();
-      self::$default::authorization();
+      self::$default_db = new Replicant\Database\Defaults();
+      self::$default_db::authorization();
 
       // Display menus on dashboard and other pages
       new Replicant\Dashboard();

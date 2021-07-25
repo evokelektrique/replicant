@@ -18,7 +18,7 @@
                class="replicant_input"
                name="replicant_authoriazation" 
                id="replicant_authoriazation"
-               value="<?= $replicant::$default::authorization()->value ?>"
+               value="<?= $replicant::$default_db::authorization()->value ?>"
                placeholder="<?= __( "Authorization Key", "replicant" );?>" 
                readonly=""
             />
