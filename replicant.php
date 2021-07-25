@@ -23,12 +23,6 @@ require_once __DIR__ . "/vendor/autoload.php";
 class Replicant {
 
    /**
-    * @access private
-    * @static class $isntance Singleton class instance
-    */
-   private static $instance;
-
-   /**
     * @access public
     * @static string $version Current version of plugin
     */
@@ -39,6 +33,12 @@ class Replicant {
     * @static class $default_db Database Default Values Class Instance
     */
    public static $default_db;
+
+   /**
+    * @access private
+    * @static class $isntance Singleton class instance
+    */
+   private static $instance;
 
    /**
     * @access private
@@ -78,6 +78,9 @@ class Replicant {
 
       // Initialize Forms
       new Replicant\Forms\Nodes\Handler();
+
+      // // Initialize Routes
+      // new Replicant\Routes();
 
       // Replicant\Log::purge(9);
       // $node = new Replicant\Node();
@@ -124,7 +127,7 @@ class Replicant {
    /**
     * Include Files Located In Plugin Folder
     *
-    * @param array $files An array of file paths
+    * @param array $files List of files paths
     */
    private function load_files(array $files) {
       foreach($files as &$file) {
