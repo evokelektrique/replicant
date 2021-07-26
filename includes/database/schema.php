@@ -88,4 +88,30 @@ class Schema {
 
       return $sql;  
    }
+
+   /**
+    * Generates schema of "replicant_nodes" table
+    * 
+    * @return string Create table SQL query
+    */
+   public static function trusted_nodes() {
+      $table_name = \Replicant\Config::$TABLES["trusted_nodes"];
+
+      $charset_collate = self::$wpdb->get_charset_collate();
+
+      $sql = "CREATE TABLE $table_name (
+         `id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
+         `authorization` VARCHAR(200) NOT NULL,
+         `host` VARCHAR(200) NOT NULL,
+         `port` INT DEFAULT 80 NOT NULL,
+         `status` boolean DEFAULT false NOT NULL,
+         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+         UNIQUE KEY host (`host`),
+         PRIMARY KEY  (`id`)
+      ) $charset_collate";
+
+      return $sql;
+   }
+
 }

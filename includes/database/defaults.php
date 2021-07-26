@@ -17,10 +17,10 @@ class Defaults {
    private static $wpdb;
 
    /**
+    * Set $wpdb class variable
+    * 
     * @access public
     * @static
-    * 
-    * Set $wpdb class variable
     */
    public function __construct() {
       global $wpdb;
@@ -28,9 +28,9 @@ class Defaults {
    }
 
    /**
-    * @return int|string could be an last insert_id or could be a value of row
-    *
     * Insert Default Authorization value
+    *
+    * @return int|string could be an last insert_id or could be a value of row
     */
    public static function authorization() {
       $table_name = \Replicant\Config::$TABLES["settings"];
@@ -47,7 +47,8 @@ class Defaults {
       }
 
       // Insert Default Value
-      $default_value = self::generate_random_string();
+      // (Will be needed in one day)
+      $default_value = self::generate_random_string(32);
       self::$wpdb->insert(
          $table_name,
          // Columns
@@ -63,20 +64,21 @@ class Defaults {
    }
 
    /**
-    * @access private
-    * @static
-    * 
     * Generates an Unique Random Byte String
+    * 
+    * @access private
+    * @var int $length Length of the unique generated string
     */
-   private static function generate_random_string() {
+   private static function generate_random_string($length) {
       // Solution for PHP_VERSION >= 7
       if(version_compare(PHP_VERSION, "7.0.0") >= 0) {
-         $bytes = random_bytes(20);
+         $bytes = random_bytes($length);
          return bin2hex($bytes);
       }
 
       // Solution for PHP_VERSION >= 5  
-      return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 40);
+      $bytes = openssl_random_pseudo_bytes($length);
+      return bin2hex($bytes);
    }
 
 }

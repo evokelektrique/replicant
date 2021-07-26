@@ -18,13 +18,6 @@ class Auth {
    public $namepsace;
 
    /**
-    * Namepsace version number
-    * 
-    * @var string
-    */
-   public $version
-
-   /**
     * Namespace resource name
     * 
     * @var string
@@ -33,13 +26,28 @@ class Auth {
 
 
    public function __construct() {
-      // Generates "replicant/v1/auth"
-      $this->namespace = "replicant";
-      $this->version = "v1";
-      $this->resource = "auth";
+      $this->namespace = "replicant/v1";
+      $this->resource = "/auth";
    }
 
    public function register_routes() {
-      // ...
+      // Request Trust Endpoint
+      register_rest_route(
+         $this->namespace, 
+         $this->resource . "/trust", 
+         [
+            // Register the readable endpoint
+            [
+               "methods" => "POST",
+               "callback" => [&$this, "trust"]
+            ]
+         ]
+      );
    }
+
+   public function trust($request) {
+      $data = ["trust" => true];
+      return rest_ensure_response($data);
+   }
+
 }

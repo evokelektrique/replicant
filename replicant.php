@@ -41,13 +41,15 @@ class Replicant {
    private static $instance;
 
    /**
-    * @access private
-    * @static float $db_version Current database migration version
+    * Current database migration version 
+    * And will be saved in 'wp_options' table
+    * 
+    * @static float $db_version migration version
     */
-   private static $db_version = 0.3;
+   private static $db_version = 0.4;
 
    /**
-    * Load Files And Initialize Classes
+    * Load Files And Initialize Classes In Order
     */
    private function __construct() {
       // Load necessary files 
@@ -56,7 +58,8 @@ class Replicant {
          "includes/admin/*.php",
          "includes/database/*.php",
          "includes/tables/nodes/*.php",
-         "includes/forms/nodes/*.php"
+         "includes/forms/nodes/*.php",
+         "includes/controllers/*.php"
       ];
       $this->load_files($files);
 
@@ -103,6 +106,7 @@ class Replicant {
       $schemas[] = $schema_generator::settings();
       $schemas[] = $schema_generator::nodes();
       $schemas[] = $schema_generator::logs();
+      $schemas[] = $schema_generator::trusted_nodes();
 
       // Iterate over schemas and create them
       foreach($schemas as &$schema) {

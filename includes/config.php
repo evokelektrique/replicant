@@ -21,10 +21,12 @@ class Config {
 
    private function set_tables() {
       $tables = [
-         "settings"  => self::$TABLES_PREFIX . "settings",
-         "nodes"     => self::$TABLES_PREFIX . "nodes",
-         "logs"      => self::$TABLES_PREFIX . "logs"
+         "settings"        => self::$TABLES_PREFIX . "settings",
+         "nodes"           => self::$TABLES_PREFIX . "nodes",
+         "logs"            => self::$TABLES_PREFIX . "logs",
+         "trusted_nodes"   => self::$TABLES_PREFIX . "trusted_nodes"
       ];
+      
       self::$TABLES = $tables;
    }
 }
