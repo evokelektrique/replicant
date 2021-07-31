@@ -107,7 +107,6 @@ class Replicant {
       $schemas[] = $schema_generator::settings();
       $schemas[] = $schema_generator::nodes();
       $schemas[] = $schema_generator::logs();
-      $schemas[] = $schema_generator::trusted_nodes();
 
       // Iterate over schemas and create them
       foreach($schemas as &$schema) {

@@ -1,3 +1,10 @@
+// Variables
+$notice_error_background_color: #fa7c73;
+$notice_error_border_color: #dd4a4a;
+
+$notice_success_background_color: #73bc76;
+$notice_success_border_color: #4caf50;
+
 .replicant-tab {
   padding: 20px;
   border: 1px solid #000;
@@ -47,5 +54,22 @@
          background: #4caf50;
          cursor: default;
       }
+   }
+}
+
+.replicant-notice {
+   padding: 0.7rem 1rem;
+   color: white;
+   border-radius: 5px;
+   border: 1px solid;
+
+   &-error {
+      background: $notice_error_background_color;
+      border-color: $notice_error_border_color;
+   }
+
+   &-success {
+      background: $notice_success_background_color;
+      border-color: $notice_success_border_color;
    }
 }

@@ -1,4 +1,12 @@
 <div class="wrap">
+   
+   <?php 
+      $message = isset($_GET['message']) ? $_GET['message'] : NULL;
+      $status  = $_GET['status'];
+
+      \Replicant\Helper::print_notice($status, $message);
+   ?>
+
     <h2>
       <?php _e( 'Nodes', 'replicant' ); ?> 
 
@@ -11,7 +19,7 @@
    </h2>
 
     <form method="post">
-        <input type="hidden" name="page" value="ttest_list_table">
+        <input type="hidden" name="page">
 
         <?php
            $list_table = new \Replicant\Tables\Nodes\ListTable();

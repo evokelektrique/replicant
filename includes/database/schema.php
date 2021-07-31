@@ -55,7 +55,7 @@ class Schema {
       $sql = "CREATE TABLE $table_name (
          `id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
          `name` VARCHAR(255) NOT NULL,
-         `host` VARCHAR(255) NOT NULL,
+         `host` VARCHAR(200) NOT NULL,
          `port` INT unsigned NOT NULL,
          `ssl` boolean DEFAULT false NOT NULL,
          `is_trusted` boolean DEFAULT false NOT NULL,

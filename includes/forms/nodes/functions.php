@@ -51,8 +51,9 @@ class Functions {
                $wpdb->insert_id,
                1 // Info
             );
-
             return $wpdb->insert_id;
+        } else {
+            return new \WP_Error('db_error',  __('Something went wrong, Please try again.', 'replicant'), $args);
         }
       } else {
          // Do update method here

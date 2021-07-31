@@ -43,3 +43,18 @@
   background: #4caf50;
   cursor: default;
 }
+
+.replicant-notice {
+  padding: 0.7rem 1rem;
+  color: white;
+  border-radius: 5px;
+  border: 1px solid;
+}
+.replicant-notice-error {
+  background: #fa7c73;
+  border-color: #dd4a4a;
+}
+.replicant-notice-success {
+  background: #73bc76;
+  border-color: #4caf50;
+}
