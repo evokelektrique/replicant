@@ -24,8 +24,9 @@ class Functions {
         'port' => 80
       );
 
-      $args       = wp_parse_args( $args, $defaults );
-      $table_name = 'replicant_nodes';
+      $args         = wp_parse_args( $args, $defaults );
+      $args["hash"] = \Replicant\Helper::generate_random_string(32);
+      $table_name   = 'replicant_nodes';
 
       // Basic validations
       if(empty( $args['name'] )) {

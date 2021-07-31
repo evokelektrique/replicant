@@ -34,18 +34,18 @@ class Auth {
       // Request Trust Endpoint
       register_rest_route(
          $this->namespace, 
-         $this->resource . "/trust", 
+         $this->resource . "/accept_trust", 
          [
             // Register the readable endpoint
             [
                "methods" => "POST",
-               "callback" => [&$this, "trust"]
+               "callback" => [&$this, "accept_trust"]
             ]
          ]
       );
    }
 
-   public function trust($request) {
+   public function accept_trust($request) {
       $data = ["trust" => true];
       return rest_ensure_response($data);
    }

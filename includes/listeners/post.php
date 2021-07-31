@@ -26,7 +26,7 @@ class Post {
          $this->update($post);
       }
 
-      $this->
+      // $this->
    }
 
 

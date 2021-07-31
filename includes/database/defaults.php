@@ -48,7 +48,7 @@ class Defaults {
 
       // Insert Default Value
       // (Will be needed in one day)
-      $default_value = self::generate_random_string(32);
+      $default_value = \Replicant\Helper::generate_random_string(32);
       self::$wpdb->insert(
          $table_name,
          // Columns
@@ -62,23 +62,4 @@ class Defaults {
 
       return self::$wpdb->insert_id;
    }
-
-   /**
-    * Generates an Unique Random Byte String
-    * 
-    * @access private
-    * @var int $length Length of the unique generated string
-    */
-   private static function generate_random_string($length) {
-      // Solution for PHP_VERSION >= 7
-      if(version_compare(PHP_VERSION, "7.0.0") >= 0) {
-         $bytes = random_bytes($length);
-         return bin2hex($bytes);
-      }
-
-      // Solution for PHP_VERSION >= 5  
-      $bytes = openssl_random_pseudo_bytes($length);
-      return bin2hex($bytes);
-   }
-
 }

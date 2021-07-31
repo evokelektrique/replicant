@@ -46,7 +46,7 @@ class Replicant {
     * 
     * @static float $db_version migration version
     */
-   private static $db_version = 0.4;
+   private static $db_version = 0.5;
 
    /**
     * Load Files And Initialize Classes In Order
@@ -96,6 +96,7 @@ class Replicant {
    private function init_db() {
       // Require wordpress database files
       require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+      
       update_option( "replicant_db_version", self::$db_version );
 
       // Initialize Schema Generator Class
@@ -110,15 +111,12 @@ class Replicant {
 
       // Iterate over schemas and create them
       foreach($schemas as &$schema) {
-         // var_dump($schema);
          dbDelta( $schema );
       }
    }
 
    /**
     * Retrieve singleton class instance
-    *
-    * @return class
     */
    public static function get_instance() {
       if(!isset(self::$instance)) {
