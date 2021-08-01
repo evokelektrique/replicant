@@ -2,9 +2,12 @@
    
    <?php 
       $message = isset($_GET['message']) ? $_GET['message'] : NULL;
-      $status  = $_GET['status'];
-
-      \Replicant\Helper::print_notice($status, $message);
+      $status  = isset($_GET['status']) ? $_GET['status'] : NULL;
+      
+      // Only print the notice when a status has given
+      if($status) {
+         \Replicant\Helper::print_notice($status, $message);
+      }
    ?>
 
     <h2>

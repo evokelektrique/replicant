@@ -56,7 +56,10 @@ class ListTable extends \WP_List_Table {
             return $item->port;
 
          case 'ssl':
-            return $this->ssl_html($item->ssl);
+            return $this->badge_html($item->ssl);
+
+         case 'is_trusted':
+            return $this->badge_html($item->is_trusted);
 
          default:
             return isset( $item->$column_name ) ? $item->$column_name : '';
@@ -71,10 +74,11 @@ class ListTable extends \WP_List_Table {
     function get_columns() {
       $columns = array(
          'cb'           => '<input type="checkbox" />',
-         'name'      => __( 'Name', 'replicant' ),
-         'host'      => __( 'Address', 'replicant' ),
-         'port'      => __( 'Port', 'replicant' ),
-         'ssl'      => __( 'SSL', 'replicant' )
+         'name'         => __( 'Name', 'replicant' ),
+         'host'         => __( 'Address', 'replicant' ),
+         'port'         => __( 'Port', 'replicant' ),
+         'ssl'          => __( 'SSL', 'replicant' ),
+         'is_trusted'   => __( 'Trust', 'replicant' )
       );
 
       return $columns;
@@ -207,10 +211,16 @@ class ListTable extends \WP_List_Table {
    }
 
 
-   private function ssl_html($ssl) {
+   /**
+    * Print custom badge
+    * 
+    * @param  boolean $status Current status
+    * @return string          Custom HTML badge
+    */
+   private function badge_html($status) {
       ?>
-      <span class="replicant-node-ssl <?= $ssl ? "is-ssl" : "" ?>">
-         <?= $ssl ? __( 'Yes', 'replicant' ) : __( 'No', 'replicant' ); ?>
+      <span class="replicant-badge replicant-badge-<?= $status ? "success" : "error" ?>">
+         <?= $status ? __( 'Yes', 'replicant' ) : __( 'No', 'replicant' ); ?>
       </span>
       <?php
    }

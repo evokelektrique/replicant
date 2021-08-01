@@ -32,16 +32,18 @@
   width: 80%;
 }
 
-.replicant-nodes .replicant-node-ssl {
+.replicant-badge {
   color: white;
-  background: #f44336;
   border-radius: 5px;
   padding: 5px 10px;
-  cursor: not-allowed;
 }
-.replicant-nodes .replicant-node-ssl.is-ssl {
+.replicant-badge-success {
   background: #4caf50;
   cursor: default;
+}
+.replicant-badge-error {
+  background: #f44336;
+  cursor: not-allowed;
 }
 
 .replicant-notice {

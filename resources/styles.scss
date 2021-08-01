@@ -5,6 +5,9 @@ $notice_error_border_color: #dd4a4a;
 $notice_success_background_color: #73bc76;
 $notice_success_border_color: #4caf50;
 
+$badge_success_background_color: #4caf50;
+$badge_error_background_color: #f44336;
+
 .replicant-tab {
   padding: 20px;
   border: 1px solid #000;
@@ -42,18 +45,19 @@ $notice_success_border_color: #4caf50;
    }
 }
 
-.replicant-nodes {
-   .replicant-node-ssl {
-      color: white;
-      background: #f44336;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: not-allowed;
+.replicant-badge {
+   color: white;
+   border-radius: 5px;
+   padding: 5px 10px;
 
-      &.is-ssl {
-         background: #4caf50;
-         cursor: default;
-      }
+   &-success {
+      background: $badge_success_background_color;
+      cursor: default;
+   }
+
+   &-error {
+      background: $badge_error_background_color;
+      cursor: not-allowed;
    }
 }
 
