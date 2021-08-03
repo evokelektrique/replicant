@@ -43,4 +43,18 @@ class Helper {
       <?php
       endif;
    }
+
+   /**
+    * Print custom badge
+    * 
+    * @param  boolean $status Current status
+    * @return string          Custom HTML badge
+    */
+   public static function badge_html($status) {
+      ?>
+      <span class="replicant-badge replicant-badge-<?= $status ? "success" : "error" ?>">
+         <?= $status ? __( 'Yes', 'replicant' ) : __( 'No', 'replicant' ); ?>
+      </span>
+      <?php
+   }
 }

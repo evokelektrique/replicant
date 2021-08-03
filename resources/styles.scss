@@ -8,6 +8,7 @@ $notice_success_border_color: #4caf50;
 $badge_success_background_color: #4caf50;
 $badge_error_background_color: #f44336;
 
+// Custom Tabs
 .replicant-tab {
   padding: 20px;
   border: 1px solid #000;
@@ -27,7 +28,7 @@ $badge_error_background_color: #f44336;
   color: #ff4200;
 }
 
-
+// Dashboard Panel Wrapper
 #panel_settings {
    position: relative;
    display: flex;
@@ -45,6 +46,7 @@ $badge_error_background_color: #f44336;
    }
 }
 
+// Custom Badge
 .replicant-badge {
    color: white;
    border-radius: 5px;
@@ -61,6 +63,7 @@ $badge_error_background_color: #f44336;
    }
 }
 
+// Custom Notice
 .replicant-notice {
    padding: 0.7rem 1rem;
    color: white;

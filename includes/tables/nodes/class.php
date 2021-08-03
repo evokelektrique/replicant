@@ -40,7 +40,6 @@ class ListTable extends \WP_List_Table {
     *
     * @param  object  $item
     * @param  string  $column_name
-    *
     * @return string
     */
     function column_default( $item, $column_name ) {
@@ -56,10 +55,10 @@ class ListTable extends \WP_List_Table {
             return $item->port;
 
          case 'ssl':
-            return $this->badge_html($item->ssl);
+            return \Replicant\Helper::badge_html($item->ssl);
 
          case 'is_trusted':
-            return $this->badge_html($item->is_trusted);
+            return \Replicant\Helper::badge_html($item->is_trusted);
 
          default:
             return isset( $item->$column_name ) ? $item->$column_name : '';
@@ -88,7 +87,6 @@ class ListTable extends \WP_List_Table {
     * Render the designation name column
     *
     * @param  object  $item
-    *
     * @return string
     */
    function column_name( $item ) {
@@ -142,7 +140,6 @@ class ListTable extends \WP_List_Table {
     * Render the checkbox column
     *
     * @param  object  $item
-    *
     * @return string
     */
    function column_cb( $item ) {
@@ -208,20 +205,5 @@ class ListTable extends \WP_List_Table {
          'total_items' => Functions::get_count(),
          'per_page'    => $per_page
       ]);
-   }
-
-
-   /**
-    * Print custom badge
-    * 
-    * @param  boolean $status Current status
-    * @return string          Custom HTML badge
-    */
-   private function badge_html($status) {
-      ?>
-      <span class="replicant-badge replicant-badge-<?= $status ? "success" : "error" ?>">
-         <?= $status ? __( 'Yes', 'replicant' ) : __( 'No', 'replicant' ); ?>
-      </span>
-      <?php
    }
 }
