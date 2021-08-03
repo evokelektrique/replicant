@@ -2,6 +2,8 @@
 
 namespace Replicant\Controllers;
 
+use GuzzleHttp\Client;
+
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit; 
 
@@ -50,4 +52,19 @@ class Auth {
       return rest_ensure_response($data);
    }
 
+   /**
+    * Send a HTTP request to node URL
+    * 
+    * @param  int $node_id Need a Node ID to generate an URL from it
+    * @return void
+    */
+   public static function request_trust($node_id) {
+      $url = \Replicant\Helper::generate_url_from_node($node_id);
+
+      $client = new \GuzzleHttp\Client();
+
+      // Testing
+      // $response = $client->get('http://httpbin.org/get');
+      // var_dump($response);
+   }
 }

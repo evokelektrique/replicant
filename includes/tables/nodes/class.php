@@ -55,10 +55,10 @@ class ListTable extends \WP_List_Table {
             return $item->port;
 
          case 'ssl':
-            return \Replicant\Helper::badge_html($item->ssl);
+            return \Replicant\Helper::print_badge($item->ssl);
 
          case 'is_trusted':
-            return \Replicant\Helper::badge_html($item->is_trusted);
+            return \Replicant\Helper::print_badge($item->is_trusted);
 
          default:
             return isset( $item->$column_name ) ? $item->$column_name : '';
@@ -102,6 +102,12 @@ class ListTable extends \WP_List_Table {
          '<a href="%s" class="submitdelete" data-id="%d" title="%s">%s</a>', 
          admin_url( 'admin.php?page=replicant-nodes&action=delete&id=' . $item->id ), 
          $item->id, __( 'Delete this item', 'replicant' ), __( 'Delete', 'replicant' ) 
+      );
+
+      $actions['request_trust'] = sprintf( 
+         '<a href="%s" class="replicant_submit_request_trust" data-id="%d" title="%s">%s</a>', 
+         admin_url( 'admin.php?page=replicant-nodes&action=request_trust&id=' . $item->id ), 
+         $item->id, __( 'Request trust this item', 'replicant' ), __( 'Request trust', 'replicant' ) 
       );
 
       return sprintf( 

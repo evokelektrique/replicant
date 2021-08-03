@@ -35,11 +35,14 @@ class NodesMenu {
             $template = \Replicant\Config::$ROOT_DIR . "views/nodes/new.php";
             break;
 
-         // case "delete":
-         //    $location = $_SERVER["HTTP_REFERER"];
-         //    wp_redirect( $location );
-         //    break;
-            // wp_safe_redirect($location);
+         case "request_trust":
+            $node_id = intval($_GET["id"]);
+
+            \Replicant\Controllers\Auth::request_trust($node_id);
+
+            // $location = $_SERVER["HTTP_REFERER"];
+            // wp_redirect( $location );
+            break;
 
          default:
             $template = \Replicant\Config::$ROOT_DIR . "views/nodes/list.php";
