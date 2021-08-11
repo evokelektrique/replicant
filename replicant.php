@@ -5,7 +5,7 @@
  * Plugin URI:        https://github.com/evokelektrique/replicant
  * Description:       This plugin replicates posts and content in your wordpress websites
  * Version:           0.1
- * Requires at least: 7.2.5
+ * Requires at least: 5.7.0
  * Author:            EVOKE
  * Author URI:        https://github.com/evokelektrique/
  * License:           GPL 3
