@@ -94,6 +94,9 @@ class Handler {
             ],
             $page_url
          );
+
+         // Request trust at node creation
+         \Replicant\Controllers\Auth::request_trust($insert_id);
       }
 
       wp_safe_redirect( $redirect_to );

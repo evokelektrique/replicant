@@ -63,8 +63,8 @@ class Auth {
 
       $client = new \GuzzleHttp\Client();
 
-      var_dump($url);
-      die();
+      // var_dump($url["formed"]);
+      
       // Testing
       // $response = $client->get('http://httpbin.org/get');
       // var_dump($response);

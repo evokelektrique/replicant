@@ -69,18 +69,29 @@ class Helper {
       $node = \Replicant\Tables\Nodes\Functions::get($node_id);
 
       // Create an empty list and append the node variables into it
+      // And create different versions of URL
       $url           = [];
       $url["scheme"] = $node->ssl === 0 ? "http://" : "https://";
       $url["host"]   = $node->host;
-      $url["port"]   = ":" . $node->port;
 
-      // Generate different versions
-      $url_string    = implode('', $url);       // Raw
-      $parsed_url    = parse_url($url_string);  // Parsed
+      // Merge $url array
+      $url_string = implode('', $url);
+
+      // We separate parsed results 
+      $scheme  = parse_url(trim($url_string), PHP_URL_SCHEME);
+      $host    = parse_url(trim($url_string), PHP_URL_HOST);
+      $path    = parse_url(trim($url_string), PHP_URL_PATH);
+
+      // Final URl formation
+      $formed_url = $url["scheme"] . $host . ":" . $node->port . $path;
       
       return [
-         "raw" => $url_string,
-         "parsed" => $parsed_url
+         "formed" => $formed_url,
+         "parsed" => [
+            "scheme" => $scheme, 
+            "host"   => $host, 
+            "path"   => $path
+         ]
       ];
    }
 }

@@ -59,7 +59,9 @@ class Log {
          return $item->id;
       }, $logs);
       $ids = implode( ',', array_map( 'intval', $ids ) );
-      // More efficent way to delete all related rows 
-      $wpdb->query( "DELETE FROM $table_name WHERE id IN($ids)" );
+      // More efficent way to delete all related rows
+      if(!empty($ids)) {
+         $wpdb->query( "DELETE FROM $table_name WHERE id IN($ids)" );
+      }
    }
 }

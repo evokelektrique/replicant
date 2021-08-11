@@ -36,7 +36,7 @@
                         <label for="port"><?php _e( 'Port', 'replicant' ); ?></label>
                     </th>
                     <td>
-                        <input type="text" name="port" id="port" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" required="required" />
+                        <input type="text" name="port" id="port" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="80" required="required" />
                         <span class="description"><?php _e('i.e: 80', 'replicant' ); ?></span>
                     </td>
                 </tr>
