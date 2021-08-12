@@ -70,6 +70,7 @@ class Helper {
       $url           = [];
       $url["scheme"] = intval($node->ssl) === 0 ? "http://" : "https://";
       $url["host"]   = $node->host;
+      $url["path"]   = isset($node->path) ? $node->path : "";
 
       // Merge $url array
       $url_string = implode('', $url);

@@ -55,6 +55,7 @@ class Auth {
     */
    public function accept_trust($request) {
       $fields    = $request->get_json_params();
+      var_dump($fields);
       $insert_id = \Replicant\Forms\Nodes\Functions::insert_node($fields, true);
 
       $status  = true;
@@ -76,31 +77,36 @@ class Auth {
    /**
     * Send a HTTP request to node URL
     * 
-    * @param  Node $node Need a Node to generate an URL 
-    *                    And extract information from it
+    * @param  Node $target_node Need a Node to generate an URL 
+    *                           And extract information from it
     * @return void
     */
-   public static function request_trust($node) {
+   public static function request_trust($target_node) {
+      $current_node = new \Replicant\Node();
+
       // Fetch node and generate formed url and uri
-      $url  = \Replicant\Helper::generate_url_from_node($node);
-      $url  = $url["formed"] . "/?rest_route=/replicant/v1/auth/accept_trust";
+      $current_node_url = \Replicant\Helper::generate_url_from_node($current_node);
+      
+      $target_node_url = \Replicant\Helper::generate_url_from_node($target_node);
+      $target_node_url = $target_node_url["formed"] . "/?rest_route=/replicant/v1/auth/accept_trust";
 
       // Create a HTTP client and send current Node 
       // Information via POST method to the target Node
       $client = new \GuzzleHttp\Client();
 
       $body = [
-         "hash" => $node->hash,
-         "name" => $node->name,
-         "host" => $node->host,
-         "port" => $node->port,
-         "ssl"  => $node->ssl
+         "hash" => $current_node->hash,
+         "name" => $current_node->name,
+         "host" => $current_node_url["formed"],
+         "port" => $current_node->port,
+         "ssl"  => $current_node->ssl
       ];
 
       try {
-         $request = $client->request('POST', $url, [
+         $request = $client->request('POST', $target_node_url, [
             'json' => $body
          ]);
+         var_export((string) $request->getBody());
          return (string) $request->getBody();
       } catch(\GuzzleHttp\Exception\ServerException $e) {
          $error_message = $response->getBody()->getContents();

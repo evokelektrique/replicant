@@ -81,6 +81,7 @@ class Node {
       $this->host          = $this->url["parsed"]["host"];
       $this->path = isset($this->url["parsed"]["path"]) ? $this->url["parsed"]["path"] : "";
       $this->port = isset($this->url["parsed"]["port"]) ? $this->url["parsed"]["port"] : 80;
+      $this->ssl  = is_ssl();
       $this->hash = $replicant::$default_db::current_node_hash()->value;
    }
 

@@ -36,7 +36,7 @@ class Functions {
       }
 
       if($is_trust_request) {
-         $args["is_request_trust"] = true;
+         $args["is_trust_request"] = true;
       }
 
       // Basic validations
