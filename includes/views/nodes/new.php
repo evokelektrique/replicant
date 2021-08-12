@@ -1,4 +1,5 @@
 <div class="wrap">
+   <?php var_dump(new Replicant\Node()) ?>
     <h1><?php _e( 'Add new node', 'replicant' ); ?></h1>
 
     <form action="" method="post">

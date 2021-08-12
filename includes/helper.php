@@ -10,17 +10,17 @@ class Helper {
    /**
     * Generates an Unique Random Byte String
     * 
-    * @access private
-    * @var int $length Length of the unique generated string
+    * @var    int    $length Length of the unique generated string
+    * @return string         Random generated value dependant to the $length
     */
-   public static function generate_random_string($length) {
+   public static function generate_random_string(int $length = 32) {
       // Solution for PHP_VERSION >= 7
       if(version_compare(PHP_VERSION, "7.0.0") >= 0) {
          $bytes = random_bytes($length);
          return bin2hex($bytes);
       }
 
-      // Solution for PHP_VERSION >= 5  
+      // Solution for PHP_VERSION >= 5
       $bytes = openssl_random_pseudo_bytes($length);
       return bin2hex($bytes);
    }
@@ -28,8 +28,8 @@ class Helper {
    /**
     * Print custom notice
     * 
-    * @param  string $status  status given from $_GET arguments
-    * @param  string $message message given from $_GET arguments
+    * @param  string $status  Status given from $_GET arguments ("error" or "success")
+    * @param  string $message Message given from $_GET arguments
     * @return string          Custom html notice output with $status class
     */
    public static function print_notice($status, $message) {
@@ -61,17 +61,14 @@ class Helper {
    /**
     * Generate an URL from given Node ID
     * 
-    * @param  int    $node_id
-    * @return array          A list of Raw and Parsed version of generated URL
+    * @param  array $node
+    * @return array       A list of Raw and Parsed version of generated URL
     */
-   public static function generate_url_from_node(int $node_id) {
-      // Fetch node
-      $node = \Replicant\Tables\Nodes\Functions::get($node_id);
-
+   public static function generate_url_from_node($node) {
       // Create an empty list and append the node variables into it
       // And create different versions of URL
       $url           = [];
-      $url["scheme"] = $node->ssl === 0 ? "http://" : "https://";
+      $url["scheme"] = intval($node->ssl) === 0 ? "http://" : "https://";
       $url["host"]   = $node->host;
 
       // Merge $url array

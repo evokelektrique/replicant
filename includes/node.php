@@ -11,6 +11,13 @@ if(!defined( 'ABSPATH' )) exit;
 class Node {
 
    /**
+    * Server nickname
+    * 
+    * @var string
+    */
+   public $name;
+
+   /**
     * Server hostname
     * 
     * @var string
@@ -25,11 +32,25 @@ class Node {
    public $port;
 
    /**
-    * Server nickname
+    * Server path
     * 
     * @var string
     */
-   public $name;
+   public $path;
+
+   /**
+    * Server unique hash
+    * 
+    * @var string
+    */
+   public $hash;
+
+   /**
+    * Full server URL
+    * 
+    * @var array
+    */
+   public $url;
 
    /**
     * WordPress database instance
@@ -39,13 +60,28 @@ class Node {
    private $wpdb;
 
    public function __construct(Node $node = null) {
-      global $wpdb;
-      
+      // Don't need $wpdb, maybe delete it later
+      // global $wpdb;
+      // $this->wpdb = $wpdb;
+
+      global $replicant;
+
       if($node) {
-         var_dump($node);
+         return $node;
       }
 
-      $this->wpdb = $wpdb;
+      // Define values
+      $url        = get_site_url();
+      $parsed_url = parse_url($url);
+
+      // Assign associated variables
+      $this->url["parsed"] = $parsed_url;
+      $this->url["full"]   = $url;
+      $this->name          = get_bloginfo('name');
+      $this->host          = $this->url["parsed"]["host"];
+      $this->path = isset($this->url["parsed"]["path"]) ? $this->url["parsed"]["path"] : "";
+      $this->port = isset($this->url["parsed"]["port"]) ? $this->url["parsed"]["port"] : 80;
+      $this->hash = $replicant::$default_db::current_node_hash()->value;
    }
 
    /**

@@ -59,6 +59,7 @@ class Schema {
          `port` INT unsigned NOT NULL,
          `ssl` boolean DEFAULT false NOT NULL,
          `is_trusted` boolean DEFAULT false NOT NULL,
+         `is_trust_request` boolean DEFAULT false NOT NULL,
          `hash` TEXT NOT NULL,
          `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
          `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

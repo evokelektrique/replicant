@@ -4,7 +4,7 @@
    <h3><?= __( "Settings", "replicant" ); ?></h3>
    <hr>
    
-   <span replicant-tab="one"class="replicant-nav-tab active">
+   <span replicant-tab="one" class="replicant-nav-tab active">
       <?= __( "Authorization", "replicant" ); ?>
    </span>
 

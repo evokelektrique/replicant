@@ -45,7 +45,7 @@ class Replicant {
     * 
     * @static float $db_version migration version
     */
-   private static $db_version = 0.5;
+   private static $db_version = 0.6;
 
    /**
     * Load Files And Initialize Classes In Order
@@ -74,6 +74,7 @@ class Replicant {
       // Insert Default Values Into Database
       self::$default_db = new Replicant\Database\Defaults();
       self::$default_db::authorization();
+      self::$default_db::current_node_hash();
 
       // Display menus on dashboard and other pages
       new Replicant\Dashboard();
@@ -87,6 +88,7 @@ class Replicant {
       // Replicant\Log::purge(9);
       // $node = new Replicant\Node();
       // var_dump($node->get_by("name", "test"));
+
    }
 
    /**

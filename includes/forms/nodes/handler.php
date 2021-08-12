@@ -89,14 +89,24 @@ class Handler {
       } else {
          $success_message = __('Node successfully added.', 'replicant');
          $redirect_to = add_query_arg( [
-               'status' => 'success',
+               'status'  => 'success',
                'message' => $success_message
             ],
             $page_url
          );
 
          // Request trust at node creation
-         \Replicant\Controllers\Auth::request_trust($insert_id);
+         $node = Functions::get($insert_id);
+         $trust_response = \Replicant\Controllers\Auth::request_trust($insert_id);
+         if(is_wp_error( $trust_response )) {
+            $error_message = $trust_response->get_error_message();
+            $redirect_to = add_query_arg( [
+                  'status'  => 'error',
+                  'message' => $error_message
+               ],
+               $page_url
+            );
+         }
       }
 
       wp_safe_redirect( $redirect_to );

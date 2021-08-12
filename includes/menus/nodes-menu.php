@@ -36,12 +36,11 @@ class NodesMenu {
             break;
 
          case "request_trust":
-            $node_id = intval($_GET["id"]);
-
-            \Replicant\Controllers\Auth::request_trust($node_id);
-
-            // $location = $_SERVER["HTTP_REFERER"];
-            // wp_redirect( $location );
+            $node_id  = intval($_GET["id"]);
+            $node     = \Replicant\Tables\Nodes\Functions::get($node_id);
+            $request  = \Replicant\Controllers\Auth::request_trust($node);
+            $response = json_decode($request, true);
+            $template = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";
             break;
 
          default:

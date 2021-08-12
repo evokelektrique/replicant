@@ -10,10 +10,12 @@ class Functions {
 
    /**
     * Insert a new node
-    * @param  array      $args
-    * @return int|false  Returns row ID or Error
+    * 
+    * @param   array      $args
+    * @param   bool       $is_trust_request  Determine if this is requesting for trust
+    * @return  int|false                     Returns row ID or Error
     */
-   public static function insert_node(array $args = []) {
+   public static function insert_node(array $args = [], bool $is_trust_request = false) {
       global $wpdb;
 
       $defaults = array(
@@ -24,19 +26,28 @@ class Functions {
         'port' => 80
       );
 
-      $args         = wp_parse_args( $args, $defaults );
-      $args["hash"] = \Replicant\Helper::generate_random_string(32);
-      $table_name   = 'replicant_nodes';
+      $args       = wp_parse_args( $args, $defaults );
+      $table_name = 'replicant_nodes';
+
+      // Check if hash exists in parameters because hashes
+      // should be identical When a node is requesting trust
+      if(!isset($args["hash"])) {
+         $args["hash"] = \Replicant\Helper::generate_random_string();
+      }
+
+      if($is_trust_request) {
+         $args["is_request_trust"] = true;
+      }
 
       // Basic validations
       if(empty( $args['name'] )) {
-        return new WP_Error( 'no-name', __( 'No Node Name provided.', 'replicant' ) );
+        return new \WP_Error( 'no-name', __( 'No Node Name provided.', 'replicant' ) );
       }
       if(empty( $args['host'] )) {
-        return new WP_Error( 'no-address', __( 'No Address provided.', 'replicant' ) );
+        return new \WP_Error( 'no-address', __( 'No Address provided.', 'replicant' ) );
       }
       if(empty( $args['port'] )) {
-        return new WP_Error( 'no-port', __( 'No Port provided.', 'replicant' ) );
+        return new \WP_Error( 'no-port', __( 'No Port provided.', 'replicant' ) );
       }
 
       // Remove row id to determine if new or update
