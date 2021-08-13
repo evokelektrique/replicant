@@ -52,9 +52,11 @@ class Helper {
     */
    public static function print_badge($status) {
       ?>
+
       <span class="replicant-badge replicant-badge-<?= $status ? "success" : "error" ?>">
          <?= $status ? __( 'Yes', 'replicant' ) : __( 'No', 'replicant' ); ?>
       </span>
+
       <?php
    }
 
@@ -81,13 +83,14 @@ class Helper {
       $path    = parse_url(trim($url_string), PHP_URL_PATH);
 
       // Final URl formation
-      $formed_url = $url["scheme"] . $host . ":" . $node->port . $path;
+      $formed_url = $host . ":" . $node->port . $path;
       
       return [
          "formed" => $formed_url,
          "parsed" => [
-            "scheme" => $scheme, 
-            "host"   => $host, 
+            "scheme" => $url["scheme"], 
+            "host"   => $host,
+            "port"   => $node->port,
             "path"   => $path
          ]
       ];

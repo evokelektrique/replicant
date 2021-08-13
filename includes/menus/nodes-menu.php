@@ -40,8 +40,13 @@ class NodesMenu {
             $node     = \Replicant\Tables\Nodes\Functions::get($node_id);
             $request  = \Replicant\Controllers\Auth::request_trust($node);
             $response = json_decode($request, true);
-            var_dump($request);
             $template = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";
+            break;
+
+         case "accept_trust":
+            $node_hash = $_GET["hash"];
+            $response  = \Replicant\Tables\Nodes\Functions::accept_trust($node_hash);
+            $template  = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";
             break;
 
          default:

@@ -60,11 +60,10 @@ class Node {
    private $wpdb;
 
    public function __construct(Node $node = null) {
-      // Don't need $wpdb, maybe delete it later
-      // global $wpdb;
-      // $this->wpdb = $wpdb;
-
+      global $wpdb;
       global $replicant;
+
+      $this->wpdb = $wpdb;
 
       if($node) {
          return $node;
@@ -83,25 +82,6 @@ class Node {
       $this->port = isset($this->url["parsed"]["port"]) ? $this->url["parsed"]["port"] : 80;
       $this->ssl  = is_ssl();
       $this->hash = $replicant::$default_db::current_node_hash()->value;
-   }
-
-   /**
-    * Search for by custom Key and Value in "nodes" table
-    * 
-    * @param  string|null $key   WHERE key in sql query
-    * @param  string|null $value WHERE value in sql query
-    * @return array              Single row fetched by $wpdb
-    */
-   public function get_by(string $key = null, $value = null) {
-      if(!$value) {
-         return;
-      }
-
-      $table_name = \Replicant\Config::$TABLES["nodes"];
-      $query      = "SELECT * FROM $table_name WHERE `$key` = %s";
-      $result     = $this->wpdb->get_row($this->wpdb->prepare($query, $value));
-
-      return $result;
    }
 
 }

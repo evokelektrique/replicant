@@ -11,7 +11,6 @@ class Functions {
     * Get all node
     *
     * @param $args array
-    *
     * @return array
     */
    public static function get_all( $search = null, $args = array() ) {
@@ -64,7 +63,6 @@ class Functions {
     * Fetch a single node from database
     *
     * @param int $id
-    *
     * @return array
     */
    public static function get( $id = 0 ) {
@@ -77,6 +75,27 @@ class Functions {
       );
    }
 
+   /**
+    * Search for by custom Key and Value in "nodes" table
+    * 
+    * @param  string|null $key   WHERE key in sql query
+    * @param  string|null $value WHERE value in sql query
+    * @return array              Single row fetched by $wpdb
+    */
+   public static function get_by(string $key = null, $value = null) {
+      if(!$value) {
+         return;
+      }
+
+      global $wpdb;
+
+      $table_name = \Replicant\Config::$TABLES["nodes"];
+      $query      = "SELECT * FROM $table_name WHERE `$key` = %s";
+      $result     = $wpdb->get_row($wpdb->prepare($query, $value));
+
+      return $result;
+   }
+
    public static function delete( $id = null ) {
       if(!$id) {
          return;
@@ -86,6 +105,42 @@ class Functions {
       $table_name = \Replicant\Config::$TABLES["nodes"];
 
       $wpdb->delete( $table_name, ["id" => $id], ["%d"] );
+   }
+
+
+   /**
+    * Find and accept trust of given Node
+    * 
+    * @param  int          $id   Node ID
+    * @param  string       $hash Node unique hash
+    * @return array|object       Success message or error
+    */
+   public static function accept_trust(string $hash) {
+      $node = self::get_by("hash", $hash);
+      if(!$node) {
+         return new \WP_Error( 'node-not-found', "Couldn't find Node" );
+      }
+
+      global $wpdb;
+      $table_name = \Replicant\Config::$TABLES["nodes"];
+
+      $args = [
+         "is_trusted" => true
+      ];
+
+      $status  = true;
+      $message = __("Successfully accepted trust of the Node", "replicant");
+      $update  = $wpdb->update( $table_name, $args, ['hash' => $node->hash] );
+
+      if($update) {
+         $status  = false;
+         $message = __("Something went wrong in accepting trust, Please try again.", "replicant");
+      }
+
+      return [
+         "status"  => $status,
+         "message" => $message
+      ];
    }
 
 }

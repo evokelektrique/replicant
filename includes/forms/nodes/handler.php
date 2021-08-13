@@ -96,8 +96,9 @@ class Handler {
          );
 
          // Request trust at node creation
-         $node = \Replicant\Tables\Nodes\Functions::get($insert_id);
-         $trust_response = \Replicant\Controllers\Auth::request_trust($insert_id);
+         $node           = \Replicant\Tables\Nodes\Functions::get($insert_id);
+         $trust_response = \Replicant\Controllers\Auth::request_trust($node);
+         
          if(is_wp_error( $trust_response )) {
             $error_message = $trust_response->get_error_message();
             $redirect_to = add_query_arg( [
