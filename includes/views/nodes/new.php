@@ -1,12 +1,11 @@
 <div class="wrap">
-   <?php var_dump(new Replicant\Node()) ?>
     <h1><?php _e( 'Add new node', 'replicant' ); ?></h1>
 
     <form action="" method="post">
 
         <table class="form-table">
             <tbody>
-                <tr class="row-name">
+<!--                 <tr class="row-name">
                     <th scope="row">
                         <label for="name"><?php _e( 'Node Name', 'replicant' ); ?></label>
                     </th>
@@ -15,7 +14,7 @@
                         <span class="description"><?php _e('i.e: Shopping Website', 'replicant' ); ?></span>
                     </td>
                 </tr>
-                <tr class="row-host">
+ -->                <tr class="row-host">
                     <th scope="row">
                         <label for="host"><?php _e( 'Address', 'replicant' ); ?></label>
                     </th>

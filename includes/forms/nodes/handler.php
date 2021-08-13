@@ -37,15 +37,15 @@ class Handler {
       $field_id = isset( $_POST['field_id'] ) ? intval( $_POST['field_id'] ) : 0;
 
       // Fields
-      $name = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
+      // $name = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
       $host = isset( $_POST['host'] ) ? sanitize_text_field( $_POST['host'] ) : '';
       $ssl  = isset( $_POST['ssl'] ) ? true : false;
       $port = isset( $_POST['port'] ) ? sanitize_text_field( intval($_POST['port']) ) : '';
 
       // some basic validation
-      if(!$name) {
-         $errors[] = __( 'Error: Node Name is required', 'replicant' );
-      }
+      // if(!$name) {
+      //    $errors[] = __( 'Error: Node Name is required', 'replicant' );
+      // }
 
       if(!$host) {
          $errors[] = __( 'Error: Address is required', 'replicant' );
@@ -63,12 +63,52 @@ class Handler {
          exit;
       }
 
+      // Arguments to be inserted into database
       $fields = [
-         'name' => $name,
+         // 'name' => $name,
          'host' => $host,
          'ssl'  => $ssl,
          'port' => $port
       ];
+
+      //////////////////////////////////////
+      // Retrieve target node information //
+      //////////////////////////////////////
+      $url           = [];
+      $url["scheme"] = intval($fields["ssl"]) === 0 ? "http://" : "https://";
+      $url["host"]   = $fields["host"];
+
+      // Merge $url array
+      $url_string = implode('', $url);
+
+      // We separate parsed results 
+      $scheme  = parse_url(trim($url_string), PHP_URL_SCHEME);
+      $host    = parse_url(trim($url_string), PHP_URL_HOST);
+      $path    = parse_url(trim($url_string), PHP_URL_PATH);
+
+      // Final URl formation
+      $formed_target_url = $url["scheme"] . $host . ":" . $fields["port"] . $path;
+
+      // Send request to target URL
+      $request  = \Replicant\Controllers\Info::request_get_node($formed_target_url);
+
+      if(is_wp_error( $request )) {
+         $error_message = $request->get_error_message();
+         $redirect_to   = add_query_arg([
+               'status'  => 'error',
+               'message' => $error_message
+            ], 
+            $page_url
+         );
+         wp_safe_redirect( $redirect_to );
+      }
+
+      // Decode response message
+      $response = json_decode($request);
+
+      // Assign the related variables into $fields
+      $fields["hash"] = $response->hash;
+      $fields["name"] = $response->name;
 
       // New or edit?
       if(!$field_id) {

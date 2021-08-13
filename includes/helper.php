@@ -86,6 +86,7 @@ class Helper {
       $formed_url = $host . ":" . $node->port . $path;
       
       return [
+         "full"   => $url["scheme"] . $formed_url,
          "formed" => $formed_url,
          "parsed" => [
             "scheme" => $url["scheme"], 

@@ -84,4 +84,23 @@ class Node {
       $this->hash = $replicant::$default_db::current_node_hash()->value;
    }
 
+   /**
+    * Return current node information as JSON string
+    * 
+    * @return string JSON encoded $node
+    */
+   public function get_json() {
+      $node = [
+         "name" => $this->name,
+         "host" => $this->host,
+         "path" => $this->path,
+         "port" => $this->port,
+         "ssl"  => $this->ssl,
+         "url"  => $this->url,
+         "hash" => $this->hash
+      ];
+
+      return $node;
+   }
+
 }

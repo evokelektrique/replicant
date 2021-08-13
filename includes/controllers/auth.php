@@ -153,42 +153,5 @@ class Auth {
          );
       }
    }
-
-
-   public static function request_accept_trust($target_node) {
-      // Generate formed URL and parsed URI 
-      // for current and target nodes
-      $current_node     = new \Replicant\Node();
-      $current_node_url = \Replicant\Helper::generate_url_from_node($current_node);
-
-      $target_node_url = \Replicant\Helper::generate_url_from_node($target_node);
-      $target_node_url = $target_node_url["formed"] . "/?rest_route=/replicant/v1/auth/accept_trust";
-
-      // Create a HTTP client and send current Node 
-      // Information via POST method to the target Node
-      $client = new \GuzzleHttp\Client();
-
-      $body = [
-         "hash" => $current_node->hash,
-         "name" => $current_node->name,
-         "host" => $current_node_url["formed"],
-         "port" => $current_node->port,
-         "ssl"  => $current_node->ssl
-      ];
-
-      try {
-         $request = $client->request('POST', $target_node_url, [
-            'json' => $body
-         ]);
-         return (string) $request->getBody();
-      } catch(\GuzzleHttp\Exception\ServerException $e) {
-         $error_message = $response->getBody()->getContents();
-         return new \WP_Error('request-server-error',
-            __( 
-               "Couldn't establish a connection to server or an error happened on the target server.",
-               'replicant' 
-            ) 
-         );
-      }
-   }
+   
 }

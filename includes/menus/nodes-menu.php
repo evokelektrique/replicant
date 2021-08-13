@@ -46,7 +46,13 @@ class NodesMenu {
          case "accept_trust":
             $node_hash = $_GET["hash"];
             $response  = \Replicant\Tables\Nodes\Functions::accept_trust($node_hash);
-            $template  = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";
+            $template  = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";            
+
+            // $node_id  = intval($_GET["id"]);
+            // $node     = \Replicant\Tables\Nodes\Functions::get($node_id);
+            // $url      = \Replicant\Helper::generate_url_from_node($node);
+            // $request  = \Replicant\Controllers\Info::request_get_node($url["full"]);
+            // $response = json_decode($request);
             break;
 
          default:
@@ -58,4 +64,5 @@ class NodesMenu {
           require_once $template;
       }
    }
+   
 }
