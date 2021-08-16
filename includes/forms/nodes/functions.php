@@ -40,9 +40,9 @@ class Functions {
       }
 
       // Basic validations
-      if(empty( $args['name'] )) {
-        return new \WP_Error( 'no-name', __( 'No Node Name provided.', 'replicant' ) );
-      }
+      // if(empty( $args['name'] )) {
+      //   return new \WP_Error( 'no-name', __( 'No Node Name provided.', 'replicant' ) );
+      // }
       if(empty( $args['host'] )) {
         return new \WP_Error( 'no-address', __( 'No Address provided.', 'replicant' ) );
       }
@@ -81,4 +81,5 @@ class Functions {
 
       return false;
    }
+
 }

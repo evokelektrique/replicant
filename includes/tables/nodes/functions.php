@@ -111,12 +111,10 @@ class Functions {
    /**
     * Find and accept trust of given Node
     * 
-    * @param  int          $id   Node ID
-    * @param  string       $hash Node unique hash
+    * @param  object       $node Node object by self::get_by()
     * @return array|object       Success message or error
     */
-   public static function accept_trust(string $hash) {
-      $node = self::get_by("hash", $hash);
+   public static function accept_trust(object $node) {
       if(!$node) {
          return new \WP_Error( 'node-not-found', "Couldn't find Node" );
       }
@@ -132,7 +130,7 @@ class Functions {
       $message = __("Successfully accepted trust of the Node", "replicant");
       $update  = $wpdb->update( $table_name, $args, ['hash' => $node->hash] );
 
-      if($update) {
+      if(!$update) {
          $status  = false;
          $message = __("Something went wrong in accepting trust, Please try again.", "replicant");
       }

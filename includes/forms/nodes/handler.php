@@ -71,9 +71,9 @@ class Handler {
          'port' => $port
       ];
 
-      //////////////////////////////////////
-      // Retrieve target node information //
-      //////////////////////////////////////
+      /////////////////////////////////////
+      // Receive target node information //
+      /////////////////////////////////////
       $url           = [];
       $url["scheme"] = intval($fields["ssl"]) === 0 ? "http://" : "https://";
       $url["host"]   = $fields["host"];
@@ -103,19 +103,21 @@ class Handler {
          wp_safe_redirect( $redirect_to );
       }
 
-      // Decode response message
+      // Decode request message
       $response = json_decode($request);
 
       // Assign the related variables into $fields
-      $fields["hash"] = $response->hash;
-      $fields["name"] = $response->name;
+      $fields["hash"] = htmlspecialchars($response->hash);
+      $fields["name"] = htmlspecialchars($response->name);
 
-      // New or edit?
+      //////////////////////
+      // Insert or Update //
+      //////////////////////
       if(!$field_id) {
          $insert_id = Functions::insert_node( $fields );
       } else {
          $fields['id'] = $field_id;
-         $insert_id = Functions::insert_node( $fields );
+         $insert_id    = Functions::insert_node( $fields );
       }
 
       if(is_wp_error( $insert_id )) {

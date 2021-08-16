@@ -58,10 +58,27 @@ class Auth {
             ]
          ]
       );
+
+      // Current Node Trust Acceptance Endpoint
+      register_rest_route(
+         $this->namespace, 
+         $this->resource . "/accept_current",
+         [
+            // Register the readable endpoint
+            [
+               "methods"  => "POST",
+               "callback" => [&$this, "current_node_accept_trust"]
+            ]
+         ]
+      );
    }
 
+   ////////////////////////
+   // Response Callbacks //
+   ////////////////////////
+
    /**
-    * Trust request endpoint
+    * Trust request callback
     * 
     * @param  object $request Incoming request information
     * @return string          JSON Object containing specefic "status" and "message"
@@ -87,7 +104,7 @@ class Auth {
    }
 
    /**
-    * Trust acceptance endpoint
+    * Trust acceptance callback
     * 
     * @param  object $request Incoming request information
     * @return string          JSON Object containing specefic "status" and "message"
@@ -109,6 +126,60 @@ class Auth {
 
       return rest_ensure_response( $data );
    }
+
+   /**
+    * Current Node trust acceptance callback
+    * 
+    * NOTE: This function will change the value of "is_trusted" 
+    *       of target Node in current Node database so both Nodes
+    *       would be identical
+    * 
+    * @param  object $request Incoming request information
+    * @return string          JSON Object containing specefic "status" and "message"
+    */
+   public function current_node_accept_trust($request) {
+      global $wpdb;
+
+      $fields   = $request->get_json_params();
+      $response = null;
+      $data     = [];
+
+      if(empty($fields) || !isset($fields["hash"])) {
+         return rest_ensure_response([
+            "status"  => false, 
+            "message" => __("Invalid request", "replicant")
+         ]);
+      }
+
+      // var_dump($fields);
+
+      $table_name = \Replicant\Config::$TABLES["nodes"];
+
+      $args = [
+         "is_trusted" => true
+      ];
+
+      $data['status']  = true;
+      $data['message'] = __("Successfully accepted trust of the Node", "replicant");
+
+      // Do update
+      $update = $wpdb->update( 
+         $table_name,
+         $args,
+         ['hash' => htmlspecialchars($fields["hash"])]
+      );
+
+      if(!$update) {
+         $data['status']  = false;
+         $data['message'] = __("Something went wrong in accepting trust, Please try again.", "replicant");
+      }
+
+      return rest_ensure_response($data);
+   }
+
+   ///////////////////
+   // API Functions //
+   ///////////////////
 
    /**
     * Send a HTTP request to node URL
@@ -142,6 +213,44 @@ class Auth {
          $request = $client->request('POST', $target_node_url, [
             'json' => $body
          ]);
+         return (string) $request->getBody();
+      } catch(\GuzzleHttp\Exception\ServerException $e) {
+         $error_message = $response->getBody()->getContents();
+         return new \WP_Error('request-server-error',
+            __( 
+               "Couldn't establish a connection to server or an error happened on the target server.",
+               'replicant' 
+            ) 
+         );
+      }
+   }
+
+
+   /**
+    * Send a HTTP request to the $target_node's URL and 
+    * Tell it that current Node has accepted you
+    *
+    * @param object $target_node Given Node to send information to it
+    * @return string JSON repsonse of target node
+    */
+   public static function accept_target_trust(object $target_node) {
+      $current_node    = new \Replicant\Node();
+
+      $target_node_url = \Replicant\Helper::generate_url_from_node($target_node);
+      $target_node_url = $target_node_url["formed"] . "/?rest_route=/replicant/v1/auth/accept_current";
+      // Create a HTTP client and send current Node 
+      // Information(Hash) via POST method to the target Node
+      $client = new \GuzzleHttp\Client();
+
+      $body = [
+         "hash" => $current_node->hash
+      ];
+
+      try {
+         $request = $client->request('POST', $target_node_url, [
+            'json' => $body
+         ]);
+         var_export((string) $request->getBody());
          return (string) $request->getBody();
       } catch(\GuzzleHttp\Exception\ServerException $e) {
          $error_message = $response->getBody()->getContents();

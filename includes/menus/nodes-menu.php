@@ -44,9 +44,17 @@ class NodesMenu {
             break;
 
          case "accept_trust":
-            $node_hash = $_GET["hash"];
-            $response  = \Replicant\Tables\Nodes\Functions::accept_trust($node_hash);
-            $template  = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";            
+            $target_node_hash       = $_GET["hash"];
+            $target_node            = \Replicant\Tables\Nodes\Functions::get_by("hash", $target_node_hash);
+            $accept_response        = \Replicant\Tables\Nodes\Functions::accept_trust($target_node);
+            $accept_target_response = \Replicant\Controllers\Auth::accept_target_trust($target_node);
+            var_dump($accept_target_response);
+            $response = [
+               'status'  => $accept_response["status"],
+               'message' => $accept_response["message"]
+            ];
+
+            $template         = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";            
 
             // $node_id  = intval($_GET["id"]);
             // $node     = \Replicant\Tables\Nodes\Functions::get($node_id);
