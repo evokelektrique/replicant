@@ -151,8 +151,6 @@ class Auth {
          ]);
       }
 
-      // var_dump($fields);
-
       $table_name = \Replicant\Config::$TABLES["nodes"];
 
       $args = [

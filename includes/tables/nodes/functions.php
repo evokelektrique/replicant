@@ -96,6 +96,27 @@ class Functions {
       return $result;
    }
 
+   /**
+    * Get a number of Nodes awaiting to trust
+    * 
+    * @return int Count of Nodes
+    */
+   public static function get_await_count() {
+      global $wpdb;
+
+      $table_name = \Replicant\Config::$TABLES["nodes"];
+      $values     = ["false", "true"];
+      $query      = "SELECT COUNT(*) FROM $table_name WHERE `is_trusted` = false AND `is_trust_request` = true";
+      $result     = (int) $wpdb->get_var($query);
+      return $result;
+   }
+
+   /**
+    * Delete single row
+    * 
+    * @param  int $id Row ID
+    * @return null|wpdb     Null or Last affected row
+    */
    public static function delete( $id = null ) {
       if(!$id) {
          return;

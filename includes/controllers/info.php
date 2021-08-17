@@ -47,6 +47,10 @@ class Info {
       );
    }
 
+   ////////////////////////
+   // Response Callbacks //
+   ////////////////////////
+
    /**
     * Display current node information (Exclude sensetive data)
     * 
@@ -57,6 +61,9 @@ class Info {
       return rest_ensure_response( $node->get_json() );
    }
 
+   ///////////////////
+   // API Functions //
+   ///////////////////
 
    /**
     * Send a HTTP request to fetch target Node information
@@ -80,7 +87,6 @@ class Info {
             ) 
          );
       }
-
    }
 
 }

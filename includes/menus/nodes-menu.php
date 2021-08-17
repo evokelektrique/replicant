@@ -8,10 +8,14 @@ if(!defined( 'ABSPATH' )) exit;
 class NodesMenu {
 
    public function __construct() {
+      // Total Nodes awaiting to trust
+      $nodes_trust_await_count = \Replicant\Tables\Nodes\Functions::get_await_count();
+
       add_submenu_page( 
          "replicant-settings",
          __( "Nodes", "replicant" ),
-         __( "Nodes", "replicant" ),
+        $nodes_trust_await_count ?  sprintf(__("Nodes", "replicant") . '<span class="awaiting-mod">%d</span>', $nodes_trust_await_count) : __('Nodes', 'replicant'),
+
          "manage_options",
          "replicant-nodes",
          [&$this, "handle"]
@@ -44,23 +48,21 @@ class NodesMenu {
             break;
 
          case "accept_trust":
-            $target_node_hash       = $_GET["hash"];
-            $target_node            = \Replicant\Tables\Nodes\Functions::get_by("hash", $target_node_hash);
+            // Fetch Node
+            $target_node_hash = $_GET["hash"];
+            $target_node      = \Replicant\Tables\Nodes\Functions::get_by("hash", $target_node_hash);
+
+            // Accept target Node trust on current database
+            // and target Node database.
             $accept_response        = \Replicant\Tables\Nodes\Functions::accept_trust($target_node);
             $accept_target_response = \Replicant\Controllers\Auth::accept_target_trust($target_node);
-            var_dump($accept_target_response);
+
             $response = [
                'status'  => $accept_response["status"],
                'message' => $accept_response["message"]
             ];
 
-            $template         = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";            
-
-            // $node_id  = intval($_GET["id"]);
-            // $node     = \Replicant\Tables\Nodes\Functions::get($node_id);
-            // $url      = \Replicant\Helper::generate_url_from_node($node);
-            // $request  = \Replicant\Controllers\Info::request_get_node($url["full"]);
-            // $response = json_decode($request);
+            $template = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";            
             break;
 
          default:
