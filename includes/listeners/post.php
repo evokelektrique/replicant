@@ -6,12 +6,13 @@ namespace Replicant\Listeners;
 if(!defined( 'ABSPATH' )) exit; 
 
 /**
- * Listens to posts events
+ * Listens to post events
  */
 class Post {
 
    public function __construct() {
-      add_action("save_post", [&$this, "listen"]);
+      // add_action("save_post", [&$this, "listen"]);
+      add_action( 'post_updated', [&$this, 'check_values'], 10, 3 );
    }
 
    /**
@@ -25,10 +26,19 @@ class Post {
       if($update) {
          $this->update($post);
       }
-
-      // $this->
    }
 
+   function check_values($post_ID, $post_after, $post_before){
+      echo '<b>Post ID:</b><br />';
+      var_dump($post_ID);
+
+      echo '<b>Post Object AFTER update:</b><br />';
+      var_dump($post_after);
+
+      echo '<b>Post Object BEFORE update:</b><br />';
+      var_dump($post_before);
+   }
+    
 
 
 }

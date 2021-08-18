@@ -41,7 +41,8 @@ class Info {
             // Register the readable endpoint
             [
                "methods"  => "GET",
-               "callback" => [&$this, "get_node"]
+               "callback" => [&$this, "get_node"],
+               "permission_callback" => "__return_true"
             ]
          ]
       );

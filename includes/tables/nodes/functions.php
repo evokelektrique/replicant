@@ -108,6 +108,7 @@ class Functions {
       $values     = ["false", "true"];
       $query      = "SELECT COUNT(*) FROM $table_name WHERE `is_trusted` = false AND `is_trust_request` = true";
       $result     = (int) $wpdb->get_var($query);
+      
       return $result;
    }
 

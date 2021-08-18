@@ -14,8 +14,7 @@ class NodesMenu {
       add_submenu_page( 
          "replicant-settings",
          __( "Nodes", "replicant" ),
-        $nodes_trust_await_count ?  sprintf(__("Nodes", "replicant") . '<span class="awaiting-mod">%d</span>', $nodes_trust_await_count) : __('Nodes', 'replicant'),
-
+         $nodes_trust_await_count ?  sprintf(__("Nodes", "replicant") . '<span class="awaiting-mod">%d</span>', $nodes_trust_await_count) : __('Nodes', 'replicant'),
          "manage_options",
          "replicant-nodes",
          [&$this, "handle"]
