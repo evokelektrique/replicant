@@ -11,35 +11,77 @@ if(!defined( 'ABSPATH' )) exit;
 class Post {
 
    public function __construct() {
-      // add_action("save_post", [&$this, "listen"]);
-      add_action( 'post_updated', [&$this, 'check_values'], 10, 3 );
+      add_action("save_post", [&$this, "listen"], 10, 3);
    }
 
    /**
-    * Fires once a post has been saved
+    * Fires once when a post has been saved or updated
     * 
-    * @param  int     $post_id   Post ID
+    * @param  int     $id   Post ID
     * @param  WP_Post $post Post Object
-    * @param  bool    $update    Whether this is an existing post being updated or not
     */
-   private function listen($post_id, $post, $update) {
-      if($update) {
-         $this->update($post);
+   public function listen($post_id, $post, $update){
+      $parsed_post = $this->parse($post_id, $post);
+      error_log(print_r($parsed_post, true));
+   }
+
+   /**
+    * Parse and filter out product based on its type
+    * 
+    * @param  int      $post_id Post ID
+    * @param  \WP_Post $post    Post
+    * @return array             Parsed metadata and post
+    */
+   private function parse(int $post_id, $post) {
+      $parsed_post = null;
+      
+      // Avoid auto saved and drafted posts
+      if($post->post_status !== 'publish') {
+         return;
       }
+
+      // Check if it's a WooCommerce product 
+      // and whether it's activated or not
+      if($post->post_type === 'product' && \Replicant\Helper::is_woocommerce_active()) {
+         $parsed_post = $this->do_woocommerce($post);
+      }
+
+      // Check If it's actually a post
+      if($post->post_type === 'post' || $post->post_type === 'page') {
+         $parsed_post = $this->do_post($post);
+      }
+
+      $meta_data = get_post_meta($post_id);
+
+      return [
+         "meta_data" => $meta_data,
+         "post"      => $parsed_post->to_array()
+      ];
    }
 
-   function check_values($post_ID, $post_after, $post_before){
-      echo '<b>Post ID:</b><br />';
-      var_dump($post_ID);
-
-      echo '<b>Post Object AFTER update:</b><br />';
-      var_dump($post_after);
-
-      echo '<b>Post Object BEFORE update:</b><br />';
-      var_dump($post_before);
+   /**
+    * Parse Post or Page
+    * 
+    * @param  \WP_Post $post Post or Page
+    * @return \WP_Post
+    */
+   private function do_post($post) {
+      return $post;
    }
-    
 
+   /**
+    * Parse WooCommerce product
+    *
+    * @param  \WP_Post $post WooCommerce Product Post
+    * @return \WP_Post
+    */
+   private function do_woocommerce($post) {
+      if(!$product = wc_get_product($post)) {
+         return;
+      }
+
+      // Do something with $product later...
+      return $product;
+   }
 
 }
-

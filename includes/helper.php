@@ -96,4 +96,14 @@ class Helper {
          ]
       ];
    }
+
+   /**
+    * Check if WooCommerce is actived in theme
+    * 
+    * @return bool Activation status
+    */
+   public static function is_woocommerce_active() {
+      return class_exists("WooCommerce");
+   }
+
 }

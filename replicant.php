@@ -58,7 +58,8 @@ class Replicant {
          "includes/database/*.php",
          "includes/tables/nodes/*.php",
          "includes/forms/nodes/*.php",
-         "includes/controllers/*.php"
+         "includes/controllers/*.php",
+         "includes/listeners/*.php"
       ];
       $this->load_files($files);
 
@@ -82,13 +83,8 @@ class Replicant {
       // Initialize Forms
       new Replicant\Forms\Nodes\Handler();
 
-      // // Initialize Routes
-      // new Replicant\Routes();
-
-      // Replicant\Log::purge(9);
-      // $node = new Replicant\Node();
-      // var_dump($node->get_by("name", "test"));
-
+      // Initialize Listeners
+      new Replicant\Listeners\Post();
    }
 
    /**
