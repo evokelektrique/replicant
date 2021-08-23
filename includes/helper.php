@@ -98,7 +98,7 @@ class Helper {
    }
 
    /**
-    * Check if WooCommerce is actived in theme
+    * Check if WooCommerce is activated in theme
     * 
     * @return bool Activation status
     */

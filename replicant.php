@@ -52,14 +52,15 @@ class Replicant {
     */
    private function __construct() {
       // Load necessary files 
-      $files = [
-         "includes/*.php",
-         "includes/admin/*.php",
+      $files = [                       // TODO: Write a good documentation for this section.
+         "includes/*.php",             
+         "includes/admin/*.php",       // Dashboard related files such as its views and functions
          "includes/database/*.php",
          "includes/tables/nodes/*.php",
          "includes/forms/nodes/*.php",
          "includes/controllers/*.php",
-         "includes/listeners/*.php"
+         "includes/listeners/*.php",
+         "includes/publishers/*.php"
       ];
       $this->load_files($files);
 
@@ -67,6 +68,10 @@ class Replicant {
       new Replicant\Config();
 
       // Initialize Database
+      // 
+      // Check if current database version stored on `wp_options` 
+      // table is set or lower than the plugin's version($db_version) 
+      // and if so, then upgrade current database.
       $option_db_version = get_option("replicant_db_version");
       if($option_db_version === false || $option_db_version < self::$db_version) {
          $this->init_db();

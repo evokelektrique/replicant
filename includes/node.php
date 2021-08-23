@@ -18,6 +18,13 @@ class Node {
    public $name;
 
    /**
+    * Server HTTP(s) support
+    * 
+    * @var boolean
+    */
+   public $ssl;
+
+   /**
     * Server hostname
     * 
     * @var string

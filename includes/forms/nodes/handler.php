@@ -7,10 +7,19 @@ namespace Replicant\Forms\Nodes;
  */
 class Handler {
 
+
+   /**
+    * Form update status
+    * 
+    * @var boolean
+    */
+   private $is_update;
+
    /**
     * Hook 'em all
     */
    public function __construct() {
+      $this->is_update = false;
       add_action( 'admin_init', [&$this, 'handle_form'] );
    }
 
@@ -36,16 +45,20 @@ class Handler {
       $page_url = admin_url( 'admin.php?page=replicant-nodes' );
       $field_id = isset( $_POST['field_id'] ) ? intval( $_POST['field_id'] ) : 0;
 
-      // Fields
-      // $name = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
+      ////////////
+      // Fields //
+      ////////////
+      $name = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
       $host = isset( $_POST['host'] ) ? sanitize_text_field( $_POST['host'] ) : '';
       $ssl  = isset( $_POST['ssl'] ) ? true : false;
       $port = isset( $_POST['port'] ) ? sanitize_text_field( intval($_POST['port']) ) : '';
 
-      // some basic validation
-      // if(!$name) {
-      //    $errors[] = __( 'Error: Node Name is required', 'replicant' );
-      // }
+      /////////////////
+      // Validations //
+      /////////////////
+      if(!$name) {
+         $errors[] = __( 'Error: Node Name is required', 'replicant' );
+      }
 
       if(!$host) {
          $errors[] = __( 'Error: Address is required', 'replicant' );
@@ -55,7 +68,7 @@ class Handler {
          $errors[] = __( 'Error: Port is required', 'replicant' );
       }
 
-      // bail out if error found
+      // Bail out if error found
       if($errors) {
          $first_error = reset( $errors );
          $redirect_to = add_query_arg( ['error' => $first_error], $page_url );
@@ -65,7 +78,6 @@ class Handler {
 
       // Arguments to be inserted into database
       $fields = [
-         // 'name' => $name,
          'host' => $host,
          'ssl'  => $ssl,
          'port' => $port
@@ -101,6 +113,7 @@ class Handler {
             $page_url
          );
          wp_safe_redirect( $redirect_to );
+         die();
       }
 
       // Decode request message
@@ -116,8 +129,10 @@ class Handler {
       if(!$field_id) {
          $insert_id = Functions::insert_node( $fields );
       } else {
-         $fields['id'] = $field_id;
-         $insert_id    = Functions::insert_node( $fields );
+         $fields['id']    = $field_id;
+         $fields['name']  = $name;
+         $insert_id       = Functions::insert_node( $fields );
+         $this->is_update = true;
       }
 
       if(is_wp_error( $insert_id )) {
@@ -129,7 +144,8 @@ class Handler {
             $page_url
          );
       } else {
-         $success_message = __('Node successfully added.', 'replicant');
+         $message_method  = $this->is_update ? "updated" : "added";
+         $success_message = sprintf(__("Node successfully %s.", "replicant"), $message_method);
          $redirect_to = add_query_arg( [
                'status'  => 'success',
                'message' => $success_message
@@ -138,7 +154,8 @@ class Handler {
          );
 
          // Request trust at node creation
-         $node           = \Replicant\Tables\Nodes\Functions::get($insert_id);
+         $node_id        = $this->is_update ? $fields["id"] : $insert_id;
+         $node           = \Replicant\Tables\Nodes\Functions::get($node_id);
          $trust_response = \Replicant\Controllers\Auth::request_trust($node);
          
          if(is_wp_error( $trust_response )) {

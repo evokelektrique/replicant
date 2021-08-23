@@ -21,8 +21,18 @@ class Post {
     * @param  WP_Post $post Post Object
     */
    public function listen($post_id, $post, $update){
+      // Parse it
       $parsed_post = $this->parse($post_id, $post);
-      error_log(print_r($parsed_post, true));
+
+      // Publish it across all trusted nodes
+      if($parsed_post) {
+         $nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
+         if(!empty($nodes)) {
+            foreach($nodes as &$node) {
+               $publish_post = new \Replicant\Publishers\Post($parsed_post, $node);
+            }
+         }
+      }
    }
 
    /**
@@ -71,6 +81,7 @@ class Post {
 
    /**
     * Parse WooCommerce product
+    * TODO: Make it working later
     *
     * @param  \WP_Post $post WooCommerce Product Post
     * @return \WP_Post

@@ -24,11 +24,11 @@ class Functions {
       );
 
       $args       = wp_parse_args( $args, $defaults );
-      $cache_key  = 'node-all';
+      $cache_key  = 'all-nodes';
       $items      = wp_cache_get( $cache_key, 'replicant' );
       $table_name = \Replicant\Config::$TABLES["nodes"];
 
-      if ( false === $items ) {
+      if (!$items) {
          if($search && !empty($search)) {
             $items = $wpdb->get_results(
                "SELECT * FROM $table_name WHERE name LIKE '%{$search}%' ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']} , {$args['number']}" 
@@ -43,7 +43,33 @@ class Functions {
          wp_cache_set( $cache_key, $items, 'replicant' );
       }
 
-       return $items;
+      return $items;
+   }
+
+
+   /**
+    * Retrieve all trusted nodes on current database
+    * 
+    * @return array List of nodes
+    */
+   public static function get_all_trusted_nodes() {
+      global $wpdb;
+
+      $cache_key  = 'all-trusted-nodes';
+      $table_name = \Replicant\Config::$TABLES["nodes"];
+      $items      = wp_cache_get( $cache_key, 'replicant' );
+
+      if(!$items) {
+         $query = $wpdb->prepare(
+            "SELECT * FROM `$table_name` WHERE `is_trusted` = %s",
+            true
+         );
+         $items = $wpdb->get_results($query);
+
+         wp_cache_set( $cache_key, $items, 'replicant' );
+      }
+
+      return $items;
    }
 
    /**

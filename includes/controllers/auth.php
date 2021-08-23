@@ -254,10 +254,9 @@ class Auth {
          var_export((string) $request->getBody());
          return (string) $request->getBody();
       } catch(\GuzzleHttp\Exception\ServerException $e) {
-         $error_message = $response->getBody()->getContents();
          return new \WP_Error('request-server-error',
             __( 
-               "Couldn't establish a connection to server or an error happened on the target server.",
+               "Couldn't establish a connection to the server or an error happened on the target server.",
                'replicant' 
             ) 
          );
