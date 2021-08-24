@@ -12,6 +12,8 @@ if(!defined( 'ABSPATH' )) exit;
  */
 class Info {
 
+   use \Replicant\Controller;
+
    /**
     * Controller REST API Namespace name
     * 

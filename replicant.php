@@ -43,7 +43,7 @@ class Replicant {
     * Current database migration version 
     * And will be saved in 'wp_options' table
     * 
-    * @static float $db_version migration version
+    * @static float $db_version Migration version
     */
    private static $db_version = 0.6;
 
@@ -60,7 +60,8 @@ class Replicant {
          "includes/forms/nodes/*.php",
          "includes/controllers/*.php",
          "includes/listeners/*.php",
-         "includes/publishers/*.php"
+         "includes/publishers/*.php"   // No need to initialize publishers
+                                       // because they don't include hooks
       ];
       $this->load_files($files);
 

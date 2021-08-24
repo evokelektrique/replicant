@@ -56,7 +56,7 @@ class Post {
          $parsed_post = $this->do_woocommerce($post);
       }
 
-      // Check If it's actually a post
+      // Check If it's actually a post or page
       if($post->post_type === 'post' || $post->post_type === 'page') {
          $parsed_post = $this->do_post($post);
       }
