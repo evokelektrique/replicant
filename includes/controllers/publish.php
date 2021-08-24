@@ -42,7 +42,7 @@ class Publish {
             // Register the readable endpoint
             [
                "methods"             => "POST",
-               "callback"            => [&$this, "create_post"],
+               "callback"            => [$this, "create_post"],
                "permission_callback" => "__return_true"
             ]
          ]

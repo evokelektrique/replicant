@@ -175,7 +175,7 @@ class ListTable extends \WP_List_Table {
 
    function process_bulk_action() {        
       if($this->current_action() === 'trash') {
-         foreach ($_POST['node_id'] as &$id) {
+         foreach ($_POST['node_id'] as $id) {
             \Replicant\Log::purge(intval($id));
             Functions::delete(intval($id));
          }

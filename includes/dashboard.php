@@ -11,8 +11,8 @@ class Dashboard {
     * Attach dashboard functions to hooks
     */
    public function __construct() {
-      add_action( 'admin_enqueue_scripts', [&$this, 'admin_assets'] );
-      add_action( 'admin_menu', [&$this, "add_menus"] );
+      add_action( 'admin_enqueue_scripts', [$this, 'admin_assets'] );
+      add_action( 'admin_menu', [$this, "add_menus"] );
    }
 
    /**
@@ -22,7 +22,7 @@ class Dashboard {
       // Filter php files inside "./menus" folder
       $files = glob(__DIR__ . "/menus/*.php");
 
-      foreach($files as &$file) {
+      foreach($files as $file) {
          if(file_exists($file)) {
             require_once $file;
          }

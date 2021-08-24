@@ -11,7 +11,7 @@ if(!defined( 'ABSPATH' )) exit;
 class Post {
 
    public function __construct() {
-      add_action("save_post", [&$this, "listen"], 10, 3);
+      add_action("save_post", [$this, "listen"], 10, 3);
    }
 
    /**
@@ -28,8 +28,9 @@ class Post {
       // Publish it across all trusted nodes
       if($parsed_post) {
          $nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
+
          if(!empty($nodes)) {
-            foreach($nodes as &$node) {
+            foreach($nodes as $node) {
                $publish_post = new \Replicant\Publishers\Post($parsed_post, $node, $is_update);
             }
          }

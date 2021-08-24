@@ -20,7 +20,7 @@ class Handler {
     */
    public function __construct() {
       $this->is_update = false;
-      add_action( 'admin_init', [&$this, 'handle_form'] );
+      add_action( 'admin_init', [$this, 'handle_form'] );
    }
 
    /**

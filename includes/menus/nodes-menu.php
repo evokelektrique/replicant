@@ -17,7 +17,7 @@ class NodesMenu {
          $nodes_trust_await_count ?  sprintf(__("Nodes", "replicant") . '<span class="awaiting-mod">%d</span>', $nodes_trust_await_count) : __('Nodes', 'replicant'),
          "manage_options",
          "replicant-nodes",
-         [&$this, "handle"]
+         [$this, "handle"]
       );
    }  
    

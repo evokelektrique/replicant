@@ -13,7 +13,7 @@ class MainMenu {
          __("Replicant", "replicant"), 
          "manage_options", 
          "replicant-settings", 
-         [&$this, "handle"], 
+         [$this, "handle"], 
          \Replicant\Config::$ROOT_URL . "../dist/images/icon_16x16.png", 
          6
       );

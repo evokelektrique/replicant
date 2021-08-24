@@ -112,7 +112,7 @@ class Replicant {
       $schemas[] = $schema_generator::logs();
 
       // Iterate over schemas and create them
-      foreach($schemas as &$schema) {
+      foreach($schemas as $schema) {
          dbDelta( $schema );
       }
    }
@@ -134,7 +134,7 @@ class Replicant {
     * @param array $files List of files paths
     */
    private function load_files(array $files) {
-      foreach($files as &$file) {
+      foreach($files as $file) {
          foreach(glob(plugin_dir_path(__FILE__) . $file) as $filename) {
             require_once($filename);
          }

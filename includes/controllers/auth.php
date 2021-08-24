@@ -41,7 +41,7 @@ class Auth {
             // Register the readable endpoint
             [
                "methods"  => "POST",
-               "callback" => [&$this, "trust"],
+               "callback" => [$this, "trust"],
                "permission_callback" => "__return_true"
             ]
          ]
@@ -55,7 +55,7 @@ class Auth {
             // Register the readable endpoint
             [
                "methods"  => "POST",
-               "callback" => [&$this, "accept_trust"],
+               "callback" => [$this, "accept_trust"],
                "permission_callback" => "__return_true"
             ]
          ]
@@ -69,7 +69,7 @@ class Auth {
             // Register the readable endpoint
             [
                "methods"  => "POST",
-               "callback" => [&$this, "current_node_accept_trust"],
+               "callback" => [$this, "current_node_accept_trust"],
                "permission_callback" => "__return_true"
             ]
          ]
