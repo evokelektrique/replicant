@@ -17,10 +17,11 @@ class Post {
    /**
     * Fires once when a post has been saved or updated
     * 
-    * @param  int     $id   Post ID
-    * @param  WP_Post $post Post Object
+    * @param  int     $id        Post ID
+    * @param  WP_Post $post      Post Object
+    * @param  boolean $is_update Update status
     */
-   public function listen($post_id, $post, $update){
+   public function listen($post_id, $post, $is_update){
       // Parse it
       $parsed_post = $this->parse($post_id, $post);
 
@@ -29,7 +30,7 @@ class Post {
          $nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
          if(!empty($nodes)) {
             foreach($nodes as &$node) {
-               $publish_post = new \Replicant\Publishers\Post($parsed_post, $node);
+               $publish_post = new \Replicant\Publishers\Post($parsed_post, $node, $is_update);
             }
          }
       }

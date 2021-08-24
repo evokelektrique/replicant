@@ -56,9 +56,9 @@ class Handler {
       /////////////////
       // Validations //
       /////////////////
-      if(!$name) {
-         $errors[] = __( 'Error: Node Name is required', 'replicant' );
-      }
+      // if(!$name) {
+      //    $errors[] = __( 'Error: Node Name is required', 'replicant' );
+      // }
 
       if(!$host) {
          $errors[] = __( 'Error: Address is required', 'replicant' );

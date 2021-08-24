@@ -251,7 +251,6 @@ class Auth {
          $request = $client->request('POST', $target_node_url, [
             'json' => $body
          ]);
-         var_export((string) $request->getBody());
          return (string) $request->getBody();
       } catch(\GuzzleHttp\Exception\ServerException $e) {
          return new \WP_Error('request-server-error',

@@ -27,7 +27,7 @@ class Functions {
       );
 
       $args       = wp_parse_args( $args, $defaults );
-      $table_name = 'replicant_nodes';
+      $table_name = \Replicant\Config::$TABLES["nodes"];
 
       // Check if hash exists in parameters because hashes
       // should be identical When a node is requesting trust

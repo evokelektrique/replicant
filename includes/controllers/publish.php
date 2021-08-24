@@ -56,6 +56,7 @@ class Publish {
    public function create_post($request) {
       $fields    = $request->get_json_params();
 
+      // Remove unnecessary fields
       unset($fields["post"]["ID"]);
       unset($fields["meta_data"]["_edit_lock"]);
       unset($fields["meta_data"]["_pingme"]);
@@ -64,13 +65,56 @@ class Publish {
       $post               = $fields["post"];
       $post["meta_input"] = $fields["meta_data"];
 
-      error_log(print_r($post, true));
+      // Create post
+      $insert_id = $this->post_exists($fields['post']['post_title']) || wp_insert_post($post, true);
 
-      $insert_id = wp_insert_post($post, true);
-
+      error_log(print_r($this->post_exists($fields['post']['post_title']), true));
       error_log(print_r($insert_id, true));
 
-      return rest_ensure_response( ["status" => true, "message" => "Test"] );
+      $message = __("Post successfully created.", "replicant");
+      $status  = true;
+
+      if(is_wp_error($insert_id)) {
+         $message = $insert_id->get_error_message();
+         $status  = false;
+      }
+
+      return rest_ensure_response( ["status" => $status, "message" => $message] );
    }
+
+
+   /**
+    * Determines if a post exists based on title.
+    *
+    * @since 2.0.0
+    *
+    * @global wpdb $wpdb WordPress database abstraction object.
+    *
+    * @param string $title   Post title.
+    * @return int Post ID if post exists, 0 otherwise.
+    */
+   private function post_exists($title) {
+      // Copied from WordPress source code
+      // https://core.trac.wordpress.org/browser/tags/5.8/src/wp-admin/includes/post.php#L777
+      // TODO: Find a better solution.
+
+      global $wpdb;
+
+      $post_title   = wp_unslash( sanitize_post_field( 'post_title', $title, 0, 'db' ) );
+
+      $query = "SELECT ID FROM $wpdb->posts WHERE 1=1";
+      $args  = array();
+
+      if ( ! empty( $title ) ) {
+         $query .= ' AND post_title = %s';
+         $args[] = $post_title;
+      }
+
+      if ( ! empty( $args ) ) {
+         return (int) $wpdb->get_var( $wpdb->prepare( $query, $args ) );
+      }
+
+      return 0;
+   }      
 
 }

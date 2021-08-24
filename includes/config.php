@@ -5,6 +5,9 @@ namespace Replicant;
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit; 
 
+/**
+ * Handle configuration
+ */
 class Config {
    
    private static $TABLES_PREFIX = "replicant_";
@@ -19,14 +22,22 @@ class Config {
       $this->set_tables();
    }
 
+   /**
+    * Setup table names
+    *
+    * @global wpdb $wpdb WordPress database abstraction object.
+    */
    private function set_tables() {
+      global $wpdb;
+
       $tables = [
-         "settings"        => self::$TABLES_PREFIX . "settings",
-         "nodes"           => self::$TABLES_PREFIX . "nodes",
-         "logs"            => self::$TABLES_PREFIX . "logs",
-         "trusted_nodes"   => self::$TABLES_PREFIX . "trusted_nodes"
+         "settings"        => $wpdb->prefix . self::$TABLES_PREFIX . "settings",
+         "nodes"           => $wpdb->prefix . self::$TABLES_PREFIX . "nodes",
+         "logs"            => $wpdb->prefix . self::$TABLES_PREFIX . "logs",
+         "trusted_nodes"   => $wpdb->prefix . self::$TABLES_PREFIX . "trusted_nodes"
       ];
       
       self::$TABLES = $tables;
    }
+   
 }

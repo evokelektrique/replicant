@@ -14,21 +14,17 @@ class Post {
 
    private $route;
 
-   public function __construct(array &$body, object $target_node) {
-      // error_log(print_r([json_encode($body), $target_node, $target_node_url], true));
-
+   public function __construct(array $body, object $target_node, bool $is_update) {
       $target_node_url = \Replicant\Helper::generate_url_from_node($target_node);
-      $response        = $this->perform($body, $target_node_url);
+      $response        = $this->perform($body, $target_node_url, $is_update);
    }
 
-   public function perform(array &$body, array $target_node_url) {
+   public function perform(array $body, array $target_node_url, bool $is_update) {
       $controller      = new \Replicant\Controllers\Publish();
       $route           = $controller->get_route();
       $target_node_url = $target_node_url["formed"] . $route . "/posts";
 
       $client = new \GuzzleHttp\Client();
-
-      error_log($target_node_url);
 
       try {
          $request = $client->request('POST', $target_node_url, [
