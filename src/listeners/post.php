@@ -31,6 +31,7 @@ class Post {
 
          if(!empty($nodes)) {
             foreach($nodes as $node) {
+               error_log(print_r($node, true));
                $publish_post = new \Replicant\Publishers\Post($parsed_post, $node, $is_update);
             }
          }
@@ -47,6 +48,9 @@ class Post {
    private function parse(int $post_id, $post) {
       $parsed_post = null;
       
+      // TODO
+      error_log($post->post_status);
+
       // Avoid auto saved and drafted posts
       if($post->post_status !== 'publish') {
          return;
@@ -65,9 +69,15 @@ class Post {
 
       $meta_data = get_post_meta($post_id);
 
+      $sticky = is_sticky( $post->ID ) || 0;
+      $replicant_meta_data = [
+         "is_sticky" => is_sticky( $post->ID ) || 0
+      ];
+
       return [
-         "meta_data" => $meta_data,
-         "post"      => $parsed_post->to_array()
+         "replicant_meta_data" => $replicant_meta_data,
+         "meta_data"           => $meta_data,
+         "post"                => $parsed_post->to_array()
       ];
    }
 

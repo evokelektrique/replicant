@@ -2,5 +2,10 @@
     "require": {
         "htmlburger/carbon-fields": "^3.3",
         "guzzlehttp/guzzle": "^7.0"
-    }
+    },
+    "autoload": {
+      "psr-4": {
+         "Replicant\\": "src/"
+      }
+   }
 }
