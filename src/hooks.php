@@ -5,18 +5,19 @@ namespace Replicant;
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit; 
 
-////////////////////////
-// REST API Endpoints //
-////////////////////////
+/**
+ * Handle hooks and actions
+ */
+class Hooks {
 
-// Setup REST API endpoints
-add_action( 'rest_api_init', function() {
-   $auth_controller = new Controllers\Auth();
-   $auth_controller->register_routes();
+   /**
+    * Attach custom function to wordpress hooks
+    * 
+    * @param hook $tag      Hook name
+    * @param void $function Function to run when hook is triggered
+    */
+   public static function add_action($tag, $function) {
+      add_action($tag, $function);
+   }
 
-   $info_controller = new Controllers\Info();
-   $info_controller->register_routes();
-
-   $publish_controller = new Controllers\Publish();
-   $publish_controller->register_routes();
-});
+}

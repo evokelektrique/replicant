@@ -20,6 +20,12 @@ class Plugin {
    public static $default_db;
 
    /**
+    * Config class instance
+    * @var class
+    */
+   public static $config;
+
+   /**
     * @access private
     * @static class $isntance Singleton class instance
     */
@@ -38,7 +44,7 @@ class Plugin {
     */
    private function __construct() {
       // Initialize Classes In Order
-      new Config();
+      self::$config = new Config();
 
       // Initialize Database
       // 
@@ -49,6 +55,9 @@ class Plugin {
       if($option_db_version === false || $option_db_version < self::$db_version) {
          $this->init_db();
       }
+
+      // Initialize Hooks
+      $this->init_hooks();
 
       // Insert Default Values Into Database
       self::$default_db = new Database\Defaults();
@@ -98,6 +107,25 @@ class Plugin {
       }
 
       return self::$instance;
+   }
+
+   /**
+    * Initialize hooks
+    * 
+    * @return void
+    */
+   private function init_hooks() {
+      // Setup REST API endpoints
+      Hooks::add_action("rest_api_init", function() {
+         $auth_controller = new Controllers\Auth();
+         $auth_controller->register_routes();
+
+         $info_controller = new Controllers\Info();
+         $info_controller->register_routes();
+
+         $publish_controller = new Controllers\Publish();
+         $publish_controller->register_routes();
+      });
    }
 
 }
