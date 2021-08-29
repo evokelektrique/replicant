@@ -10,6 +10,8 @@ if(!defined( 'ABSPATH' )) exit;
  */
 class Post {
 
+   use \Replicant\Listener;
+
    public function __construct() {
       add_action("save_post", [$this, "listen"], 10, 3);
    }
@@ -64,19 +66,19 @@ class Post {
 
       // Check If it's actually a post or page
       if($post->post_type === 'post' || $post->post_type === 'page') {
-         $parsed_post = $this->do_post($post);
+         $parsed_post = $this->do_post($post_id, $post);
       }
 
-      $meta_data = get_post_meta($post_id);
+      $metadata = get_post_meta($post_id);
 
       $sticky = is_sticky( $post->ID ) || 0;
-      $replicant_meta_data = [
+      $replicant_metadata = [
          "is_sticky" => is_sticky( $post->ID ) || 0
       ];
 
       return [
-         "replicant_meta_data" => $replicant_meta_data,
-         "meta_data"           => $meta_data,
+         "replicant_metadata"  => $replicant_metadata,
+         "metadata"            => $metadata,
          "post"                => $parsed_post->to_array()
       ];
    }
@@ -84,10 +86,16 @@ class Post {
    /**
     * Parse Post or Page
     * 
-    * @param  \WP_Post $post Post or Page
+    * @param  \WP_Post $post    Post or Page
+    * @param  int      $post_id
     * @return \WP_Post
     */
-   private function do_post($post) {
+   private function do_post(int $post_id, $post) {
+      $metadata = $this->generate_metadata();
+      foreach($metadata as $key => $value) {
+         update_post_meta($post_id, $key, $value);
+      }
+
       return $post;
    }
 

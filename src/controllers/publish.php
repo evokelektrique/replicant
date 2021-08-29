@@ -58,17 +58,16 @@ class Publish {
       $post_id = $fields["post"]["ID"];
 
       // Remove unnecessary fields
-      unset($fields["meta_data"]["_edit_lock"]);
-      unset($fields["meta_data"]["_encloseme"]);
-      unset($fields["meta_data"]["_pingme"]);
+      unset($fields["metadata"]["_edit_lock"]);
+      unset($fields["metadata"]["_encloseme"]);
+      unset($fields["metadata"]["_pingme"]);
       unset($fields["post"]["ID"]);
 
-      $replicant_meta_data = $fields["replicant_meta_data"];
-      $post["meta_input"]  = $fields["meta_data"];
+      $replicant_metadata  = $fields["replicant_metadata"];
+      $post["meta_input"]  = $fields["metadata"];
       $post                = $fields["post"];
       // TODO: Check update event
       $post["import_id"]   = $post_id;
-
 
       $message = __("Post successfully created.", "replicant");
       $status  = true;
@@ -77,14 +76,7 @@ class Publish {
       // TODO: Find a better solution
       $insert_id = $this->post_exists($fields['post']['post_title']) || wp_insert_post($post, true);
 
-      error_log(print_r([
-         $replicant_meta_data, 
-         $post, 
-         $this->post_exists($fields['post']['post_title']),
-         $insert_id
-      ], true));
-      error_log(print_r($insert_id, true));
-
+      error_log(print_r($fields, true));
 
       if(is_wp_error($insert_id)) {
          $message = $insert_id->get_error_message();
