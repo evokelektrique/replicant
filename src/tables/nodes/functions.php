@@ -108,7 +108,7 @@ class Functions {
     * @param  string|null $value WHERE value in sql query
     * @return array              Single row fetched by $wpdb
     */
-   public static function get_by(string $key = null, $value = null) {
+   public static function get_by(string $key = null, string $value = null) {
       if(!$value) {
          return;
       }

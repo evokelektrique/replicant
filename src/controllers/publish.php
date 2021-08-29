@@ -72,20 +72,25 @@ class Publish {
       $message = __("Post successfully created.", "replicant");
       $status  = true;
 
-      // Create post
-      // TODO: Find a better solution
-      $insert_id = $this->post_exists($fields['post']['post_title']) || wp_insert_post($post, true);
+      // Find/Create post
+      $insert_id = null;
+      $find_post = $this->post_exists($fields['post']['post_title']);
+      if($find_post !== null) {
+         $insert_id = wp_insert_post($post, true);
+      }
 
-      error_log(print_r($fields, true));
+      error_log(print_r([$find_post, $insert_id, $post], true));
 
-      if(is_wp_error($insert_id)) {
+      if(!is_null($insert_id) && is_wp_error($insert_id)) {
          $message = $insert_id->get_error_message();
          $status  = false;
       }
 
       if($status) {
          // Handle sticky posts
-         stick_post($post_id);
+         if($replicant_metadata["is_sticky"]) {
+            stick_post($post_id);
+         }
       }
 
       return rest_ensure_response( ["status" => $status, "message" => $message] );
@@ -95,35 +100,17 @@ class Publish {
    /**
     * Determines if a post exists based on title.
     *
-    * @since 2.0.0
-    *
-    * @global wpdb $wpdb WordPress database abstraction object.
-    *
-    * @param string $title   Post title.
-    * @return int Post ID if post exists, 0 otherwise.
+    * @param string $post_title   Post title
+    * @param string $post_type    Post Type
+    * 
+    * @return WP_Post|null Post object if post exists, null otherwise
     */
-   private function post_exists($title) {
-      // Copied from WordPress source code
-      // https://core.trac.wordpress.org/browser/tags/5.8/src/wp-admin/includes/post.php#L777
-      // TODO: Find a better solution.
+   private function post_exists(string $post_title, string $post_type = "post") {
+      $output_type = OBJECT;
+      $post_type   = "post";
+      $post        = get_page_by_title( $post_title, $output_type, $post_type );
 
-      global $wpdb;
-
-      $post_title   = wp_unslash( sanitize_post_field( 'post_title', $title, 0, 'db' ) );
-
-      $query = "SELECT ID FROM $wpdb->posts WHERE 1=1";
-      $args  = array();
-
-      if ( ! empty( $title ) ) {
-         $query .= ' AND post_title = %s';
-         $args[] = $post_title;
-      }
-
-      if ( ! empty( $args ) ) {
-         return (int) $wpdb->get_var( $wpdb->prepare( $query, $args ) );
-      }
-
-      return 0;
+      return $post;
    }      
 
 }

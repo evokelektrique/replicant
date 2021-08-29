@@ -10,7 +10,7 @@ if(!defined( 'ABSPATH' )) exit;
  */
 class Config {
    
-   private static $TABLES_PREFIX = "replicant_";
+   public static $TABLES_PREFIX = "replicant_";
    public static $ROOT_DIR;
    public static $ROOT_URL;
    public static $TABLES;
