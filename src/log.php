@@ -31,7 +31,7 @@ class Log {
     * 
     * @var $message  The desired message
     * @var $node_id  Node ID
-    * @var $level    Log level (Debug: 0, Info: 1, Warning: 2, Error: 4)
+    * @var $level    Log level (Debug: 0, Info: 1, Warning: 2, Error: 3)
     */
    public static function write(string $message, int $node_id, int $level = 0) {
       global $wpdb;
