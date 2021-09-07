@@ -63,11 +63,11 @@ class Publish {
       unset($fields["metadata"]["_pingme"]);
       unset($fields["post"]["ID"]);
 
-      $replicant_metadata  = $fields["replicant_metadata"];
-      $post["meta_input"]  = $fields["metadata"];
-      $post                = $fields["post"];
-      // TODO: Check update event
-      $post["import_id"]   = $post_id;
+      $replicant_node_metadata = $fields["replicant_node_metadata"];
+      $post["meta_input"]      = $fields["metadata"];
+      $post                    = $fields["post"];
+      // TODO: Check update event ( Create another function )
+      $post["import_id"]       = $post_id;
 
       $message = __("Post successfully created.", "replicant");
       $status  = true;
@@ -75,11 +75,14 @@ class Publish {
       // Find/Create post
       $insert_id = null;
       $find_post = $this->post_exists($fields['post']['post_title']);
-      if($find_post !== null) {
+      if($find_post === null) {
          $insert_id = wp_insert_post($post, true);
+      } else {
+         $message = __("Post duplicate.", "replicant");
+         $status  = false;
       }
 
-      error_log(print_r([$find_post, $insert_id, $post], true));
+      // error_log(print_r([$find_post, $insert_id, $post], true));
 
       if(!is_null($insert_id) && is_wp_error($insert_id)) {
          $message = $insert_id->get_error_message();
@@ -87,10 +90,10 @@ class Publish {
       }
 
       if($status) {
-         // Handle sticky posts
-         if($replicant_metadata["is_sticky"]) {
-            stick_post($post_id);
-         }
+         // // Handle sticky posts
+         // if($replicant_node_metadata["is_sticky"]) {
+         //    stick_post($post_id);
+         // }
       }
 
       return rest_ensure_response( ["status" => $status, "message" => $message] );

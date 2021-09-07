@@ -12,10 +12,10 @@ class Post {
 
    use \Replicant\Listener;
 
-   private $replicant_metadata_key;
+   private $replicant_node_metadata_key;
 
    public function __construct() {
-      $this->replicant_metadata_key = \Replicant\Config::$TABLES_PREFIX . "metadata";
+      $this->replicant_node_metadata_key = \Replicant\Config::$TABLES_PREFIX . "node_metadata";
       add_action("save_post", [$this, "listen"], 10, 3);
    }
 
@@ -38,10 +38,11 @@ class Post {
 
          if(!empty($trusted_nodes)) {
             foreach($trusted_nodes as $node) {
-               error_log(print_r($node, true));
                
-               if($parsed_post["replicant_metadata"]["sender_node_hash"] === $current_node->hash) {
-                  $publish_post = new \Replicant\Publishers\Post($parsed_post, $node, $is_update);
+               // TODO: Still sends the duplicated post, the problem is with metadata `sender_node_hash` it changes everytime, seems like checking the existance of metadata is not working 
+               if($parsed_post["replicant_node_metadata"]["sender_node_hash"] !== $node->hash) {
+                  error_log(print_r($node, true));
+                  new \Replicant\Publishers\Post($parsed_post, $node, $is_update);
                }
             }
          }
@@ -55,27 +56,28 @@ class Post {
     * @return array             Parsed metadata and post
     */
    private function parse($post) {
-      $parsed_post = null;
-
-      // Replicant attached metadata
-      $sticky                          = is_sticky( $post->ID ) || 0;
-      $replicant_metadata              = $this->generate_metadata();
-      $replicant_metadata["is_sticky"] = $sticky || 0;
-      $replicant_metadata_json_encoded = wp_slash(json_encode($replicant_metadata));
-
-      // If the meta key does not exists, add the specific key to the object.
-      if(!metadata_exists('post', $post->ID, $this->replicant_metadata_key)) {
-         update_post_meta(
-            $post->ID,
-            $this->replicant_metadata_key,
-            $replicant_metadata_json_encoded
-         );
-      }
-
       // Avoid auto saved and drafted posts
       if($post->post_status !== 'publish') {
          return;
       }
+
+      $parsed_post = null;
+
+      // Replicant attached metadata
+      $sticky                               = is_sticky( $post->ID ) || 0;
+      $replicant_node_metadata              = $this->generate_node_metadata();
+      // $replicant_post_metadata["is_sticky"] = $sticky || 0;
+      $replicant_node_metadata_json_encoded = wp_slash(json_encode($replicant_node_metadata));
+
+      // If the meta key does not exists, add the specific key to the object.
+      // if(!metadata_exists('post', $post->ID, $this->replicant_node_metadata_key)) {
+         add_post_meta(
+            $post->ID,
+            $this->replicant_node_metadata_key,
+            $replicant_node_metadata_json_encoded,
+            true
+         );
+      // }
 
       // Check if it's a WooCommerce product 
       // and whether it's activated or not
@@ -91,9 +93,9 @@ class Post {
       $metadata = get_post_meta($post->ID);
 
       return [
-         "replicant_metadata"  => $replicant_metadata,
-         "metadata"            => $metadata,
-         "post"                => $parsed_post->to_array()
+         "replicant_node_metadata" => $replicant_node_metadata,
+         "metadata"                => $metadata,
+         "post"                    => $parsed_post->to_array()
       ];
    }
 
