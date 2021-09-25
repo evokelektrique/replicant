@@ -7,7 +7,6 @@ namespace Replicant\Forms\Nodes;
  */
 class Handler {
 
-
    /**
     * Form update status
     * 

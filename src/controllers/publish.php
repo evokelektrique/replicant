@@ -75,7 +75,7 @@ class Publish {
       // Find/Create post
       $insert_id = null;
       $find_post = $this->post_exists($fields['post']['post_title']);
-      if($find_post === null) {
+      if($find_post === null && !$this->is_duplicate_node($replicant_node_metadata)) {
          $insert_id = wp_insert_post($post, true);
       } else {
          $message = __("Post duplicate.", "replicant");
@@ -115,5 +115,25 @@ class Publish {
 
       return $post;
    }      
+
+   /**
+    * Determine wheither the sender node hash is equal to the current node or not
+    * 
+    * @param  object  $node_metadata Sender node metadata
+    * @return boolean                Duplication status
+    */
+   private function is_duplicate_node($node_metadata) {
+      if(empty($node_metadata)) {
+         return false;
+      }
+      
+      $current_node = new \Replicant\Node();
+
+      if($node_metadata["sender_node_hash"] === $current_node->hash) {
+         return true;
+      }
+
+      return false;
+   }
 
 }
