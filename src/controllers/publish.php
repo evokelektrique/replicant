@@ -82,8 +82,6 @@ class Publish {
          $status  = false;
       }
 
-      // error_log(print_r([$find_post, $insert_id, $post], true));
-
       if(!is_null($insert_id) && is_wp_error($insert_id)) {
          $message = $insert_id->get_error_message();
          $status  = false;

@@ -57,11 +57,12 @@ class Functions {
       if(!$row_id) {
         // Insert a new Node
         if($wpdb->insert( $table_name, $args )) {
-            \Replicant\Log::write(
-               sprintf(__("%s successfully created", "replicant"), $args["name"]),
-               $wpdb->insert_id,
-               1 // Info
-            );
+            // \Replicant\Log::write(
+            //    sprintf(__("%s successfully created", "replicant"), $args["name"]),
+            //    $wpdb->insert_id,
+            //    1 // Info
+            // );
+            // error_log(print_r($wpdb->insert_id, true));
             return $wpdb->insert_id;
         } else {
             return new \WP_Error('db_error',  __('Something went wrong, Please try again.', 'replicant'), $args);
@@ -69,11 +70,11 @@ class Functions {
       } else {
          // Do update method here
          if($wpdb->update( $table_name, $args, ['id' => $row_id] )) {
-            \Replicant\Log::write(
-               sprintf(__("%s successfully updated", "replicant"), $args["name"]),
-               $row_id,
-               1 // Info
-            );
+            // \Replicant\Log::write(
+            //    sprintf(__("%s successfully updated", "replicant"), $args["name"]),
+            //    $row_id,
+            //    1 // Info
+            // );
 
             return $row_id;
          }
