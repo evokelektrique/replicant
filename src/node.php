@@ -3,69 +3,83 @@
 namespace Replicant;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 /**
  * This file is the main basis for building a server
  */
 class Node {
 
+   use \Replicant\Actor;
+
+   /**
+    * Determine how this Node should act
+    *
+    * @var act
+    */
+   public $acting_as;
+
    /**
     * Server nickname
-    * 
+    *
     * @var string
     */
    public $name;
 
    /**
     * Server HTTP(s) support
-    * 
+    *
     * @var boolean
     */
    public $ssl;
 
    /**
     * Server hostname
-    * 
+    *
     * @var string
     */
    public $host;
 
    /**
     * Server port
-    * 
+    *
     * @var integer
     */
    public $port;
 
    /**
     * Server path
-    * 
+    *
     * @var string
     */
    public $path;
 
    /**
     * Server unique hash
-    * 
+    *
     * @var string
     */
    public $hash;
 
    /**
     * Full server URL
-    * 
+    *
     * @var array
     */
    public $url;
 
    /**
     * WordPress database instance
-    * 
+    *
     * @var class
     */
    private $wpdb;
 
+   /**
+    * Initialize a Node
+    *
+    * @param Node|null $node
+    */
    public function __construct(Node $node = null) {
       global $wpdb;
       global $replicant;
@@ -93,7 +107,7 @@ class Node {
 
    /**
     * Return current node information as JSON string
-    * 
+    *
     * @return string JSON encoded $node
     */
    public function get_json() {

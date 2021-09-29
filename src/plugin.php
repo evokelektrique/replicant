@@ -3,7 +3,7 @@
 namespace Replicant;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 class Plugin {
 
@@ -32,12 +32,12 @@ class Plugin {
    private static $instance;
 
    /**
-    * Current database migration version 
+    * Current database migration version
     * And will be saved in 'wp_options' table
-    * 
+    *
     * @static float $db_version Migration version
     */
-   private static $db_version = 0.6;
+   private static $db_version = 0.7;
 
    /**
     * Load Files And Initialize Classes In Order
@@ -47,9 +47,9 @@ class Plugin {
       self::$config = new Config();
 
       // Initialize Database
-      // 
-      // Check if current database version stored on `wp_options` 
-      // table is set or lower than the plugin's version($db_version) 
+      //
+      // Check if current database version stored on `wp_options`
+      // table is set or lower than the plugin's version($db_version)
       // and if so, then upgrade current database.
       $option_db_version = get_option("replicant_db_version");
       if($option_db_version === false || $option_db_version < self::$db_version) {
@@ -75,12 +75,23 @@ class Plugin {
    }
 
    /**
+    * Retrieve singleton class instance
+    */
+   public static function get_instance() {
+      if(!isset(self::$instance)) {
+         self::$instance = new Plugin();
+      }
+
+      return self::$instance;
+   }
+
+   /**
     * Initializes Database Tables
     */
    private function init_db() {
       // Require wordpress database files
       require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-      
+
       update_option( "replicant_db_version", self::$db_version );
 
       // Initialize Schema Generator Class
@@ -99,19 +110,8 @@ class Plugin {
    }
 
    /**
-    * Retrieve singleton class instance
-    */
-   public static function get_instance() {
-      if(!isset(self::$instance)) {
-         self::$instance = new Plugin();
-      }
-
-      return self::$instance;
-   }
-
-   /**
     * Initialize hooks
-    * 
+    *
     * @return void
     */
    private function init_hooks() {

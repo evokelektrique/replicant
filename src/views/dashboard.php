@@ -3,7 +3,7 @@
 <div class="wrap">
    <h3><?= __( "Settings", "replicant" ); ?></h3>
    <hr>
-   
+
    <span replicant-tab="one" class="replicant-nav-tab active">
       <?= __( "Authorization", "replicant" ); ?>
    </span>
@@ -14,12 +14,12 @@
             <label for="replicant_authoriazation">
                <?= __( "Authorization Key:", "replicant" ); ?>
             </label>
-            <input type="text" 
+            <input type="text"
                class="replicant_input"
-               name="replicant_authoriazation" 
+               name="replicant_authoriazation"
                id="replicant_authoriazation"
                value="<?= $replicant::$default_db::authorization()->value ?>"
-               placeholder="<?= __( "Authorization Key", "replicant" );?>" 
+               placeholder="<?= __( "Authorization Key", "replicant" );?>"
                readonly=""
             />
          </div>

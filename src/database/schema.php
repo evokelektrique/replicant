@@ -3,7 +3,7 @@
 namespace Replicant\Database;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 /**
  * Generates pre defined specific SQL Queries
@@ -44,7 +44,7 @@ class Schema {
 
    /**
     * Generates schema of "replicant_nodes" table
-    * 
+    *
     * @return string Create table SQL query
     */
    public static function nodes() {
@@ -55,6 +55,7 @@ class Schema {
       $sql = "CREATE TABLE $table_name (
          `id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
          `name` VARCHAR(255) NOT NULL,
+         `acting_as` VARCHAR(255) DEFAULT 'SENDER' NOT NULL,
          `host` VARCHAR(200) NOT NULL,
          `port` INT unsigned NOT NULL,
          `ssl` boolean DEFAULT false NOT NULL,
@@ -72,7 +73,7 @@ class Schema {
 
    /**
     * Generates schema of "replicant_logs" table
-    * 
+    *
     * @return string Create table SQL query
     */
    public static function logs() {
@@ -90,6 +91,6 @@ class Schema {
          PRIMARY KEY  (`id`)
       ) $charset_collate";
 
-      return $sql;  
+      return $sql;
    }
 }
