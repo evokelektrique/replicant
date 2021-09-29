@@ -11,7 +11,7 @@ class Plugin {
     * @access public
     * @static string $version Current version of plugin
     */
-   public static $version = 0.2;
+   public static $version = "0.4.5";
 
    /**
     * @access public
