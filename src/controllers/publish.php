@@ -3,10 +3,10 @@
 namespace Replicant\Controllers;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 /**
- * Publish Controller, listens for an entry 
+ * Publish Controller, listens for an entry
  * and it will insert the exact type and metadata
  */
 class Publish {
@@ -15,19 +15,21 @@ class Publish {
 
    /**
     * Controller REST API Namespace name
-    * 
+    *
     * @var string
     */
    public $namepsace;
 
    /**
     * Namespace resource name
-    * 
+    *
     * @var string
     */
    public $resource;
 
-
+   /**
+    * Initialize router endpoints
+    */
    public function __construct() {
       $this->namespace = "replicant/v1";
       $this->resource = "/publish";
@@ -36,13 +38,19 @@ class Publish {
    public function register_routes() {
       // CRUD Post endpoints
       register_rest_route(
-         $this->namespace, 
-         $this->resource . "/posts", 
+         $this->namespace,
+         $this->resource . "/posts",
          [
             // Register the readable endpoint
             [
                "methods"             => "POST",
                "callback"            => [$this, "create_post"],
+
+               // TODO:
+               //
+               // Write another function and call it back
+               // here and it must check if the sender node
+               // is trusted or not.
                "permission_callback" => "__return_true"
             ]
          ]
@@ -103,7 +111,7 @@ class Publish {
     *
     * @param string $post_title   Post title
     * @param string $post_type    Post Type
-    * 
+    *
     * @return WP_Post|null Post object if post exists, null otherwise
     */
    private function post_exists(string $post_title, string $post_type = "post") {
@@ -112,11 +120,11 @@ class Publish {
       $post        = get_page_by_title( $post_title, $output_type, $post_type );
 
       return $post;
-   }      
+   }
 
    /**
     * Determine wheither the sender node hash is equal to the current node or not
-    * 
+    *
     * @param  object  $node_metadata Sender node metadata
     * @return boolean                Duplication status
     */
@@ -124,7 +132,7 @@ class Publish {
       if(empty($node_metadata)) {
          return false;
       }
-      
+
       $current_node = new \Replicant\Node();
 
       if($node_metadata["sender_node_hash"] === $current_node->hash) {

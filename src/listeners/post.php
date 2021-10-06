@@ -3,7 +3,7 @@
 namespace Replicant\Listeners;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 /**
  * Listens to post events
@@ -21,7 +21,7 @@ class Post {
 
    /**
     * Fires once when a post has been saved or updated
-    * 
+    *
     * @param  int     $id        Post ID
     * @param  WP_Post $post      Post Object
     * @param  boolean $is_update Update status
@@ -38,10 +38,15 @@ class Post {
 
          if(!empty($trusted_nodes)) {
             foreach($trusted_nodes as $node) {
-               
-               // TODO: Still sends the duplicated post, the problem is with metadata `sender_node_hash` it changes everytime, seems like checking the existance of metadata is not working 
+
+               // TODO:
+               //
+               // Still sends the duplicated post, the problem is with
+               // metadata `sender_node_hash` it changes everytime,
+               // seems like checking the existance of metadata is not working
+               // to solve this I or "you" have to fix the metadata validator
                if($parsed_post["replicant_node_metadata"]["sender_node_hash"] !== $node->hash) {
-                  // error_log(print_r(["node" => $node, "parsed_post" => $parsed_post], true));
+                  error_log(print_r(["node" => $node, "parsed_post" => $parsed_post], true));
                   new \Replicant\Publishers\Post($parsed_post, $node, $is_update);
                }
             }
@@ -51,7 +56,7 @@ class Post {
 
    /**
     * Parse and filter out product based on its type
-    * 
+    *
     * @param  \WP_Post $post    Post
     * @return array             Parsed metadata and post
     */
@@ -79,7 +84,7 @@ class Post {
          );
       // }
 
-      // Check if it's a WooCommerce product 
+      // Check if it's a WooCommerce product
       // and whether it's activated or not
       if($post->post_type === 'product' && \Replicant\Helper::is_woocommerce_active()) {
          $parsed_post = $this->do_woocommerce($post);
@@ -101,7 +106,7 @@ class Post {
 
    /**
     * Parse Post or Page
-    * 
+    *
     * @param  \WP_Post $post    Post or Page
     * @param  int      $post_id
     * @return \WP_Post
