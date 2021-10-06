@@ -25,8 +25,6 @@ trait Actor {
       } else {
          return "RECEIVER";
       }
-
-      return null;
    }
 
 }
