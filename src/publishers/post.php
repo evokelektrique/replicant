@@ -5,7 +5,7 @@ namespace Replicant\Publishers;
 use GuzzleHttp\Client;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 /**
  * Handle publishing posts
@@ -34,10 +34,10 @@ class Post {
          return (string) $request->getBody();
       } catch(\GuzzleHttp\Exception\ServerException $e) {
          return new \WP_Error('request-server-error',
-            __( 
+            __(
                "Couldn't establish a connection to the server or an error happened on the target server.",
-               'replicant' 
-            ) 
+               'replicant'
+            )
          );
       }
    }

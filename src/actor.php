@@ -11,8 +11,8 @@ if(!defined( 'ABSPATH' )) exit;
 trait Actor {
 
    protected $ACTORS = [
-      "SENDER" => 0,
-      "RECEIVER" => 1
+      0 => "SENDER",
+      1 => "RECEIVER"
    ];
 
    public function set_acting($act_as = "SENDER") {

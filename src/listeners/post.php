@@ -38,15 +38,7 @@ class Post {
 
          if(!empty($trusted_nodes)) {
             foreach($trusted_nodes as $node) {
-
-               // TODO:
-               //
-               // Still sends the duplicated post, the problem is with
-               // metadata `sender_node_hash` it changes everytime,
-               // seems like checking the existance of metadata is not working
-               // to solve this I or "you" have to fix the metadata validator
                if($parsed_post["replicant_node_metadata"]["sender_node_hash"] !== $node->hash) {
-                  error_log(print_r(["node" => $node, "parsed_post" => $parsed_post], true));
                   new \Replicant\Publishers\Post($parsed_post, $node, $is_update);
                }
             }

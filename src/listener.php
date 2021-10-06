@@ -3,13 +3,13 @@
 namespace Replicant;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 /**
  * Define listener functions
  */
 trait Listener {
-   
+
    public function generate_node_metadata() {
       $current_node = new Node();
 

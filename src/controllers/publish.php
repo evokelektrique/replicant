@@ -105,12 +105,11 @@ class Publish {
       return rest_ensure_response( ["status" => $status, "message" => $message] );
    }
 
-
    /**
     * Determines if a post exists based on title.
     *
-    * @param string $post_title   Post title
-    * @param string $post_type    Post Type
+    * @param string $post_title Post title
+    * @param string $post_type  Post Type
     *
     * @return WP_Post|null Post object if post exists, null otherwise
     */
