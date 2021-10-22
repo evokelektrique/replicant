@@ -64,6 +64,7 @@ class Publish {
    public function create_post($request) {
       $fields  = $request->get_json_params();
       $post_id = $fields["post"]["ID"];
+      $post    = [];
 
       // Remove unnecessary fields
       unset($fields["metadata"]["_edit_lock"]);
@@ -77,6 +78,7 @@ class Publish {
       // TODO: Check update event ( Create another function )
       $post["import_id"]       = $post_id;
 
+      // Message to response back
       $message = __("Post successfully created.", "replicant");
       $status  = true;
 

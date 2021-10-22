@@ -65,7 +65,6 @@ class Post {
       $replicant_node_metadata              = $this->generate_node_metadata();
       // $replicant_post_metadata["is_sticky"] = $sticky || 0;
       $replicant_node_metadata_json_encoded = wp_slash(json_encode($replicant_node_metadata));
-
       // If the meta key does not exists, add the specific key to the object.
       // if(!metadata_exists('post', $post->ID, $this->replicant_node_metadata_key)) {
          add_post_meta(
