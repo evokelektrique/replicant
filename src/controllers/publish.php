@@ -32,16 +32,16 @@ class Publish {
     */
    public function __construct() {
       $this->namespace = "replicant/v1";
-      $this->resource = "/publish";
+      $this->resource = "/posts";
    }
 
    public function register_routes() {
       // CRUD Post endpoints
       register_rest_route(
          $this->namespace,
-         $this->resource . "/posts",
+         $this->resource,
          [
-            // Register the readable endpoint
+            // Create
             [
                "methods"             => "POST",
                "callback"            => [$this, "create_post"],
@@ -52,54 +52,80 @@ class Publish {
                // here and it must check if the sender node
                // is trusted or not.
                "permission_callback" => "__return_true"
+            ],
+
+            // Delete
+            [
+               "methods"             => "DELETE",
+               "callback"            => [$this, "delete_post"],
+
+               // TODO:
+               //
+               // Write another function and call it back
+               // here and it must check if the sender node
+               // is trusted or not.
+               "permission_callback" => "__return_true"
             ]
          ]
       );
+
+
    }
 
    ////////////////////////
    // Response Callbacks //
    ////////////////////////
 
+   public function delete_post($request) {
+      $build         = $this->build_post($request);
+      $post          = $build["post"];
+      $node_metadata = $build["node_metadata"];
+      $search        = $this->post_exists($post['post_title']);
+
+      // Message to response back
+      $message = __("Post not found.", "replicant");
+      // Response status
+      $status  = false;
+      // Set to "true" to force delete or "false" to trash it
+      $force   = true;
+
+      if($search !== null) {
+         $delete = wp_delete_post( $search->ID, $force );
+         $message = __("Post(".$search->ID.") successfully deleted.", "replicant");
+         $status  = true;
+      }
+
+      return rest_ensure_response(["status" => $status, "message" => $message]);
+   }
+
    public function create_post($request) {
-      $fields  = $request->get_json_params();
-      $post_id = $fields["post"]["ID"];
-      $post    = [];
-
-      // Remove unnecessary fields
-      unset($fields["metadata"]["_edit_lock"]);
-      unset($fields["metadata"]["_encloseme"]);
-      unset($fields["metadata"]["_pingme"]);
-      unset($fields["post"]["ID"]);
-
-      $replicant_node_metadata = $fields["replicant_node_metadata"];
-      $post["meta_input"]      = $fields["metadata"];
-      $post                    = $fields["post"];
-      // TODO: Check update event ( Create another function )
-      $post["import_id"]       = $post_id;
+      $build         = $this->build_post($request);
+      $post          = $build["post"];
+      $node_metadata = $build["node_metadata"];
+      $search        = $this->post_exists($post['post_title']);
 
       // Message to response back
       $message = __("Post successfully created.", "replicant");
       $status  = true;
 
-      // Find/Create post
-      $insert_id = null;
-      $find_post = $this->post_exists($fields['post']['post_title']);
-      if($find_post === null && !$this->is_duplicate_node($replicant_node_metadata)) {
-         $insert_id = wp_insert_post($post, true);
+      $insert = null;
+
+      // Find / Create post
+      if($search === null && !$this->is_duplicate_node($node_metadata)) {
+         $insert = wp_insert_post($post, true);
       } else {
          $message = __("Post duplicate.", "replicant");
          $status  = false;
       }
 
-      if(!is_null($insert_id) && is_wp_error($insert_id)) {
-         $message = $insert_id->get_error_message();
+      if(!is_null($insert) && is_wp_error($insert)) {
+         $message = $insert->get_error_message();
          $status  = false;
       }
 
       if($status) {
          // // Handle sticky posts
-         // if($replicant_node_metadata["is_sticky"]) {
+         // if($node_metadata["is_sticky"]) {
          //    stick_post($post_id);
          // }
       }
@@ -111,13 +137,12 @@ class Publish {
     * Determines if a post exists based on title.
     *
     * @param string $post_title Post title
-    * @param string $post_type  Post Type
+    * @param string $post_type  Post type
     *
     * @return WP_Post|null Post object if post exists, null otherwise
     */
    private function post_exists(string $post_title, string $post_type = "post") {
       $output_type = OBJECT;
-      $post_type   = "post";
       $post        = get_page_by_title( $post_title, $output_type, $post_type );
 
       return $post;
@@ -129,7 +154,7 @@ class Publish {
     * @param  object  $node_metadata Sender node metadata
     * @return boolean                Duplication status
     */
-   private function is_duplicate_node($node_metadata) {
+   private function is_duplicate_node(array $node_metadata) {
       if(empty($node_metadata)) {
          return false;
       }
@@ -141,6 +166,35 @@ class Publish {
       }
 
       return false;
+   }
+
+   /**
+    * Generate post from request and delete unnecessary fields
+    *
+    * @param  WP_Request $request Wordpress REST
+    * @return Array               Post and Node metadata
+    */
+   private function build_post($request) {
+      $fields  = $request->get_json_params();
+      $post_id = $fields["post"]["ID"];
+      $post    = [];
+
+      // Remove unnecessary fields
+      unset($fields["metadata"]["_edit_lock"]);
+      unset($fields["metadata"]["_encloseme"]);
+      unset($fields["metadata"]["_pingme"]);
+      unset($fields["post"]["ID"]);
+
+      $node_metadata           = $fields["replicant_node_metadata"];
+      $post                    = $fields["post"];
+      $post["meta_input"]      = $fields["metadata"];
+      // TODO: Check update event ( Create another function )
+      $post["import_id"]       = $post_id;
+
+      return [
+         "post"          => $post,
+         "node_metadata" => $node_metadata
+      ];
    }
 
 }

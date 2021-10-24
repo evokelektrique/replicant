@@ -22,7 +22,7 @@
    - [X] Fix node `hash` and get the target node `hash` at node creation
          or get all The data form that so everything would be identical.
    - [X] Add trust queue badge counter on nodes-menu.
-   - [ ] Add delete listener for posts.
+   - [X] Add delete listener for posts.
    - [ ] Add update listener for posts.
    - [X] Add unique identifier hash for Posts and its types, because checking the.
          existence of a post by its `title` is wrong and causes duplication on update event.

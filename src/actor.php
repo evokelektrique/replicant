@@ -22,9 +22,9 @@ trait Actor {
    public function get_acting() {
       if($this->acting_as === 0) {
          return "SENDER";
-      } else {
-         return "RECEIVER";
       }
+
+      return "RECEIVER";
    }
 
 }

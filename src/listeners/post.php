@@ -16,7 +16,8 @@ class Post {
 
    public function __construct() {
       $this->replicant_node_metadata_key = \Replicant\Config::$TABLES_PREFIX . "node_metadata";
-      add_action("save_post", [$this, "listen"], 10, 3);
+      add_action("save_post", [$this, "listen_save"], 10, 3);
+      add_action("before_delete_post", [$this, "listen_delete"], 10, 3);
    }
 
    /**
@@ -26,8 +27,14 @@ class Post {
     * @param  WP_Post $post      Post Object
     * @param  boolean $is_update Update status
     */
-   public function listen($post_id, $post, $is_update){
+   public function listen_save($post_id, $post, $is_update){
+      // Avoid auto saved and drafted posts
+      if($post->post_status !== 'publish') {
+         return;
+      }
+
       $current_node = new \Replicant\Node();
+      $is_delete = false;
 
       // Parse it
       $parsed_post = $this->parse($post);
@@ -39,7 +46,33 @@ class Post {
          if(!empty($trusted_nodes)) {
             foreach($trusted_nodes as $node) {
                if($parsed_post["replicant_node_metadata"]["sender_node_hash"] !== $node->hash) {
-                  new \Replicant\Publishers\Post($parsed_post, $node, $is_update);
+                  new \Replicant\Publishers\Post($parsed_post, $node, $is_update, $is_delete);
+               }
+            }
+         }
+      }
+   }
+
+   public function listen_delete($post_id, $post) {
+      // Avoid auto saved and drafted posts
+      if($post->post_status !== 'trash') {
+         return;
+      }
+
+      $is_delete = true;
+      $is_update = false;
+
+      // Parse it
+      $parsed_post = $this->parse($post);
+
+      // Publish it across all trusted nodes
+      if($parsed_post) {
+         $trusted_nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
+
+         if(!empty($trusted_nodes)) {
+            foreach($trusted_nodes as $node) {
+               if($parsed_post["replicant_node_metadata"]["sender_node_hash"] !== $node->hash) {
+                  new \Replicant\Publishers\Post($parsed_post, $node, $is_update, $is_delete);
                }
             }
          }
@@ -53,11 +86,6 @@ class Post {
     * @return array             Parsed metadata and post
     */
    private function parse($post) {
-      // Avoid auto saved and drafted posts
-      if($post->post_status !== 'publish') {
-         return;
-      }
-
       $parsed_post = null;
 
       // Replicant attached metadata
