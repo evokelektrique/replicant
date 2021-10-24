@@ -26,7 +26,7 @@
    - [ ] Add update listener for posts.
    - [X] Add unique identifier hash for Posts and its types, because checking the.
          existence of a post by its `title` is wrong and causes duplication on update event.
-   - [ ] Implement "acting_as" for "Node" class, fetch the default from database.
+   - [X] Implement "acting_as" for "Node" class, fetch the default from database.
    - [ ] Add sender node validator in `publish.php` controller.
    - [ ] Add "acting as" select option.
    - [ ] Add "Post" publisher check how should current node act based on its "acting_as".
