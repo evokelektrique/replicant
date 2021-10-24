@@ -21,6 +21,7 @@ class Dashboard {
    public static function add_menus() {
       new \Replicant\Menus\MainMenu();
       new \Replicant\Menus\NodesMenu();
+      new \Replicant\Menus\SettingsMenu();
    }
 
    /**

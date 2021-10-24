@@ -3,7 +3,7 @@
 namespace Replicant\Menus;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 class NodesMenu {
 
@@ -11,16 +11,16 @@ class NodesMenu {
       // Total Nodes awaiting to trust
       $nodes_trust_await_count = \Replicant\Tables\Nodes\Functions::get_await_count();
 
-      add_submenu_page( 
-         "replicant-settings",
+      add_submenu_page(
+         "replicant-dashboard",
          __( "Nodes", "replicant" ),
          $nodes_trust_await_count ?  sprintf(__("Nodes", "replicant") . '<span class="awaiting-mod">%d</span>', $nodes_trust_await_count) : __('Nodes', 'replicant'),
          "manage_options",
          "replicant-nodes",
          [$this, "handle"]
       );
-   }  
-   
+   }
+
    public static function handle() {
       $action = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
       $id     = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : 0;
@@ -61,7 +61,7 @@ class NodesMenu {
                'message' => $accept_response["message"]
             ];
 
-            $template = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";            
+            $template = \Replicant\Config::$ROOT_DIR . "views/nodes/trust.php";
             break;
 
          default:
@@ -73,5 +73,5 @@ class NodesMenu {
           require_once $template;
       }
    }
-   
+
 }

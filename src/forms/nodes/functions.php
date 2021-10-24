@@ -10,7 +10,7 @@ class Functions {
 
    /**
     * Insert a new node
-    * 
+    *
     * @param   array      $args
     * @param   bool       $is_trust_request  Determine if this is requesting for trust
     * @return  int|false                     Returns row ID or Error

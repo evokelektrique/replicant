@@ -97,12 +97,13 @@ class Node {
       // Assign associated variables
       $this->url["parsed"] = $parsed_url;
       $this->url["full"]   = $url;
-      $this->name          = get_bloginfo('name');
-      $this->host          = $this->url["parsed"]["host"];
+      $this->name = get_bloginfo('name');
+      $this->host = $this->url["parsed"]["host"];
       $this->path = isset($this->url["parsed"]["path"]) ? $this->url["parsed"]["path"] : "";
       $this->port = isset($this->url["parsed"]["port"]) ? $this->url["parsed"]["port"] : 80;
       $this->ssl  = is_ssl();
       $this->hash = $replicant::$default_db::current_node_hash()->value;
+      $this->acting_as = $replicant::$default_db::acting_as()->value;
    }
 
    /**
@@ -122,6 +123,10 @@ class Node {
       ];
 
       return $node;
+   }
+
+   public function get_acting_as() {
+      return "Sender";
    }
 
 }

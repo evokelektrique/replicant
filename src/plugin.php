@@ -63,6 +63,7 @@ class Plugin {
       self::$default_db = new Database\Defaults();
       self::$default_db::authorization();
       self::$default_db::current_node_hash();
+      self::$default_db::acting_as();
 
       // Display menus on dashboard and other pages
       new Dashboard();
