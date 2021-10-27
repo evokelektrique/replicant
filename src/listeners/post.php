@@ -12,10 +12,10 @@ class Post {
 
    use \Replicant\Listener;
 
-   private $replicant_node_metadata_key;
+   private $replicant_metadata_key;
 
    public function __construct() {
-      $this->replicant_node_metadata_key = \Replicant\Config::$TABLES_PREFIX . "node_metadata";
+      $this->replicant_metadata_key = \Replicant\Config::$TABLES_PREFIX . "metadata";
       add_action("save_post", [$this, "listen_save"], 10, 3);
       add_action("before_delete_post", [$this, "listen_delete"], 10, 3);
    }
@@ -29,7 +29,15 @@ class Post {
     */
    public function listen_save($post_id, $post, $is_update){
       // Avoid auto saved and drafted posts
+      // TODO: Add these
+      // wp_is_post_autosave
+      // wp_is_post_revision
       if($post->post_status !== 'publish') {
+         return;
+      }
+
+      // Avoid firing the hook twice
+      if(defined('REST_REQUEST') && REST_REQUEST) {
          return;
       }
 
@@ -38,19 +46,22 @@ class Post {
 
       // Parse it
       $parsed_post = $this->parse($post, $is_update);
+      $metadata = wp_unslash($parsed_post["replicant_metadata"]);
 
       // Publish it across all trusted nodes
       if($parsed_post) {
          $trusted_nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
-
          if(!empty($trusted_nodes)) {
             foreach($trusted_nodes as $node) {
-               // TODO: add validator for not publishing the posts for the `sender_node`
-               // the easiest way to solve this problem is to insert sender_node in
-               // post meta data and then fetch it here and then if it the $node matched
-               // sender_node of the post, ignore it and don't publish the post.
-               if($parsed_post["replicant_node_metadata"]["sender_node_hash"] !== $node->hash) {
-                  new \Replicant\Publishers\Post($parsed_post, $node, $is_update, $is_delete);
+               // Do not send the request back where it came from
+               if($metadata["node_hash"] !== $node->hash) {
+                  // Publish the post
+                  $response = new \Replicant\Publishers\Post(
+                     $parsed_post,
+                     $node,
+                     $is_update,
+                     $is_delete
+                  );
                }
             }
          }
@@ -63,6 +74,11 @@ class Post {
          return;
       }
 
+      // Avoid firing the hook twice
+      if(defined('REST_REQUEST') && REST_REQUEST) {
+         return;
+      }
+
       $is_delete = true;
       $is_update = false;
 
@@ -72,10 +88,9 @@ class Post {
       // Publish it across all trusted nodes
       if($parsed_post) {
          $trusted_nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
-
          if(!empty($trusted_nodes)) {
             foreach($trusted_nodes as $node) {
-               if($parsed_post["replicant_node_metadata"]["sender_node_hash"] !== $node->hash) {
+               if($parsed_post["replicant_metadata"]["node_hash"] !== $node->hash) {
                   new \Replicant\Publishers\Post($parsed_post, $node, $is_update, $is_delete);
                }
             }
@@ -90,23 +105,21 @@ class Post {
     * @param  bool     $is_update Update status
     * @return array               Parsed post and its properties
     */
-   private function parse($post, $is_update): array {
+   private function parse($post, bool $is_update = false): array {
       $parsed_post = null;
 
       // Replicant attached metadata
-      $sticky                               = is_sticky( $post->ID ) || 0;
-      $replicant_node_metadata              = $this->generate_node_metadata();
-      // $replicant_post_metadata["is_sticky"] = $sticky || 0;
-      $replicant_node_metadata_json_encoded = wp_slash(json_encode($replicant_node_metadata));
-      // If the meta key does not exists, add the specific key to the object.
-      // if(!metadata_exists('post', $post->ID, $this->replicant_node_metadata_key)) {
-         add_post_meta(
-            $post->ID,
-            $this->replicant_node_metadata_key,
-            $replicant_node_metadata_json_encoded,
-            true
-         );
-      // }
+      $sticky = is_sticky( $post->ID ) || 0;
+      $replicant_metadata = $this->generate_metadata();
+      $metadata = wp_slash(json_encode($replicant_metadata));
+
+      // Add metadata to current $post
+      $metadata_id = add_post_meta(
+         $post->ID,
+         $this->replicant_metadata_key,
+         $metadata,
+         true
+      );
 
       // Check if it's a WooCommerce product
       // and whether it's activated or not
@@ -119,13 +132,13 @@ class Post {
          $parsed_post = $this->do_post($post->ID, $post);
       }
 
-      $metadata = get_post_meta($post->ID);
+      $get_metadata = get_post_meta($post->ID);
 
       return [
-         "replicant_node_metadata" => $replicant_node_metadata,
-         "metadata"                => $metadata,
-         "post"                    => $parsed_post->to_array(),
-         "is_update"               => $is_update
+         "replicant_metadata" => $replicant_metadata,
+         "metadata"           => $get_metadata,
+         "post"               => $parsed_post->to_array(),
+         "is_update"          => $is_update
       ];
    }
 

@@ -65,20 +65,17 @@ class Publish {
    ////////////////////////
 
    public function delete_post(\WP_REST_Request $request) {
-      $build         = $this->build_post($request);
-      $post          = $build["post"];
-      $node_metadata = $build["node_metadata"];
-      $search        = $this->post_exists($post['post_title']);
+      $build  = $this->build_post($request);
+      $post   = $build["post"];
+      $search = $this->post_exists($post['post_title']);
 
-      // Message to response back
-      $message = __("Post not found.", "replicant");
-      // Response status
-      $status  = false;
-      // Set to "true" to force delete or "false" to trash it
-      $force   = true;
+      $message = __("Post not found.", "replicant"); // Message to response back
+      $status  = false;                              // Response status
+
+      $force   = true;                               // Force delete or not
 
       if($search !== null) {
-         $delete = wp_delete_post( $search->ID, $force );
+         $delete  = wp_delete_post( $search->ID, $force );
          $message = __("Post(".$search->ID.") successfully deleted.", "replicant");
          $status  = true;
       }
@@ -87,32 +84,30 @@ class Publish {
    }
 
    public function create_post(\WP_REST_Request $request) {
-      $build         = $this->build_post($request);
-      $post          = $build["post"];
-      $post_id       = $build["id"];
-      $node_metadata = $build["node_metadata"];
-      $is_update     = $build["is_update"];
+      $build     = $this->build_post($request);
+      $post      = $build["post"];
+      $post_id   = $build["id"];
+      $is_update = $build["is_update"];
       error_log(print_r(["is_update" => $is_update, "post" => $post], true));
 
-      $search        = $this->post_exists($post['post_title']);
+      $search = $this->post_exists($post['post_title']);
 
       // Message to response back
       $message = __("Post successfully created.", "replicant");
       $status  = true;
 
-      $insert = null;
-
       ////////////////
       // CRUD Posts //
       ////////////////
-      if($search === null && !$this->is_duplicate_node($node_metadata)) {
+      $insert = null;
+
+      if($search === null && !$this->is_duplicate_node($build["replicant_metadata"])) {
          // Create Post
          $insert = wp_insert_post($post, true);
 
-      } elseif($is_update) {
+      } elseif($is_update && !$this->is_duplicate_node($build["replicant_metadata"])) {
          // Update Post
          unset($post["import_id"]);
-
          $post["ID"] = $post_id;
          $insert = wp_update_post($post);
 
@@ -127,9 +122,10 @@ class Publish {
          $status  = false;
       }
 
+      // TODO: Fix sticky posts
       // if($status) {
       //    // Handle sticky posts
-      //    if($node_metadata["is_sticky"]) {
+      //    if($replicant_metadata["is_sticky"]) {
       //       stick_post($post_id);
       //    }
       // }
@@ -155,17 +151,17 @@ class Publish {
    /**
     * Determine wheither the sender node hash is equal to the current node or not
     *
-    * @param  object  $node_metadata Sender node metadata
-    * @return boolean                Duplication status
+    * @param  object  $replicant_metadata Sender node metadata
+    * @return boolean                     Duplication status
     */
-   private function is_duplicate_node(array $node_metadata): bool {
-      if(empty($node_metadata)) {
+   private function is_duplicate_node(array $replicant_metadata): bool {
+      if(empty($replicant_metadata)) {
          return false;
       }
 
       $current_node = new \Replicant\Node();
 
-      if($node_metadata["sender_node_hash"] === $current_node->hash) {
+      if($replicant_metadata["node_hash"] === $current_node->hash) {
          return true;
       }
 
@@ -190,17 +186,16 @@ class Publish {
       unset($fields["metadata"]["_pingme"]);
       unset($fields["post"]["ID"]);
 
-      $node_metadata           = $fields["replicant_node_metadata"];
-      $post                    = $fields["post"];
-      $post["meta_input"]      = $fields["metadata"];
-      // TODO: Check update event ( Create another function )
-      $post["import_id"]       = $post_id;
+      $replicant_metadata = $fields["replicant_metadata"];
+      $post               = $fields["post"];
+      $post["meta_input"] = $fields["metadata"];
+      $post["import_id"]  = $post_id;
 
       return [
-         "id"            => $post_id,
-         "post"          => $post,
-         "node_metadata" => $node_metadata,
-         "is_update"     => $is_update
+         "id"                 => $post_id,
+         "post"               => $post,
+         "replicant_metadata" => $replicant_metadata,
+         "is_update"          => $is_update
       ];
    }
 
@@ -212,7 +207,7 @@ class Publish {
     */
    public function check_permissions(\WP_REST_Request $request): bool {
       $fields = $request->get_json_params();
-      $target_node_hash = $fields["replicant_node_metadata"]["sender_node_hash"];
+      $target_node_hash = $fields["replicant_metadata"]["node_hash"];
       $trusted_nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
 
       // Iterate through a list of trusted nodes

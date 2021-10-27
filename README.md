@@ -28,5 +28,6 @@
          existence of a post by its `title` is wrong and causes duplication on update event.
    - [X] Implement "acting_as" for "Node" class, fetch the default from database.
    - [X] Add sender node validator in `publish.php` controller.
+   - [X] Fix duplication bug at `Post` listener in `listen_save` at line 48
    - [ ] Add "acting as" select option.
    - [ ] Add "Post" publisher check how should current node act based on its "acting_as".

@@ -10,12 +10,15 @@ if(!defined( 'ABSPATH' )) exit;
  */
 trait Listener {
 
-   public function generate_node_metadata() {
+   public function generate_metadata(string $title = ""): array {
       $current_node = new Node();
+      $post_title_hash = hash("sha256", $title, false);
 
-      $metadata = [];
-      // $metadata["hash"] = \Replicant\Helper::generate_random_string();
-      $metadata["sender_node_hash"] = $current_node->hash; // Reason: Prevent duplicate publishes
+      $metadata = [
+         // Reason: Prevent duplicate publishes
+         "node_hash" => $current_node->hash, // Sender node hash
+         "post_hash" => $post_title_hash     // Current post hash
+      ];
 
       return $metadata;
    }
