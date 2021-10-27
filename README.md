@@ -23,7 +23,7 @@
          or get all The data form that so everything would be identical.
    - [X] Add trust queue badge counter on nodes-menu.
    - [X] Add delete listener for posts.
-   - [ ] Add update listener for posts.
+   - [X] Add update listener for posts.
    - [X] Add unique identifier hash for Posts and its types, because checking the.
          existence of a post by its `title` is wrong and causes duplication on update event.
    - [X] Implement "acting_as" for "Node" class, fetch the default from database.
