@@ -37,7 +37,7 @@ class Post {
       $is_delete = false;
 
       // Parse it
-      $parsed_post = $this->parse($post);
+      $parsed_post = $this->parse($post, $is_update);
 
       // Publish it across all trusted nodes
       if($parsed_post) {
@@ -45,6 +45,10 @@ class Post {
 
          if(!empty($trusted_nodes)) {
             foreach($trusted_nodes as $node) {
+               // TODO: add validator for not publishing the posts for the `sender_node`
+               // the easiest way to solve this problem is to insert sender_node in
+               // post meta data and then fetch it here and then if it the $node matched
+               // sender_node of the post, ignore it and don't publish the post.
                if($parsed_post["replicant_node_metadata"]["sender_node_hash"] !== $node->hash) {
                   new \Replicant\Publishers\Post($parsed_post, $node, $is_update, $is_delete);
                }
@@ -82,10 +86,11 @@ class Post {
    /**
     * Parse and filter out product based on its type
     *
-    * @param  \WP_Post $post    Post
-    * @return array             Parsed metadata and post
+    * @param  \WP_Post $post      Post
+    * @param  bool     $is_update Update status
+    * @return array               Parsed post and its properties
     */
-   private function parse($post) {
+   private function parse($post, $is_update): array {
       $parsed_post = null;
 
       // Replicant attached metadata
@@ -119,7 +124,8 @@ class Post {
       return [
          "replicant_node_metadata" => $replicant_node_metadata,
          "metadata"                => $metadata,
-         "post"                    => $parsed_post->to_array()
+         "post"                    => $parsed_post->to_array(),
+         "is_update"               => $is_update
       ];
    }
 

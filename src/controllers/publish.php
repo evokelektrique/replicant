@@ -89,7 +89,11 @@ class Publish {
    public function create_post(\WP_REST_Request $request) {
       $build         = $this->build_post($request);
       $post          = $build["post"];
+      $post_id       = $build["id"];
       $node_metadata = $build["node_metadata"];
+      $is_update     = $build["is_update"];
+      error_log(print_r(["is_update" => $is_update, "post" => $post], true));
+
       $search        = $this->post_exists($post['post_title']);
 
       // Message to response back
@@ -98,10 +102,22 @@ class Publish {
 
       $insert = null;
 
-      // Find / Create post
+      ////////////////
+      // CRUD Posts //
+      ////////////////
       if($search === null && !$this->is_duplicate_node($node_metadata)) {
+         // Create Post
          $insert = wp_insert_post($post, true);
+
+      } elseif($is_update) {
+         // Update Post
+         unset($post["import_id"]);
+
+         $post["ID"] = $post_id;
+         $insert = wp_update_post($post);
+
       } else {
+         // Duplication error
          $message = __("Post duplicate.", "replicant");
          $status  = false;
       }
@@ -111,12 +127,12 @@ class Publish {
          $status  = false;
       }
 
-      if($status) {
-         // // Handle sticky posts
-         // if($node_metadata["is_sticky"]) {
-         //    stick_post($post_id);
-         // }
-      }
+      // if($status) {
+      //    // Handle sticky posts
+      //    if($node_metadata["is_sticky"]) {
+      //       stick_post($post_id);
+      //    }
+      // }
 
       return rest_ensure_response( ["status" => $status, "message" => $message] );
    }
@@ -163,9 +179,10 @@ class Publish {
     * @return Array                    Post and Node metadata
     */
    private function build_post(\WP_REST_Request $request): array {
-      $fields  = $request->get_json_params();
-      $post_id = $fields["post"]["ID"];
-      $post    = [];
+      $fields    = $request->get_json_params();
+      $is_update = $fields["is_update"];
+      $post_id   = $fields["post"]["ID"];
+      $post      = [];
 
       // Remove unnecessary fields
       unset($fields["metadata"]["_edit_lock"]);
@@ -180,8 +197,10 @@ class Publish {
       $post["import_id"]       = $post_id;
 
       return [
+         "id"            => $post_id,
          "post"          => $post,
-         "node_metadata" => $node_metadata
+         "node_metadata" => $node_metadata,
+         "is_update"     => $is_update
       ];
    }
 
