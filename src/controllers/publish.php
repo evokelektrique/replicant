@@ -45,26 +45,14 @@ class Publish {
             [
                "methods"             => "POST",
                "callback"            => [$this, "create_post"],
-
-               // TODO:
-               //
-               // Write another function and call it back
-               // here and it must check if the sender node
-               // is trusted or not.
-               "permission_callback" => "__return_true"
+               "permission_callback" => [$this, 'check_permissions']
             ],
 
             // Delete
             [
                "methods"             => "DELETE",
                "callback"            => [$this, "delete_post"],
-
-               // TODO:
-               //
-               // Write another function and call it back
-               // here and it must check if the sender node
-               // is trusted or not.
-               "permission_callback" => "__return_true"
+               "permission_callback" => [$this, 'check_permissions']
             ]
          ]
       );
@@ -76,7 +64,7 @@ class Publish {
    // Response Callbacks //
    ////////////////////////
 
-   public function delete_post($request) {
+   public function delete_post(\WP_REST_Request $request) {
       $build         = $this->build_post($request);
       $post          = $build["post"];
       $node_metadata = $build["node_metadata"];
@@ -98,7 +86,7 @@ class Publish {
       return rest_ensure_response(["status" => $status, "message" => $message]);
    }
 
-   public function create_post($request) {
+   public function create_post(\WP_REST_Request $request) {
       $build         = $this->build_post($request);
       $post          = $build["post"];
       $node_metadata = $build["node_metadata"];
@@ -154,7 +142,7 @@ class Publish {
     * @param  object  $node_metadata Sender node metadata
     * @return boolean                Duplication status
     */
-   private function is_duplicate_node(array $node_metadata) {
+   private function is_duplicate_node(array $node_metadata): bool {
       if(empty($node_metadata)) {
          return false;
       }
@@ -171,10 +159,10 @@ class Publish {
    /**
     * Generate post from request and delete unnecessary fields
     *
-    * @param  WP_Request $request Wordpress REST
-    * @return Array               Post and Node metadata
+    * @param  WP_REST_Request $request Wordpress REST
+    * @return Array                    Post and Node metadata
     */
-   private function build_post($request) {
+   private function build_post(\WP_REST_Request $request): array {
       $fields  = $request->get_json_params();
       $post_id = $fields["post"]["ID"];
       $post    = [];
@@ -195,6 +183,29 @@ class Publish {
          "post"          => $post,
          "node_metadata" => $node_metadata
       ];
+   }
+
+   /**
+    * Controller validation middleware
+    *
+    * @param  WP_REST_Request $request Wordpress REST
+    * @return boolean                  Pass on `true`, reject on `false`
+    */
+   public function check_permissions(\WP_REST_Request $request): bool {
+      $fields = $request->get_json_params();
+      $target_node_hash = $fields["replicant_node_metadata"]["sender_node_hash"];
+      $trusted_nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
+
+      // Iterate through a list of trusted nodes
+      // and check if the target node is in the list.
+      foreach($trusted_nodes as $trusted_node) {
+         if($trusted_node->hash === $target_node_hash) {
+            return true;
+         }
+      }
+
+      // Returns HTTP 401 error
+      return false;
    }
 
 }

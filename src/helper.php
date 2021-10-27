@@ -3,13 +3,13 @@
 namespace Replicant;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 class Helper {
 
    /**
     * Generates an Unique Random Byte String
-    * 
+    *
     * @var    int    $length Length of the unique generated string
     * @return string         Random generated value dependant to the $length
     */
@@ -27,7 +27,7 @@ class Helper {
 
    /**
     * Print custom notice
-    * 
+    *
     * @param  string $status  Status given from $_GET arguments ("error" or "success")
     * @param  string $message Message given from $_GET arguments
     * @return string          Custom html notice output with $status class
@@ -46,7 +46,7 @@ class Helper {
 
    /**
     * Print custom badge
-    * 
+    *
     * @param  boolean $status Current status
     * @return string          Custom HTML badge
     */
@@ -62,7 +62,7 @@ class Helper {
 
    /**
     * Generate an URL from given Node ID
-    * 
+    *
     * @param  array $node
     * @return array       A list of Raw and Parsed version of generated URL
     */
@@ -77,19 +77,19 @@ class Helper {
       // Merge $url array
       $url_string = implode('', $url);
 
-      // We separate parsed results 
+      // We separate parsed results
       $scheme  = parse_url(trim($url_string), PHP_URL_SCHEME);
       $host    = parse_url(trim($url_string), PHP_URL_HOST);
       $path    = parse_url(trim($url_string), PHP_URL_PATH);
 
       // Final URl formation
       $formed_url = $host . ":" . $node->port . $path;
-      
+
       return [
          "full"   => $url["scheme"] . $formed_url,
          "formed" => $formed_url,
          "parsed" => [
-            "scheme" => $url["scheme"], 
+            "scheme" => $url["scheme"],
             "host"   => $host,
             "port"   => $node->port,
             "path"   => $path
@@ -99,11 +99,26 @@ class Helper {
 
    /**
     * Check if WooCommerce is activated in theme
-    * 
+    *
     * @return bool Activation status
     */
    public static function is_woocommerce_active() {
       return class_exists("WooCommerce");
+   }
+
+   /**
+    * Validate JSON format
+    *
+    * @param  string  $text JSON String
+    * @return boolean       Validation status
+    */
+   public static function is_json(string $text): bool {
+      if(empty($text)) {
+         return false;
+      }
+
+      json_decode($text);
+      return json_last_error() === JSON_ERROR_NONE;
    }
 
 }

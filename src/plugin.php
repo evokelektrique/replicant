@@ -43,7 +43,6 @@ class Plugin {
     * Load Files And Initialize Classes In Order
     */
    private function __construct() {
-      // Initialize Classes In Order
       self::$config = new Config();
 
       // Initialize Database

@@ -46,6 +46,21 @@ class Post {
                'replicant'
             )
          );
+      } catch(\GuzzleHttp\Exception\ClientException $e) {
+         $error = $e->getResponse()->getBody()->getContents();
+         if(\Replicant\Helper::is_json($error)) {
+            $error_array   = json_decode($error, true);
+            $error_code    = $error_array["code"];
+            $error_message = $error_array["message"];
+            return new \WP_Error($error_code, $error_message);
+         }
+
+         return new \WP_Error('request-client-error',
+            __(
+               "Couldn't establish a connection to the server or an error happened on the target server.",
+               'replicant'
+            )
+         );
       }
    }
 
