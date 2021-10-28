@@ -65,19 +65,22 @@ class Publish {
    ////////////////////////
 
    public function delete_post(\WP_REST_Request $request) {
-      $build  = $this->build_post($request);
-      $post   = $build["post"];
-      $search = $this->post_exists($post['post_title']);
+      $build    = $this->build_post($request);
+      $post     = $build["post"];
+      $metadata = $build["metadata"];
 
       $message = __("Post not found.", "replicant"); // Message to response back
       $status  = false;                              // Response status
-
       $force   = true;                               // Force delete or not
 
-      if($search !== null) {
-         $delete  = wp_delete_post( $search->ID, $force );
-         $message = __("Post(".$search->ID.") successfully deleted.", "replicant");
-         $status  = true;
+      if($this->is_valid_metadata($metadata)) {
+         $search = $this->post_exists($metadata["replicant_post_hash"]);
+
+         if($search) {
+            $delete  = wp_delete_post( $build["id"], $force );
+            $message = __("Post with id(".$build["id"].") successfully deleted.", "replicant");
+            $status  = true;
+         }
       }
 
       return rest_ensure_response(["status" => $status, "message" => $message]);
@@ -88,44 +91,54 @@ class Publish {
       $post      = $build["post"];
       $post_id   = $build["id"];
       $is_update = $build["is_update"];
-      error_log(print_r(["is_update" => $is_update, "post" => $post], true));
-
-      $search = $this->post_exists($post['post_title']);
-
-      // Message to response back
-      $message = __("Post successfully created.", "replicant");
-      $status  = true;
+      $metadata  = $build["metadata"];
 
       ////////////////
       // CRUD Posts //
       ////////////////
       $insert = null;
 
-      if($search === null && !$this->is_duplicate_node($build["replicant_metadata"])) {
-         // Create Post
-         $insert = wp_insert_post($post, true);
+      if($this->is_valid_metadata($metadata)) {
+         $is_duplicate_node = $this->is_duplicate_node($metadata["replicant_node_hash"]);
+         $search = $this->post_exists($metadata["replicant_post_hash"]);
 
-      } elseif($is_update && !$this->is_duplicate_node($build["replicant_metadata"])) {
-         // Update Post
-         unset($post["import_id"]);
-         $post["ID"] = $post_id;
-         $insert = wp_update_post($post);
+         if($search === false && !$is_duplicate_node) {
+            // Create Post
+            $insert = wp_insert_post($post, true);
 
+            // Message to response back
+            $message = __("Post successfully created.", "replicant");
+            $status  = true;
+
+         } elseif($is_update && !$is_duplicate_node) {
+            // Update Post
+            unset($post["import_id"]);
+            $post["ID"] = $post_id;
+            $insert = wp_update_post($post);
+
+            // Message to response back
+            $message = __("Post successfully updated.", "replicant");
+            $status  = true;
+
+         } else {
+            // Duplication error
+            $message = __("Post duplicate.", "replicant");
+            $status  = false;
+         }
+
+         if(!is_null($insert) && is_wp_error($insert)) {
+            $message = $insert->get_error_message();
+            $status  = false;
+         }
       } else {
-         // Duplication error
-         $message = __("Post duplicate.", "replicant");
-         $status  = false;
-      }
-
-      if(!is_null($insert) && is_wp_error($insert)) {
-         $message = $insert->get_error_message();
+         $message = __("Invalid input.", "replicant");
          $status  = false;
       }
 
       // TODO: Fix sticky posts
       // if($status) {
       //    // Handle sticky posts
-      //    if($replicant_metadata["is_sticky"]) {
+      //    if($metadata["is_sticky"]) {
       //       stick_post($post_id);
       //    }
       // }
@@ -134,34 +147,43 @@ class Publish {
    }
 
    /**
-    * Determines if a post exists based on title.
+    * Determines if a post exists based on post hash
+    * in posts metadata database.
     *
-    * @param string $post_title Post title
-    * @param string $post_type  Post type
-    *
-    * @return WP_Post|null Post object if post exists, null otherwise
+    * @param  string $post_hash SHA-256 hashed post title
+    * @return boolean           Existence status
     */
-   private function post_exists(string $post_title, string $post_type = "post") {
-      $output_type = OBJECT;
-      $post        = get_page_by_title( $post_title, $output_type, $post_type );
+   private function post_exists(string $post_hash): bool {
+      if(empty($post_hash)) {
+         return false;
+      }
 
-      return $post;
+      global $wpdb;
+      $query = "SELECT * FROM $wpdb->postmeta WHERE `meta_key` = %s AND  meta_value = %s";
+      $key   = "replicant_post_hash";
+      $post  = $wpdb->get_row($wpdb->prepare($query, [$key, $post_hash]));
+
+      if(is_null($post) || empty($post)) {
+         return false;
+      }
+
+      return true;
    }
 
    /**
     * Determine wheither the sender node hash is equal to the current node or not
     *
-    * @param  object  $replicant_metadata Sender node metadata
-    * @return boolean                     Duplication status
+    * @param  string  $sender_node_hash Sender node hash
+    * @return boolean                   Duplication status
     */
-   private function is_duplicate_node(array $replicant_metadata): bool {
-      if(empty($replicant_metadata)) {
+   private function is_duplicate_node(string $sender_node_hash): bool {
+      if(empty($sender_node_hash)) {
          return false;
       }
 
       $current_node = new \Replicant\Node();
 
-      if($replicant_metadata["node_hash"] === $current_node->hash) {
+      if($sender_node_hash === $current_node->hash) {
          return true;
       }
 
@@ -178,24 +200,34 @@ class Publish {
       $fields    = $request->get_json_params();
       $is_update = $fields["is_update"];
       $post_id   = $fields["post"]["ID"];
-      $post      = [];
 
       // Remove unnecessary fields
       unset($fields["metadata"]["_edit_lock"]);
+      unset($fields["metadata"]["_edit_last"]);
       unset($fields["metadata"]["_encloseme"]);
       unset($fields["metadata"]["_pingme"]);
       unset($fields["post"]["ID"]);
 
-      $replicant_metadata = $fields["replicant_metadata"];
-      $post               = $fields["post"];
-      $post["meta_input"] = $fields["metadata"];
+      $metadata = $fields["metadata"];
+      $post = $fields["post"];
+
+      if($this->is_valid_metadata($metadata)) {
+         $post_hash = maybe_unserialize($metadata["replicant_post_hash"][0]);
+         $node_hash = maybe_unserialize($metadata["replicant_node_hash"][0]);
+         unset($metadata["replicant_node_hash"]);
+         unset($metadata["replicant_post_hash"]);
+         $metadata["replicant_node_hash"] = $node_hash;
+         $metadata["replicant_post_hash"] = $post_hash;
+      }
+
+      $post["meta_input"] = $metadata;
       $post["import_id"]  = $post_id;
 
       return [
-         "id"                 => $post_id,
-         "post"               => $post,
-         "replicant_metadata" => $replicant_metadata,
-         "is_update"          => $is_update
+         "id"        => $post_id,
+         "post"      => $post,
+         "metadata"  => $metadata,
+         "is_update" => $is_update
       ];
    }
 
@@ -207,7 +239,13 @@ class Publish {
     */
    public function check_permissions(\WP_REST_Request $request): bool {
       $fields = $request->get_json_params();
-      $target_node_hash = $fields["replicant_metadata"]["node_hash"];
+      $metadata = $fields["metadata"];
+
+      if(!$this->is_valid_metadata($metadata)) {
+         return false;
+      }
+
+      $target_node_hash = $fields["node"]["hash"];
       $trusted_nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
 
       // Iterate through a list of trusted nodes
@@ -220,6 +258,30 @@ class Publish {
 
       // Returns HTTP 401 error
       return false;
+   }
+
+   /**
+    * Check if metadata is valid
+    *
+    * @param  array   $metadata Metadata array
+    * @return boolean           Validation status
+    */
+   private function is_valid_metadata(array $metadata): bool {
+      if(empty($metadata)) {
+         return false;
+      }
+
+      // Validate node metadata
+      if(empty(maybe_unserialize($metadata["replicant_node_hash"][0]))) {
+         return false;
+      }
+
+      // Validate post metadata
+      if(empty(maybe_unserialize($metadata["replicant_node_hash"][0]))) {
+         return false;
+      }
+
+      return true;
    }
 
 }

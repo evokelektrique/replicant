@@ -12,10 +12,7 @@ class Post {
 
    use \Replicant\Listener;
 
-   private $replicant_metadata_key;
-
    public function __construct() {
-      $this->replicant_metadata_key = \Replicant\Config::$TABLES_PREFIX . "metadata";
       add_action("save_post", [$this, "listen_save"], 10, 3);
       add_action("before_delete_post", [$this, "listen_delete"], 10, 3);
    }
@@ -41,12 +38,11 @@ class Post {
          return;
       }
 
-      $current_node = new \Replicant\Node();
       $is_delete = false;
 
       // Parse it
       $parsed_post = $this->parse($post, $is_update);
-      $metadata = wp_unslash($parsed_post["replicant_metadata"]);
+      $metadata = $parsed_post["metadata"];
 
       // Publish it across all trusted nodes
       if($parsed_post) {
@@ -54,7 +50,7 @@ class Post {
          if(!empty($trusted_nodes)) {
             foreach($trusted_nodes as $node) {
                // Do not send the request back where it came from
-               if($metadata["node_hash"] !== $node->hash) {
+               if($metadata["replicant_node_hash"] !== $node->hash) {
                   // Publish the post
                   $response = new \Replicant\Publishers\Post(
                      $parsed_post,
@@ -90,7 +86,7 @@ class Post {
          $trusted_nodes = \Replicant\Tables\Nodes\Functions::get_all_trusted_nodes();
          if(!empty($trusted_nodes)) {
             foreach($trusted_nodes as $node) {
-               if($parsed_post["replicant_metadata"]["node_hash"] !== $node->hash) {
+               if($parsed_post["metadata"]["replicant_node_hash"] !== $node->hash) {
                   new \Replicant\Publishers\Post($parsed_post, $node, $is_update, $is_delete);
                }
             }
@@ -106,18 +102,26 @@ class Post {
     * @return array               Parsed post and its properties
     */
    private function parse($post, bool $is_update = false): array {
+      $current_node = new \Replicant\Node();
       $parsed_post = null;
 
       // Replicant attached metadata
       $sticky = is_sticky( $post->ID ) || 0;
-      $replicant_metadata = $this->generate_metadata();
-      $metadata = wp_slash(json_encode($replicant_metadata));
+      $replicant_metadata = $this->generate_metadata(get_the_title( $post ));
+
+      $table_prefix = \Replicant\Config::$TABLES_PREFIX;
 
       // Add metadata to current $post
-      $metadata_id = add_post_meta(
+      $metadata_node_hash_id = add_post_meta(
          $post->ID,
-         $this->replicant_metadata_key,
-         $metadata,
+         $table_prefix . "node_hash",
+         $replicant_metadata["node_hash"],
+         true
+      );
+      $metadata_post_hash_id = add_post_meta(
+         $post->ID,
+         $table_prefix . "post_hash",
+         $replicant_metadata["post_hash"],
          true
       );
 
@@ -135,10 +139,10 @@ class Post {
       $get_metadata = get_post_meta($post->ID);
 
       return [
-         "replicant_metadata" => $replicant_metadata,
-         "metadata"           => $get_metadata,
-         "post"               => $parsed_post->to_array(),
-         "is_update"          => $is_update
+         "metadata"  => $get_metadata,
+         "post"      => $parsed_post->to_array(),
+         "is_update" => $is_update,
+         "node"      => $current_node->get_json()
       ];
    }
 
