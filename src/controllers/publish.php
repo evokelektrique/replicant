@@ -101,7 +101,7 @@ class Publish {
       if($this->is_valid_metadata($metadata)) {
          $is_duplicate_node = $this->is_duplicate_node($metadata["replicant_node_hash"]);
          $search = $this->post_exists($metadata["replicant_post_hash"]);
-
+         // error_log(print_r(["is_update" => $is_update, "search" => $search, "is_duplicate_node" => $is_duplicate_node], true));
          if($search["status"] === false && !$is_duplicate_node) {
             // Create Post
             $insert = wp_insert_post($post, true);
@@ -185,6 +185,8 @@ class Publish {
       }
 
       $current_node = new \Replicant\Node();
+
+      error_log(print_r([$sender_node_hash, $current_node->hash], true));
 
       if($sender_node_hash === $current_node->hash) {
          return true;
