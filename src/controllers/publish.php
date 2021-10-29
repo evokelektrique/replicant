@@ -76,7 +76,7 @@ class Publish {
       if($this->is_valid_metadata($metadata)) {
          $search = $this->post_exists($metadata["replicant_post_hash"]);
 
-         if($search) {
+         if($search["status"]) {
             $delete  = wp_delete_post( $build["id"], $force );
             $message = __("Post with id(".$build["id"].") successfully deleted.", "replicant");
             $status  = true;
@@ -102,7 +102,7 @@ class Publish {
          $is_duplicate_node = $this->is_duplicate_node($metadata["replicant_node_hash"]);
          $search = $this->post_exists($metadata["replicant_post_hash"]);
 
-         if($search === false && !$is_duplicate_node) {
+         if($search["status"] === false && !$is_duplicate_node) {
             // Create Post
             $insert = wp_insert_post($post, true);
 
@@ -112,8 +112,7 @@ class Publish {
 
          } elseif($is_update && !$is_duplicate_node) {
             // Update Post
-            unset($post["import_id"]);
-            $post["ID"] = $post_id;
+            $post["ID"] = $search["post"]->post_id;
             $insert = wp_update_post($post);
 
             // Message to response back
@@ -153,21 +152,25 @@ class Publish {
     * @param  string $post_hash SHA-256 hashed post title
     * @return boolean           Existence status
     */
-   private function post_exists(string $post_hash): bool {
+   private function post_exists(string $post_hash): array {
       if(empty($post_hash)) {
-         return false;
+         $status = false;
       }
 
       global $wpdb;
       $query = "SELECT * FROM $wpdb->postmeta WHERE `meta_key` = %s AND  meta_value = %s";
       $key   = "replicant_post_hash";
       $post  = $wpdb->get_row($wpdb->prepare($query, [$key, $post_hash]));
+      $status = true;
 
       if(is_null($post) || empty($post)) {
-         return false;
+         $status = false;
       }
 
-      return true;
+      return [
+         "status" => $status,
+         "post" => $post
+      ];
    }
 
    /**
@@ -221,7 +224,6 @@ class Publish {
       }
 
       $post["meta_input"] = $metadata;
-      $post["import_id"]  = $post_id;
 
       return [
          "id"        => $post_id,
