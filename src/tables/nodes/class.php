@@ -3,7 +3,7 @@
 namespace Replicant\Tables\Nodes;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 if(!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -92,40 +92,46 @@ class ListTable extends \WP_List_Table {
    function column_name( $item ) {
       $actions           = [];
 
-      $actions['edit']   = sprintf( 
-         '<a href="%s" data-id="%d" title="%s">%s</a>', 
-         admin_url( 'admin.php?page=replicant-nodes&action=edit&id=' . $item->id ), 
-         $item->id, __( 'Edit this item', 'replicant' ), __( 'Edit', 'replicant' ) 
+      $actions['edit']   = sprintf(
+         '<a href="%s" data-id="%d" title="%s">%s</a>',
+         admin_url( 'admin.php?page=replicant-nodes&action=edit&id=' . $item->id ),
+         $item->id, __( 'Edit this item', 'replicant' ), __( 'Edit', 'replicant' )
       );
 
-      $actions['delete'] = sprintf( 
-         '<a href="%s" class="submitdelete" data-id="%d" title="%s">%s</a>', 
-         admin_url( 'admin.php?page=replicant-nodes&action=delete&id=' . $item->id ), 
-         $item->id, __( 'Delete this item', 'replicant' ), __( 'Delete', 'replicant' ) 
+      $actions['view']   = sprintf(
+         '<a href="%s" data-id="%d" title="%s">%s</a>',
+         admin_url( 'admin.php?page=replicant-nodes&action=view&id=' . $item->id ),
+         $item->id, __( 'View this item', 'replicant' ), __( 'View', 'replicant' )
+      );
+
+      $actions['delete'] = sprintf(
+         '<a href="%s" class="submitdelete" data-id="%d" title="%s">%s</a>',
+         admin_url( 'admin.php?page=replicant-nodes&action=delete&id=' . $item->id ),
+         $item->id, __( 'Delete this item', 'replicant' ), __( 'Delete', 'replicant' )
       );
 
       // Only visible when the Node item is not trusted
       if(!intval($item->is_trusted)) {
          if(intval($item->is_trust_request)) {
-            $actions['accept_trust'] = sprintf( 
-               '<a href="%s" class="replicant_submit_request_trust" data-id="%d" title="%s">%s</a>', 
-               admin_url( 'admin.php?page=replicant-nodes&action=accept_trust&id=' . $item->id . "&hash=" . $item->hash ), 
-               $item->id, __( 'Accept trust', 'replicant' ), __( 'Accept trust', 'replicant' ) 
+            $actions['accept_trust'] = sprintf(
+               '<a href="%s" class="replicant_submit_request_trust" data-id="%d" title="%s">%s</a>',
+               admin_url( 'admin.php?page=replicant-nodes&action=accept_trust&id=' . $item->id . "&hash=" . $item->hash ),
+               $item->id, __( 'Accept trust', 'replicant' ), __( 'Accept trust', 'replicant' )
             );
          } else {
-            $actions['request_trust'] = sprintf( 
-               '<a href="%s" class="replicant_submit_request_trust" data-id="%d" title="%s">%s</a>', 
-               admin_url( 'admin.php?page=replicant-nodes&action=request_trust&id=' . $item->id ), 
-               $item->id, __( 'Request trust this item', 'replicant' ), __( 'Request trust', 'replicant' ) 
+            $actions['request_trust'] = sprintf(
+               '<a href="%s" class="replicant_submit_request_trust" data-id="%d" title="%s">%s</a>',
+               admin_url( 'admin.php?page=replicant-nodes&action=request_trust&id=' . $item->id ),
+               $item->id, __( 'Request trust this item', 'replicant' ), __( 'Request trust', 'replicant' )
             );
          }
       }
 
-      return sprintf( 
-         '<a href="%1$s"><strong>%2$s</strong></a> %3$s', 
-         admin_url( 'admin.php?page=replicant-nodes&action=view&id=' . $item->id ), 
-         $item->name, 
-         $this->row_actions( $actions ) 
+      return sprintf(
+         '<a href="%1$s"><strong>%2$s</strong></a> %3$s',
+         admin_url( 'admin.php?page=replicant-nodes&action=view&id=' . $item->id ),
+         $item->name,
+         $this->row_actions( $actions )
       );
    }
 
@@ -173,13 +179,13 @@ class ListTable extends \WP_List_Table {
       }
    }
 
-   function process_bulk_action() {        
+   function process_bulk_action() {
       if($this->current_action() === 'trash') {
          foreach ($_POST['node_id'] as $id) {
             \Replicant\Log::purge(intval($id));
             Functions::delete(intval($id));
          }
-      }        
+      }
    }
 
    /**

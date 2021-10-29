@@ -3,7 +3,7 @@
 namespace Replicant;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 /**
  * Manage logs in database
@@ -12,30 +12,31 @@ class Log {
 
    /**
     * Fetch all logs related to the given node ID
-    * 
-    * @param  int   $node_id The desired node ID
-    * @return array          List of fetched logs from Database
+    *
+    * @param  int    $node_id The desired node ID
+    * @param  string $output  Results output type
+    * @return array           List of fetched logs from Database
     */
-   public static function get_all(int $node_id) {
+   public static function get_all(int $node_id, $output = OBJECT) {
       global $wpdb;
 
       $table_name = \Replicant\Config::$TABLES["logs"];
       $query      = "SELECT * FROM $table_name WHERE node_id = %d";
-      $result     = $wpdb->get_results($wpdb->prepare($query, $node_id));
+      $result     = $wpdb->get_results($wpdb->prepare($query, $node_id), $output);
 
       return $result;
    }
 
    /**
     * Write log into Database
-    * 
+    *
     * @var $message  The desired message
     * @var $node_id  Node ID
     * @var $level    Log level (Debug: 0, Info: 1, Warning: 2, Error: 3)
     */
    public static function write(string $message, int $node_id, int $level = 0) {
       global $wpdb;
-      
+
       $table_name = \Replicant\Config::$TABLES["logs"];
       $data       = ["message" => $message, "level" => $level, "node_id" => $node_id];
       $format     = ["%s", "%d", "%d"];
@@ -46,7 +47,7 @@ class Log {
 
    /**
     * Deletes all associated logs with given node ID
-    * 
+    *
     * @param  int $node_id The desired node ID
     * @return int|false    The number of rows affected, or false on error
     */
@@ -64,4 +65,37 @@ class Log {
          $wpdb->query( "DELETE FROM $table_name WHERE id IN($ids)" );
       }
    }
+
+   /**
+    * Specify the current level of log
+    *
+    * @param  int    $level Log level (Debug: 0, Info: 1, Warning: 2, Error: 3)
+    * @return string        Human readable level
+    */
+   public static function human_readable_level($level): string {
+      $level = intval($level);
+
+      switch ($level) {
+         case 0:
+            return "debug";
+            break;
+
+         case 1:
+            return "info";
+            break;
+
+         case 2:
+            return "warning";
+            break;
+
+         case 3:
+            return "error";
+            break;
+
+         default:
+            return "unknown";
+            break;
+      }
+   }
+
 }

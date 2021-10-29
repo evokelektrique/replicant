@@ -5,40 +5,41 @@
    <hr>
 
    <span replicant-tab="settings" class="replicant-nav-tab active">
-      <?= __( "Settings", "replicant" ); ?>
+      <?= __( "General", "replicant" ); ?>
    </span>
 
    <form id="panel_settings">
       <div class="left_side">
          <div id="settings" class="replicant-tab active">
-            <label for="replicant_authoriazation">
-               <?= __( "Authorization Key:", "replicant" ); ?>
-            </label>
-            <input
-               type="text"
-               class="replicant_input"
-               name="replicant_authoriazation"
-               id="replicant_authoriazation"
-               value="<?= $replicant::$default_db::authorization()->value ?>"
-               placeholder="<?= __( "Authorization Key", "replicant" );?>"
-               readonly=""
-            />
+            <div class="replicant-form-row">
+               <label for="replicant_authoriazation">
+                  <?= __( "Authorization Key:", "replicant" ); ?>
+               </label>
+               <input
+                  type="text"
+                  class="replicant_input"
+                  name="replicant_authoriazation"
+                  id="replicant_authoriazation"
+                  value="<?= $replicant::$default_db::authorization()->value ?>"
+                  placeholder="<?= __( "Authorization Key", "replicant" );?>"
+                  readonly=""
+               />
+            </div>
 
-            <br>
-            <br>
-
-            <label for="replicant_acting_as">
-               <?= __( "Acting as:", "replicant" ); ?>
-            </label>
-            <input
-               type="text"
-               class="replicant_input"
-               name="replicant_acting_as"
-               id="replicant_acting_as"
-               value="<?= $replicant::$default_db::acting_as()->value ?>"
-               placeholder="<?= __( "Authorization Key", "replicant" );?>"
-               readonly=""
-            />
+            <div class="replicant-form-row">
+               <label for="replicant_acting_as">
+                  <?= __( "Acting as:", "replicant" ); ?>
+               </label>
+               <input
+                  type="text"
+                  class="replicant_input"
+                  name="replicant_acting_as"
+                  id="replicant_acting_as"
+                  value="<?= $replicant::$default_db::acting_as()->value ?>"
+                  placeholder="<?= __( "Authorization Key", "replicant" );?>"
+                  readonly=""
+               />
+            </div>
          </div>
       </div>
       <div class="right_side">
