@@ -1,9 +1,9 @@
 # Replicant
-
-Synchronize your WordPress websites with ease
+Wordpress plugin that replicates posts and content in your wordpress websites
 
 ### Features
    - [X] Sync WordPress posts, including **(Create, Update, Delete)**
+   - [X] Sync WordPress pages, including **(Create, Update, Delete)**
    - [ ] Sync WordPress comments
    - [ ] Sync WordPress users
    - [ ] Sync WooCommerce products
