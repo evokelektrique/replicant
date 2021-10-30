@@ -19,8 +19,6 @@ class Post {
       $target_node_url = \Replicant\Helper::generate_url_from_node($target_node);
       $response        = $this->perform($body, $target_node_url, $is_update, $is_delete);
       $response        = json_decode($response, true);
-      // TODO: Debug, REMOVE IT
-      error_log(print_r([$is_update, $target_node_url["full"], $response, $get_target_node], true));
       \Replicant\Log::write(
          sprintf(__("%s", "replicant"), $response["message"]),
          $get_target_node->id,
