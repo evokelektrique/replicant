@@ -126,6 +126,10 @@ class Plugin {
          $publish_controller = new Controllers\Publish();
          $publish_controller->register_routes();
       });
+
+      Hooks::add_action("init", function() {
+         load_plugin_textdomain("replicant", false, dirname(plugin_basename(__FILE__)) . '/../languages');
+      });
    }
 
 }

@@ -1,0 +1,468 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Replicant\n"
+"POT-Creation-Date: 2021-10-30 17:01+0330\n"
+"PO-Revision-Date: 2021-10-30 17:19+0330\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: replicant.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: src/controllers/auth.php:94
+msgid "Node successfully inserted"
+msgstr "سایت با موفقیت اضافه شد"
+
+#: src/controllers/auth.php:127
+msgid "Something went wrong."
+msgstr "مشکلی به وجود آمد."
+
+#: src/controllers/auth.php:153
+msgid "Invalid request"
+msgstr "درخواست نا معتبر"
+
+#: src/controllers/auth.php:164 src/tables/nodes/functions.php:178
+msgid "Successfully accepted trust of the Node"
+msgstr "تاییدیه سایت با موفقیت انجام شد"
+
+#: src/controllers/auth.php:175 src/tables/nodes/functions.php:183
+msgid "Something went wrong in accepting trust, Please try again."
+msgstr "مشکلی در تاییدیه سایت به وجود آمد، لطفا دوباره تلاش کنید."
+
+#: src/controllers/auth.php:222
+msgid ""
+"Couldn't establish a connection to server or an error happened on the target "
+"server."
+msgstr "مشکلی در ایجاد ارتباط با سرور هدف ایجاد شده است."
+
+#: src/controllers/auth.php:258 src/controllers/info.php:87
+#: src/publishers/post.php:50 src/publishers/post.php:65
+msgid ""
+"Couldn't establish a connection to the server or an error happened on the "
+"target server."
+msgstr "مشکلی در ایجاد ارتباط با سرور هدف ایجاد شده است."
+
+#: src/controllers/publish.php:72
+msgid "Post not found."
+msgstr "پست پیدا نشد.."
+
+#: src/controllers/publish.php:81
+msgid "Post with id("
+msgstr "پست با آی دی ("
+
+#: src/controllers/publish.php:109
+msgid "Post successfully created."
+msgstr "پست با موفقیت ساخته شد."
+
+#: src/controllers/publish.php:118
+msgid "Post successfully updated."
+msgstr "پست با موفقیت بروزرسانی شد."
+
+#: src/controllers/publish.php:123
+msgid "Post duplicate."
+msgstr "پست تکراری می باشد."
+
+#: src/controllers/publish.php:132
+msgid "Invalid input."
+msgstr "ورودی نا معتبر."
+
+#: src/forms/nodes/functions.php:47
+msgid "No Address provided."
+msgstr "آدرسی اراعه نشده است."
+
+#: src/forms/nodes/functions.php:50
+msgid "No Port provided."
+msgstr "پورتی اراعه نشده است."
+
+#: src/forms/nodes/functions.php:62
+#, php-format
+msgid "%s successfully created"
+msgstr "با موفقیت ایجاد شد %s"
+
+#: src/forms/nodes/functions.php:68
+msgid "Something went wrong, Please try again."
+msgstr "مشکلی پیش آمد، لطفا دوباره امتحان کنید."
+
+#: src/forms/nodes/functions.php:74
+#, php-format
+msgid "%s successfully updated"
+msgstr "با موفقیت بروزرسانی شد %s"
+
+#: src/forms/nodes/handler.php:36
+msgid "Are you cheating?"
+msgstr "تقلب؟"
+
+#: src/forms/nodes/handler.php:40
+msgid "Permission Denied!"
+msgstr "دسترسی رد شد!"
+
+#: src/forms/nodes/handler.php:63
+msgid "Error: Address is required"
+msgstr "خطا: آدرس ضروری می باشد"
+
+#: src/forms/nodes/handler.php:67
+msgid "Error: Port is required"
+msgstr "خطا: پورت ضروری می باشد"
+
+#: src/forms/nodes/handler.php:147
+#, php-format
+msgid "Node successfully %s."
+msgstr "سایت با موفقیت %s."
+
+#: src/helper.php:57
+msgid "Yes"
+msgstr "بله"
+
+#: src/helper.php:57
+msgid "No"
+msgstr "خیر"
+
+#. Plugin Name of the plugin/theme
+#: src/menus/main-menu.php:12 src/menus/main-menu.php:13
+#: src/views/dashboard.php:4
+msgid "Replicant"
+msgstr ""
+
+#: src/menus/nodes-menu.php:16 src/menus/nodes-menu.php:17
+#: src/views/nodes/list.php:14
+msgid "Nodes"
+msgstr "سایت ها"
+
+#: src/menus/settings-menu.php:13 src/menus/settings-menu.php:14
+#: src/views/settings.php:4
+msgid "Settings"
+msgstr "تنظیمات"
+
+#: src/publishers/post.php:23
+#, php-format
+msgid "%s"
+msgstr ""
+
+#: src/tables/nodes/class.php:35
+msgid "No node found"
+msgstr "سایتی یافت نشد"
+
+#: src/tables/nodes/class.php:76
+msgid "Name"
+msgstr "نام"
+
+#: src/tables/nodes/class.php:77 src/views/nodes/edit.php:21
+#: src/views/nodes/new.php:19
+msgid "Address"
+msgstr "آدرس"
+
+#: src/tables/nodes/class.php:78 src/views/nodes/edit.php:38
+#: src/views/nodes/new.php:36
+msgid "Port"
+msgstr "پورت"
+
+#: src/tables/nodes/class.php:79 src/views/nodes/edit.php:30
+#: src/views/nodes/new.php:28
+msgid "SSL"
+msgstr ""
+
+#: src/tables/nodes/class.php:80
+msgid "Trust"
+msgstr "اعتماد"
+
+#: src/tables/nodes/class.php:98
+msgid "Edit this item"
+msgstr "ویرایش این آیتم"
+
+#: src/tables/nodes/class.php:98
+msgid "Edit"
+msgstr "ویرایش"
+
+#: src/tables/nodes/class.php:104
+msgid "View this item"
+msgstr "نمایش این آیتم"
+
+#: src/tables/nodes/class.php:104
+msgid "View"
+msgstr "نمایش"
+
+#: src/tables/nodes/class.php:110
+msgid "Delete this item"
+msgstr "حذف این آیتم"
+
+#: src/tables/nodes/class.php:110
+msgid "Delete"
+msgstr "حذف"
+
+#: src/tables/nodes/class.php:119
+msgid "Accept trust"
+msgstr "تایید اعتماد"
+
+#: src/tables/nodes/class.php:125
+msgid "Request trust this item"
+msgstr "درخواست اعتماد برای آیتم"
+
+#: src/tables/nodes/class.php:125
+msgid "Request trust"
+msgstr "درخواست اعتماد"
+
+#: src/tables/nodes/class.php:157
+msgid "Move to Trash"
+msgstr "انتقال به زباله دان"
+
+#: src/views/nodes/edit.php:2
+msgid "Edit node"
+msgstr "ویرایش سایت"
+
+#: src/views/nodes/edit.php:12 src/views/nodes/new.php:10
+msgid "Node Name"
+msgstr "نام سایت"
+
+#: src/views/nodes/edit.php:16 src/views/nodes/new.php:14
+msgid "i.e: Shopping Website"
+msgstr "نمونه: سایت فروشگاهی"
+
+#: src/views/nodes/edit.php:25 src/views/nodes/new.php:23
+msgid "i.e: wordpress.org"
+msgstr "نمونه: wordpress.org"
+
+#: src/views/nodes/edit.php:42 src/views/nodes/new.php:40
+msgid "i.e: 80"
+msgstr "نمونه: 80"
+
+#: src/views/nodes/edit.php:51
+msgid "Update node"
+msgstr "بروزرسانی سایت"
+
+#: src/views/nodes/list.php:20
+msgid "Add New"
+msgstr "اضافه کردن"
+
+#: src/views/nodes/list.php:30
+msgid "Search"
+msgstr "جستجو"
+
+#: src/views/nodes/new.php:2
+msgid "Add new node"
+msgstr "افزودن سایت جدید"
+
+#: src/views/nodes/new.php:49
+msgid "Submit new node"
+msgstr "تایید سایت جدید"
+
+#: src/views/nodes/single.php:11
+msgid "Information"
+msgstr "اطلاعات"
+
+#: src/views/nodes/single.php:14
+msgid "id"
+msgstr "آی دی"
+
+#: src/views/nodes/single.php:18
+msgid "name"
+msgstr "نام"
+
+#: src/views/nodes/single.php:22
+msgid "host"
+msgstr "هاست"
+
+#: src/views/nodes/single.php:26
+msgid "port"
+msgstr "پورت"
+
+#: src/views/nodes/single.php:37
+msgid "Logs"
+msgstr "تاریخچه"
+
+#: src/views/nodes/single.php:39
+msgid "No logs found."
+msgstr "تاریخچه ای یافت نشد."
+
+#: src/views/nodes/single.php:52
+msgid "ago"
+msgstr "پیش"
+
+#: src/views/nodes/trust.php:16
+msgid "Go back"
+msgstr "برگشت"
+
+#: src/views/settings.php:8
+#: vendor/htmlburger/carbon-fields/core/Container/Container.php:727
+msgid "General"
+msgstr "عمومی"
+
+#: src/views/settings.php:16
+msgid "Authorization Key:"
+msgstr ""
+
+#: src/views/settings.php:24 src/views/settings.php:39
+msgid "Authorization Key"
+msgstr ""
+
+#: src/views/settings.php:31
+msgid "Acting as:"
+msgstr ""
+
+#: src/views/settings.php:46
+msgid "Submit"
+msgstr "تایید"
+
+#: vendor/htmlburger/carbon-fields/core/Container/Block_Container.php:287
+msgid "The parent must be 'array', 'string' or 'null'."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Container/Block_Container.php:316
+msgid "The position of inner blocks must be 'above' or 'below'."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Container/Block_Container.php:334
+msgid "The template must be an 'array' or 'null'."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Container/Block_Container.php:352
+msgid "The template lock must be 'all', 'insert', 'false' or 'null'."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Container/Block_Container.php:370
+msgid "The allowed blocks must be an 'array' or 'null'."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Container/Block_Container.php:437
+msgid "'render_callback' is required for the blocks."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Container/Block_Container.php:441
+msgid "'render_callback' must be a callable."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Container/Theme_Options_Container.php:207
+msgid "Settings saved."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Field/Footer_Scripts_Field.php:20
+msgid ""
+"If you need to add scripts to your footer (like Google Analytics tracking "
+"code), you should enter them in this box."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Field/Gravity_Form_Field.php:47
+msgid "No form"
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Field/Header_Scripts_Field.php:20
+msgid "If you need to add scripts to your header, you should enter them here."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Field/Sidebar_Field.php:74
+msgctxt "sidebar"
+msgid "Add New"
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
+msgid "Please enter a name for the sidebar."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php:72
+msgid "Unknown action attempted."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php:102
+msgid "Sidebar with the same ID is already registered."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php:112
+#: vendor/htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php:142
+msgid ""
+"Failed to update option storing your custom sidebars. Please contact support."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
+msgid "Sidebar not found."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php:181
+msgid "Add Sidebar"
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
+msgid "Please enter the name of the new sidebar:"
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php:183
+msgid "Are you sure you wish to remove this sidebar?"
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:398
+msgid "No option names provided"
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:409
+msgid "Theme Options updated."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:431
+msgid "Sorry, you are not allowed to read blocks of this post."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:441
+msgid "Sorry, you are not allowed to read blocks as this user."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:462
+msgid "The requested type: ID or URL."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:467
+msgid "The ID / URL of the attachment"
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:484
+msgid "The name of the block."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:489
+msgid "The content of the block."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:493
+msgid "ID of the post context."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/core/REST_API/Router.php:524
+msgid "Invalid block."
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/templates/Container/common/options-page.php:43
+msgid "Actions"
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/templates/Container/common/options-page.php:52
+msgid "Save Changes"
+msgstr ""
+
+#: vendor/htmlburger/carbon-fields/templates/Container/widget.php:4
+msgid "No options are available for this widget."
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/evokelektrique/replicant"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "This plugin replicates posts and content in your wordpress websites"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "EVOKE"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://github.com/evokelektrique/"
+msgstr ""

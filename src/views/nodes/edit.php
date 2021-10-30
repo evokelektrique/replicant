@@ -1,5 +1,5 @@
 <div class="wrap">
-    <h1><?php _e( 'Add new node', 'replicant' ); ?></h1>
+    <h1><?php _e( 'Edit node', 'replicant' ); ?></h1>
 
     <?php $item = \Replicant\Tables\Nodes\Functions::get( $id ); ?>
 
