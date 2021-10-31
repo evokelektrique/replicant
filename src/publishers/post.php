@@ -16,9 +16,9 @@ class Post {
 
    public function __construct(array $body, object $target_node, bool $is_update, bool $is_delete) {
       $get_target_node = \Replicant\Tables\Nodes\Functions::get_by("hash", $target_node->hash);
-      $target_node_url = \Replicant\Helper::generate_url_from_node($target_node);
-      $response        = $this->perform($body, $target_node_url, $is_update, $is_delete);
-      $response        = json_decode($response, true);
+      $parsed_target_node_url = \Replicant\Helper::generate_url_from_node($target_node);
+      $response = $this->perform($body, $parsed_target_node_url, $is_update, $is_delete);
+      $response = json_decode($response, true);
       \Replicant\Log::write(
          sprintf(__("%s", "replicant"), $response["message"]),
          $get_target_node->id,
@@ -27,10 +27,10 @@ class Post {
       return $response;
    }
 
-   public function perform(array $body, array $target_node_url, bool $is_update, bool $is_delete) {
+   public function perform(array $body, array $parsed_target_node_url, bool $is_update, bool $is_delete) {
       $controller      = new \Replicant\Controllers\Publish();
       $route           = $controller->get_route();
-      $target_node_url = $target_node_url["formed"] . $route;
+      $target_node_url = $parsed_target_node_url["formed"] . $route;
 
       $client = new \GuzzleHttp\Client();
 
@@ -40,7 +40,7 @@ class Post {
       }
 
       try {
-         $request = $client->request($method, $target_node_url, [
+         $request = $client->request($method, $parsed_target_node_url["parsed"]["scheme"] . $target_node_url, [
             'json' => $body
          ]);
          return (string) $request->getBody();

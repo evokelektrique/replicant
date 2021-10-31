@@ -5,7 +5,7 @@ namespace Replicant\Controllers;
 use GuzzleHttp\Client;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 /**
  * Information Controller
@@ -16,14 +16,14 @@ class Info {
 
    /**
     * Controller REST API Namespace name
-    * 
+    *
     * @var string
     */
    public $namepsace;
 
    /**
     * Namespace resource name
-    * 
+    *
     * @var string
     */
    public $resource;
@@ -37,8 +37,8 @@ class Info {
    public function register_routes() {
       // Retrieve current Node information Endpoint
       register_rest_route(
-         $this->namespace, 
-         $this->resource . "/get_node", 
+         $this->namespace,
+         $this->resource . "/get_node",
          [
             // Register the readable endpoint
             [
@@ -56,7 +56,7 @@ class Info {
 
    /**
     * Display current node information (Exclude sensetive data)
-    * 
+    *
     * @return string JSON encoded of current node associated information
     */
    public function get_node() {
@@ -70,12 +70,13 @@ class Info {
 
    /**
     * Send a HTTP request to fetch target Node information
-    * 
+    *
     * @param  string $target_url Target server URl
     * @return string             HTTP Response
     */
    public static function request_get_node($target_url) {
       $target_url = $target_url . "/?rest_route=/replicant/v1/info/get_node";
+      error_log(print_r($target_url, true));
       $client = new \GuzzleHttp\Client();
 
       try {
@@ -83,10 +84,10 @@ class Info {
          return (string) $request->getBody();
       } catch(\Exception $e) {
          return new \WP_Error('request-server-error',
-            __( 
+            __(
                "Couldn't establish a connection to the server or an error happened on the target server.",
-               'replicant' 
-            ) 
+               'replicant'
+            )
          );
       }
    }

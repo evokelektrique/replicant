@@ -100,8 +100,20 @@ class Node {
       $this->name = get_bloginfo('name');
       $this->host = $this->url["parsed"]["host"];
       $this->path = isset($this->url["parsed"]["path"]) ? $this->url["parsed"]["path"] : "";
-      $this->port = isset($this->url["parsed"]["port"]) ? $this->url["parsed"]["port"] : 80;
       $this->ssl  = is_ssl();
+
+      // Define port based on SSL support
+      if($this->ssl) {
+         // It's SSL
+         $this->port = 443;
+      } elseif(isset($this->url["parsed"]["port"])) {
+         // It's a different port
+         $this->port = $this->url["parsed"]["port"];
+      } else {
+         // Default port
+         $this->port = 80;
+      }
+
       $this->hash = $replicant::$default_db::current_node_hash()->value;
       $this->acting_as = $replicant::$default_db::acting_as()->value;
    }

@@ -9,7 +9,7 @@ class Handler {
 
    /**
     * Form update status
-    * 
+    *
     * @var boolean
     */
    private $is_update;
@@ -89,10 +89,15 @@ class Handler {
       $url["scheme"] = intval($fields["ssl"]) === 0 ? "http://" : "https://";
       $url["host"]   = $fields["host"];
 
+      // Change the port to 443 when SSL is enabled
+      if(intval($fields["ssl"]) !== 0) {
+         $fields["port"] = "443";
+      }
+
       // Merge $url array
       $url_string = implode('', $url);
 
-      // We separate parsed results 
+      // We separate parsed results
       $scheme  = parse_url(trim($url_string), PHP_URL_SCHEME);
       $host    = parse_url(trim($url_string), PHP_URL_HOST);
       $path    = parse_url(trim($url_string), PHP_URL_PATH);
@@ -108,7 +113,7 @@ class Handler {
          $redirect_to   = add_query_arg([
                'status'  => 'error',
                'message' => $error_message
-            ], 
+            ],
             $page_url
          );
          wp_safe_redirect( $redirect_to );
@@ -139,7 +144,7 @@ class Handler {
          $redirect_to   = add_query_arg([
                'status'  => 'error',
                'message' => $error_message
-            ], 
+            ],
             $page_url
          );
       } else {
@@ -156,7 +161,7 @@ class Handler {
          $node_id        = $this->is_update ? $fields["id"] : $insert_id;
          $node           = \Replicant\Tables\Nodes\Functions::get($node_id);
          $trust_response = \Replicant\Controllers\Auth::request_trust($node);
-         
+
          if(is_wp_error( $trust_response )) {
             $error_message = $trust_response->get_error_message();
             $redirect_to = add_query_arg( [
