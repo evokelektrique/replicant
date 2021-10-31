@@ -3,8 +3,8 @@
 A plugin that replicates and synchronize content in your WordPress websites.
 
 ## Features
-   - [X] Sync WordPress posts, including **(Create, Update, Delete)**
-   - [X] Sync WordPress pages, including **(Create, Update, Delete)**
+   - [X] Sync WordPress posts, including **(Create, Update, Delete)** across all trusted nodes
+   - [X] Sync WordPress pages, including **(Create, Update, Delete)** across all trusted nodes
    - [ ] Sync WordPress comments
    - [ ] Sync WordPress users
    - [ ] Sync WooCommerce products
