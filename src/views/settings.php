@@ -1,11 +1,11 @@
 <?php global $replicant; ?>
 
 <div class="wrap">
-   <h3><?= __( "Settings", "replicant" ); ?></h3>
+   <h3><?php esc_html_e( "Settings", "replicant" ); ?></h3>
    <hr>
 
    <span replicant-tab="settings" class="replicant-nav-tab active">
-      <?= __( "General", "replicant" ); ?>
+      <?php esc_html_e( "General", "replicant" ); ?>
    </span>
 
    <form id="panel_settings">
@@ -13,37 +13,37 @@
          <div id="settings" class="replicant-tab active">
             <div class="replicant-form-row">
                <label for="replicant_authoriazation">
-                  <?= __( "Authorization Key:", "replicant" ); ?>
+                  <?php esc_html_e( "Authorization Key:", "replicant" ); ?>
                </label>
                <input
                   type="text"
                   class="replicant_input"
                   name="replicant_authoriazation"
                   id="replicant_authoriazation"
-                  value="<?= $replicant::$default_db::authorization()->value ?>"
-                  placeholder="<?= __( "Authorization Key", "replicant" );?>"
+                  value="<?php echo $replicant::$default_db::authorization()->value ?>"
+                  placeholder="<?php esc_html_e( "Authorization Key", "replicant" );?>"
                   readonly=""
                />
             </div>
 
             <div class="replicant-form-row">
                <label for="replicant_acting_as">
-                  <?= __( "Acting as:", "replicant" ); ?>
+                  <?php esc_html_e( "Acting as:", "replicant" ); ?>
                </label>
                <input
                   type="text"
                   class="replicant_input"
                   name="replicant_acting_as"
                   id="replicant_acting_as"
-                  value="<?= $replicant::$default_db::acting_as()->value ?>"
-                  placeholder="<?= __( "Authorization Key", "replicant" );?>"
+                  value="<?php echo $replicant::$default_db::acting_as()->value ?>"
+                  placeholder="<?php esc_html_e( "Authorization Key", "replicant" );?>"
                   readonly=""
                />
             </div>
          </div>
       </div>
       <div class="right_side">
-         <button class="button-primary"><?= __("Submit", "replicant") ?></button>
+         <button class="button-primary"><?php esc_html_e("Submit", "replicant") ?></button>
       </div>
    </form>
 </div>

@@ -5,16 +5,7 @@
 
         <table class="form-table">
             <tbody>
-<!--                 <tr class="row-name">
-                    <th scope="row">
-                        <label for="name"><?php _e( 'Node Name', 'replicant' ); ?></label>
-                    </th>
-                    <td>
-                        <input type="text" name="name" id="name" class="regular-text" placeholder="<?php echo esc_attr( '', 'replicant' ); ?>" value="" required="required" />
-                        <span class="description"><?php _e('i.e: Shopping Website', 'replicant' ); ?></span>
-                    </td>
-                </tr>
- -->                <tr class="row-host">
+                 <tr class="row-host">
                     <th scope="row">
                         <label for="host"><?php _e( 'Address', 'replicant' ); ?></label>
                     </th>

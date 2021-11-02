@@ -1,5 +1,5 @@
 <div class="wrap">
-   <?php 
+   <?php
       // Print out notice
       if(is_wp_error( $response )) {
          $message = $response->get_error_message();
@@ -12,8 +12,8 @@
       \Replicant\Helper::print_notice($status, $message);
    ?>
    <br>
-   <a href="<?= admin_url( 'admin.php?page=replicant-nodes' ); ?>" class="button">
-      <?= __("Go back", "replicant") ?>
+   <a href="<?php echo admin_url( 'admin.php?page=replicant-nodes' ); ?>" class="button">
+      <?php esc_html_e("Go back", "replicant") ?>
    </a>
 </div>
 
