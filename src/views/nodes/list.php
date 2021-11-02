@@ -1,9 +1,9 @@
 <div class="wrap">
-   
-   <?php 
-      $message = isset($_GET['message']) ? $_GET['message'] : NULL;
-      $status  = isset($_GET['status']) ? $_GET['status'] : NULL;
-      
+
+   <?php
+      $message = isset($_GET['message']) ? sanitize_text_field($_GET['message']) : NULL;
+      $status  = isset($_GET['status']) ? sanitize_text_field($_GET['status']) : NULL;
+
       // Only print the notice when a status has given
       if($status) {
          \Replicant\Helper::print_notice($status, $message);
@@ -11,13 +11,13 @@
    ?>
 
     <h2>
-      <?php _e( 'Nodes', 'replicant' ); ?> 
+      <?php _e( 'Nodes', 'replicant' ); ?>
 
-      <a 
-      href="<?php echo admin_url( 'admin.php?page=replicant-nodes&action=new' ); ?>" 
+      <a
+      href="<?php echo admin_url( 'admin.php?page=replicant-nodes&action=new' ); ?>"
       class="add-new-h2"
       >
-         <?php _e( 'Add New', 'replicant' ); ?> 
+         <?php _e( 'Add New', 'replicant' ); ?>
       </a>
    </h2>
 

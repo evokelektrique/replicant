@@ -3,17 +3,18 @@
 namespace Replicant\Tables\Nodes;
 
 // Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit; 
+if(!defined( 'ABSPATH' )) exit;
 
 class Functions {
 
    /**
     * Get all node
     *
-    * @param $args array
+    * @param string $s    Search text
+    * @param array  $args array
     * @return array
     */
-   public static function get_all( $search = null, $args = array() ) {
+   public static function get_all( $s = null, $args = array() ) {
       global $wpdb;
 
       $defaults = array(
@@ -23,6 +24,7 @@ class Functions {
          'order'      => 'ASC',
       );
 
+      $search     = sanitize_text_field($s);
       $args       = wp_parse_args( $args, $defaults );
       $cache_key  = 'all-nodes';
       $items      = wp_cache_get( $cache_key, 'replicant' );
@@ -31,12 +33,12 @@ class Functions {
       if (!$items) {
          if($search && !empty($search)) {
             $items = $wpdb->get_results(
-               "SELECT * FROM $table_name WHERE name LIKE '%{$search}%' ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']} , {$args['number']}" 
+               "SELECT * FROM $table_name WHERE name LIKE '%{$search}%' ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']} , {$args['number']}"
             );
 
          } else {
             $items = $wpdb->get_results(
-               "SELECT * FROM $table_name ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']} , {$args['number']}" 
+               "SELECT * FROM $table_name ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']} , {$args['number']}"
             );
          }
 
@@ -49,7 +51,7 @@ class Functions {
 
    /**
     * Retrieve all trusted nodes on current database
-    * 
+    *
     * @return array List of nodes
     */
    public static function get_all_trusted_nodes() {
@@ -79,7 +81,7 @@ class Functions {
     */
    public static function get_count() {
       global $wpdb;
-      
+
       $table_name = \Replicant\Config::$TABLES["nodes"];
 
       return (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
@@ -96,25 +98,26 @@ class Functions {
 
       $table_name = \Replicant\Config::$TABLES["nodes"];
 
-      return $wpdb->get_row( 
+      return $wpdb->get_row(
          $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id )
       );
    }
 
    /**
     * Search for by custom Key and Value in "nodes" table
-    * 
-    * @param  string|null $key   WHERE key in sql query
-    * @param  string|null $value WHERE value in sql query
-    * @return array              Single row fetched by $wpdb
+    *
+    * @param  string|null $k WHERE key in sql query
+    * @param  string|null $v WHERE value in sql query
+    * @return array          Single row fetched by $wpdb
     */
-   public static function get_by(string $key = null, string $value = null) {
+   public static function get_by(string $k = null, string $v = null) {
       if(!$value) {
          return;
       }
 
       global $wpdb;
-
+      $key        = sanitize_text_field($k);
+      $value      = sanitize_text_field($v);
       $table_name = \Replicant\Config::$TABLES["nodes"];
       $query      = "SELECT * FROM $table_name WHERE `$key` = %s";
       $result     = $wpdb->get_row($wpdb->prepare($query, $value));
@@ -124,7 +127,7 @@ class Functions {
 
    /**
     * Get a number of Nodes awaiting to trust
-    * 
+    *
     * @return int Count of Nodes
     */
    public static function get_await_count() {
@@ -134,13 +137,13 @@ class Functions {
       $values     = ["false", "true"];
       $query      = "SELECT COUNT(*) FROM $table_name WHERE `is_trusted` = false AND `is_trust_request` = true";
       $result     = (int) $wpdb->get_var($query);
-      
+
       return $result;
    }
 
    /**
     * Delete single row
-    * 
+    *
     * @param  int $id Row ID
     * @return null|wpdb     Null or Last affected row
     */
@@ -158,7 +161,7 @@ class Functions {
 
    /**
     * Find and accept trust of given Node
-    * 
+    *
     * @param  object       $node Node object by self::get_by()
     * @return array|object       Success message or error
     */

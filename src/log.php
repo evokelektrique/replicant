@@ -18,6 +18,10 @@ class Log {
     * @return array           List of fetched logs from Database
     */
    public static function get_all(int $node_id, $output = OBJECT) {
+      if(!is_numeric($node_id)) {
+         return;
+      }
+
       global $wpdb;
 
       $table_name = \Replicant\Config::$TABLES["logs"];
@@ -35,8 +39,12 @@ class Log {
     * @var $level    Log level (Debug: 0, Info: 1, Warning: 2, Error: 3)
     */
    public static function write(string $message, int $node_id, int $level = 0) {
-      global $wpdb;
+      if(empty($message)) {
+         return;
+      }
 
+      global $wpdb;
+      $message    = sanitize_text_field($message);
       $table_name = \Replicant\Config::$TABLES["logs"];
       $data       = ["message" => $message, "level" => $level, "node_id" => $node_id];
       $format     = ["%s", "%d", "%d"];
@@ -72,7 +80,7 @@ class Log {
     * @param  int    $level Log level (Debug: 0, Info: 1, Warning: 2, Error: 3)
     * @return string        Human readable level
     */
-   public static function human_readable_level($level): string {
+   public static function human_readable_level(int $level = 1): string {
       $level = intval($level);
 
       switch ($level) {

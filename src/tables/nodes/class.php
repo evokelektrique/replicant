@@ -195,7 +195,7 @@ class ListTable extends \WP_List_Table {
     */
    function prepare_items() {
       // Check if user is searching
-      $search = (isset($_REQUEST['s'])) ? $_REQUEST['s'] : false;
+      $search = (isset($_REQUEST['s'])) ? sanitize_text_field($_REQUEST['s']) : false;
 
       $columns               = $this->get_columns();
       $hidden                = [];
@@ -218,8 +218,8 @@ class ListTable extends \WP_List_Table {
       ];
 
       if ( isset( $_REQUEST['orderby'] ) && isset( $_REQUEST['order'] ) ) {
-         $args['orderby'] = $_REQUEST['orderby'];
-         $args['order']   = $_REQUEST['order'] ;
+         $args['orderby'] = sanitize_text_field($_REQUEST['orderby']);
+         $args['order']   = sanitize_text_field($_REQUEST['order']);
       }
 
       $this->items = Functions::get_all($search, $args);

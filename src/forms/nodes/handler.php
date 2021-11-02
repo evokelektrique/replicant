@@ -112,7 +112,7 @@ class Handler {
          $error_message = $request->get_error_message();
          $redirect_to   = add_query_arg([
                'status'  => 'error',
-               'message' => $error_message
+               'message' => esc_html($error_message)
             ],
             $page_url
          );
@@ -143,16 +143,17 @@ class Handler {
          $error_message = $insert_id->get_error_message();
          $redirect_to   = add_query_arg([
                'status'  => 'error',
-               'message' => $error_message
+               'message' => esc_html($error_message)
             ],
             $page_url
          );
       } else {
+         // TODO: Differ success messages for better translation.
          $message_method  = $this->is_update ? "updated" : "added";
          $success_message = sprintf(__("Node successfully %s.", "replicant"), $message_method);
          $redirect_to = add_query_arg( [
                'status'  => 'success',
-               'message' => $success_message
+               'message' => esc_html($success_message)
             ],
             $page_url
          );
@@ -166,7 +167,7 @@ class Handler {
             $error_message = $trust_response->get_error_message();
             $redirect_to = add_query_arg( [
                   'status'  => 'error',
-                  'message' => $error_message
+                  'message' => esc_html($error_message)
                ],
                $page_url
             );

@@ -48,7 +48,7 @@ class NodesMenu {
 
          case "accept_trust":
             // Fetch Node
-            $target_node_hash = $_GET["hash"];
+            $target_node_hash = sanitize_text_field($_GET["hash"]);
             $target_node      = \Replicant\Tables\Nodes\Functions::get_by("hash", $target_node_hash);
 
             // Accept target Node trust on current database
