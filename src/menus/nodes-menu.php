@@ -22,8 +22,8 @@ class NodesMenu {
    }
 
    public static function handle() {
-      $action = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
-      $id     = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : 0;
+      $action = isset( $_GET['action'] ) ? sanitize_text_field($_GET['action']) : 'list';
+      $id     = isset( $_GET['id'] ) ? intval($_GET['id']) : 0;
 
       switch ($action) {
          case "view":

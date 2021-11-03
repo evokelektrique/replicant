@@ -12,26 +12,26 @@ $item = Functions::get( $id );
       <ul class="replicant-node-information">
          <li>
             <span class="node-information-head"><?php esc_html_e("id", "replicant") ?></span>
-            <span class="node-information-value"><?php echo $item->id ?></span>
+            <span class="node-information-value"><?php echo esc_html($item->id) ?></span>
          </li>
          <li>
             <span class="node-information-head"><?php esc_html_e("name", "replicant") ?></span>
-            <span class="node-information-value"><?php echo $item->name ?></span>
+            <span class="node-information-value"><?php echo esc_html($item->name) ?></span>
          </li>
          <li>
             <span class="node-information-head"><?php esc_html_e("host", "replicant") ?></span>
-            <span class="node-information-value"><?php echo $item->host ?></span>
+            <span class="node-information-value"><?php echo esc_html($item->host) ?></span>
          </li>
          <li>
             <span class="node-information-head"><?php esc_html_e("port", "replicant") ?></span>
-            <span class="node-information-value"><?php echo $item->port ?></span>
+            <span class="node-information-value"><?php echo esc_html($item->port) ?></span>
          </li>
       </ul>
    </div>
 
    <?php
    // Fetch all logs related to current node
-   $node_logs = Log::get_all($item->id, ARRAY_A);
+   $node_logs = Log::get_all(intval($item->id), ARRAY_A);
    ?>
    <div class="replicant-logs-container replicant-box">
       <h2 class="replicant-heading"><?php esc_html_e("Logs", "replicant") ?></h2>

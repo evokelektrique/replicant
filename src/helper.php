@@ -36,8 +36,8 @@ class Helper {
       if($message):
       ?>
 
-      <div class="replicant-notice replicant-notice-<?= $status ?>">
-         <?= htmlspecialchars($message) ?>
+      <div class="replicant-notice replicant-notice-<?php echo esc_html($status) ?>">
+         <?php echo esc_html(htmlspecialchars($message)) ?>
       </div>
 
       <?php
@@ -53,8 +53,8 @@ class Helper {
    public static function print_badge($status) {
       ?>
 
-      <span class="replicant-badge replicant-badge-<?= $status ? "success" : "error" ?>">
-         <?= $status ? __( 'Yes', 'replicant' ) : __( 'No', 'replicant' ); ?>
+      <span class="replicant-badge replicant-badge-<?php echo $status ? "success" : "error" ?>">
+         <?php echo $status ? esc_html__('Yes', 'replicant') : esc_html__('No', 'replicant'); ?>
       </span>
 
       <?php

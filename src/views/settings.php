@@ -20,7 +20,7 @@
                   class="replicant_input"
                   name="replicant_authoriazation"
                   id="replicant_authoriazation"
-                  value="<?php echo $replicant::$default_db::authorization()->value ?>"
+                  value="<?php echo esc_html($replicant::$default_db::authorization()->value) ?>"
                   placeholder="<?php esc_html_e( "Authorization Key", "replicant" );?>"
                   readonly=""
                />
@@ -35,7 +35,7 @@
                   class="replicant_input"
                   name="replicant_acting_as"
                   id="replicant_acting_as"
-                  value="<?php echo $replicant::$default_db::acting_as()->value ?>"
+                  value="<?php echo esc_html($replicant::$default_db::acting_as()->value) ?>"
                   placeholder="<?php esc_html_e( "Authorization Key", "replicant" );?>"
                   readonly=""
                />
