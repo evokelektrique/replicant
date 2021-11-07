@@ -5,7 +5,7 @@
  * Plugin URI:        https://github.com/evokelektrique/replicant
  * Description:       Synchronize your WordPress websites with ease
  * Version:           0.6.4
- * Requires at least: 7.0
+ * Requires at least: 5.2
  * Author:            EVOKE
  * Author URI:        https://github.com/evokelektrique/
  * License:           AGPL v3
