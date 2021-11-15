@@ -111,7 +111,7 @@ class Functions {
     * @return array          Single row fetched by $wpdb
     */
    public static function get_by(string $k = null, string $v = null) {
-      if(!$value) {
+      if(!$v) {
          return;
       }
 
