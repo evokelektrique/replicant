@@ -25,7 +25,7 @@ class Log {
       global $wpdb;
 
       $table_name = \Replicant\Config::$TABLES["logs"];
-      $query      = "SELECT * FROM $table_name WHERE node_id = %d";
+      $query      = "SELECT * FROM $table_name WHERE node_id = %d ORDER BY id DESC";
       $result     = $wpdb->get_results($wpdb->prepare($query, $node_id), $output);
 
       return $result;
