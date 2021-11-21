@@ -77,8 +77,8 @@ class Publish {
          $search = $this->post_exists($metadata["replicant_post_hash"]);
 
          if($search["status"]) {
-            $delete  = wp_delete_post( $build["id"], $force );
-            $message = __("Post with id(".$build["id"].") successfully deleted.", "replicant");
+            $delete  = wp_delete_post( $search["post"]->post_id, $force );
+            $message = __("Post with id(".$search["post"]->post_id.") successfully deleted.", "replicant");
             $status  = true;
          }
       }
@@ -92,8 +92,6 @@ class Publish {
       $post_id   = $build["id"];
       $is_update = $build["is_update"];
       $metadata  = $build["metadata"];
-
-      error_log(print_r($build, true));
 
       ////////////////
       // CRUD Posts //
