@@ -61,7 +61,7 @@ class Helper {
    }
 
    /**
-    * Generate an URL from given Node ID
+    * Generate an URL from given Node
     *
     * @param  array $node
     * @return array       A list of Raw and Parsed version of generated URL
