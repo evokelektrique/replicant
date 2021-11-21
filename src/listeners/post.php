@@ -138,11 +138,18 @@ class Post {
 
       $get_metadata = get_post_meta($post->ID);
 
+      $thumbnail_options = ["size" => "full"];
+
+      $temp_data = [
+         "featured_image_url" => get_the_post_thumbnail_url($post, $thumbnail_options["size"])
+      ];
+
       return [
          "metadata"  => $get_metadata,
          "post"      => $parsed_post->to_array(),
          "is_update" => $is_update,
-         "node"      => $current_node->get_json()
+         "node"      => $current_node->get_json(),
+         "temp_data" => $temp_data
       ];
    }
 

@@ -3,6 +3,7 @@
 namespace Replicant\Publishers;
 
 use GuzzleHttp\Client;
+use Replicant\Helper;
 
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit;
@@ -16,14 +17,18 @@ class Post {
 
    public function __construct(array $body, object $target_node, bool $is_update, bool $is_delete) {
       $get_target_node = \Replicant\Tables\Nodes\Functions::get_by("hash", $target_node->hash);
-      $parsed_target_node_url = \Replicant\Helper::generate_url_from_node($target_node);
+      $parsed_target_node_url = Helper::generate_url_from_node($target_node);
       $response = $this->perform($body, $parsed_target_node_url, $is_update, $is_delete);
-      $response = json_decode($response, true);
-      \Replicant\Log::write(
-         sprintf(__("%s", "replicant"), $response["message"]),
-         $get_target_node->id,
-         1 // Info
-      );
+      if(Helper::is_json($response)) {
+         $response = json_decode($response, true);
+         \Replicant\Log::write(
+            sprintf(__("%s", "replicant"), $response["message"]),
+            $get_target_node->id,
+            1 // Info
+         );
+      } else {
+         $response = ["status" => false, "message" => "unknown"];
+      }
       return $response;
    }
 
@@ -53,7 +58,7 @@ class Post {
          );
       } catch(\GuzzleHttp\Exception\ClientException $e) {
          $error = $e->getResponse()->getBody()->getContents();
-         if(\Replicant\Helper::is_json($error)) {
+         if(Helper::is_json($error)) {
             $error_array   = json_decode($error, true);
             $error_code    = $error_array["code"];
             $error_message = $error_array["message"];

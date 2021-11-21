@@ -93,6 +93,8 @@ class Publish {
       $is_update = $build["is_update"];
       $metadata  = $build["metadata"];
 
+      error_log(print_r($build, true));
+
       ////////////////
       // CRUD Posts //
       ////////////////
@@ -105,6 +107,10 @@ class Publish {
             // Create Post
             $insert = wp_insert_post($post, true);
 
+            // Attach featured image to the post
+            $file = $build["temp_data"]["featured_image_url"];
+            $featured_image = $this->generate_featured_image($file, $insert);
+
             // Message to response back
             $message = __("Post successfully created.", "replicant");
             $status  = true;
@@ -113,6 +119,10 @@ class Publish {
             // Update Post
             $post["ID"] = $search["post"]->post_id;
             $insert = wp_update_post($post);
+
+            // Attach featured image to the post
+            $file = $build["temp_data"]["featured_image_url"];
+            $featured_image = $this->generate_featured_image($file, $insert);
 
             // Message to response back
             $message = __("Post successfully updated.", "replicant");
@@ -204,6 +214,7 @@ class Publish {
       $post_id   = $fields["post"]["ID"];
 
       // Remove unnecessary fields
+      unset($fields["metadata"]["_thumbnail_id"]);
       unset($fields["metadata"]["_edit_lock"]);
       unset($fields["metadata"]["_edit_last"]);
       unset($fields["metadata"]["_encloseme"]);
@@ -212,6 +223,7 @@ class Publish {
 
       $metadata = $fields["metadata"];
       $post = $fields["post"];
+      $temp_data = $fields["temp_data"];
 
       if($this->is_valid_metadata($metadata)) {
          $post_hash = maybe_unserialize($metadata["replicant_post_hash"][0]);
@@ -228,7 +240,8 @@ class Publish {
          "id"        => $post_id,
          "post"      => $post,
          "metadata"  => $metadata,
-         "is_update" => $is_update
+         "is_update" => $is_update,
+         "temp_data" => $temp_data
       ];
    }
 
@@ -283,6 +296,51 @@ class Publish {
       }
 
       return true;
+   }
+
+
+   /**
+    * Downloads an image from the specified URL and attaches it to a post as a post thumbnail.
+    *
+    * @param string $file     The URL of the image to download.
+    * @param int    $post_id  The post ID the post thumbnail is to be associated with.
+    * @param string $desc     Optional. Description of the image.
+    * @return string|WP_Error Attachment ID, WP_Error object otherwise.
+   */
+   private function generate_featured_image($file, $post_id, $desc = null) {
+      if(!function_exists('download_url')) {
+         require_once(ABSPATH . 'wp-admin/includes/media.php');
+         require_once(ABSPATH . 'wp-admin/includes/file.php');
+         require_once(ABSPATH . 'wp-admin/includes/image.php');
+      }
+
+      // Set variables for storage, fix file filename for query strings.
+      preg_match('/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches);
+      if(!$matches) {
+         return new \WP_Error('image_sideload_failed', __('Invalid image URL'));
+      }
+
+      $file_array = array();
+      $file_array['name'] = basename($matches[0]);
+
+      // Download file to temp location.
+      $file_array['tmp_name'] = \download_url($file);
+
+      // If error storing temporarily, return the error.
+      if(is_wp_error( $file_array['tmp_name'])) {
+         return $file_array['tmp_name'];
+      }
+
+      // Do the validation and storage stuff.
+      $id = media_handle_sideload( $file_array, $post_id, $desc );
+
+      // If error storing permanently, unlink.
+      if ( is_wp_error( $id ) ) {
+         @unlink($file_array['tmp_name']);
+         return $id;
+      }
+
+      return set_post_thumbnail($post_id, $id);
    }
 
 }

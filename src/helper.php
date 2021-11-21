@@ -109,15 +109,15 @@ class Helper {
    /**
     * Validate JSON format
     *
-    * @param  string  $text JSON String
+    * @param  $json JSON String
     * @return boolean       Validation status
     */
-   public static function is_json(string $text): bool {
-      if(empty($text)) {
+   public static function is_json($json): bool {
+      if(empty($json)) {
          return false;
       }
 
-      json_decode($text);
+      json_decode($json);
       return json_last_error() === JSON_ERROR_NONE;
    }
 
