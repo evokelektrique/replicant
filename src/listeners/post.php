@@ -136,16 +136,17 @@ class Post {
          $parsed_post = $this->do_post($post->ID, $post);
       }
 
-      $get_metadata = get_post_meta($post->ID);
+      $post_metadata = get_post_meta($post->ID);
 
       $thumbnail_options = ["size" => "full"];
 
       $temp_data = [
-         "featured_image_url" => get_the_post_thumbnail_url($post, $thumbnail_options["size"])
+         "featured_image_url" => get_the_post_thumbnail_url($post, $thumbnail_options["size"]),
+         "post_tags" => $this->get_post_tags($post->ID)
       ];
 
       return [
-         "metadata"  => $get_metadata,
+         "metadata"  => $post_metadata,
          "post"      => $parsed_post->to_array(),
          "is_update" => $is_update,
          "node"      => $current_node->get_json(),
@@ -178,6 +179,27 @@ class Post {
 
       // Do something with $product later...
       return $product;
+   }
+
+   /**
+    * Retrieve post tags
+    *
+    * @param  int   $id Post ID
+    * @return array     An array of post tags
+    */
+   private function get_post_tags(int $id): array {
+      $temp_tags = get_the_tags($id);
+      $tags = [];
+
+      if($temp_tags) {
+         foreach($temp_tags as $tag) {
+            $tags[] = $tag->name;
+         }
+
+         return $tags;
+      }
+
+      return [];
    }
 
 }

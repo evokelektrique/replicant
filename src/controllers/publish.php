@@ -86,12 +86,25 @@ class Publish {
       return rest_ensure_response(["status" => $status, "message" => $message]);
    }
 
+   //////////////////////////////////
+   // TODO: Clean up this function //
+   //////////////////////////////////
    public function create_post(\WP_REST_Request $request) {
       $build     = $this->build_post($request);
       $post      = $build["post"];
       $post_id   = $build["id"];
       $is_update = $build["is_update"];
       $metadata  = $build["metadata"];
+      $tags      = $build["temp_data"]["post_tags"];
+      $file      = $build["temp_data"]["featured_image_url"];
+
+      $options = [
+         "tags" => [
+            // If true, don't delete existing tags, just add on.
+            // If false, replace the tags with the new tags.
+            "append" => true
+         ]
+      ];
 
       ////////////////
       // CRUD Posts //
@@ -106,8 +119,14 @@ class Publish {
             $insert = wp_insert_post($post, true);
 
             // Attach featured image to the post
-            $file = $build["temp_data"]["featured_image_url"];
-            $featured_image = $this->generate_featured_image($file, $insert);
+            if($file) {
+               $featured_image = $this->generate_featured_image($file, $insert);
+            }
+
+            // Attach tags to the post
+            if($tags) {
+               wp_set_post_tags($insert, $tags, $options["tags"]["append"]);
+            }
 
             // Message to response back
             $message = __("Post successfully created.", "replicant");
@@ -119,8 +138,14 @@ class Publish {
             $insert = wp_update_post($post);
 
             // Attach featured image to the post
-            $file = $build["temp_data"]["featured_image_url"];
-            $featured_image = $this->generate_featured_image($file, $insert);
+            if($file) {
+               $featured_image = $this->generate_featured_image($file, $insert);
+            }
+
+            // Attach tags to the post
+            if($tags) {
+               wp_set_post_tags($insert, $tags, $options["tags"]["append"]);
+            }
 
             // Message to response back
             $message = __("Post successfully updated.", "replicant");
