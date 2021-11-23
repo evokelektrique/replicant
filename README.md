@@ -1,7 +1,7 @@
 <h1>
    <img src="./replicant.png" alt="Replicant" />
 </h1>
-   
+
 An advanced WordPress plugin to synchronize posts and pages across all your websites.
 
 ## Features
@@ -38,3 +38,5 @@ First, all your WordPress websites have to have this plugin installed already. O
    - [ ] Add `Post` publisher check how should current node act based on its `acting_as`
    - [ ] Add website / github pages
    - [ ] Add Unit tests
+   - [ ] Add CRUD for categories
+   - [ ] Add CRUD for tags
