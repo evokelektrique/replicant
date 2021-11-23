@@ -39,4 +39,4 @@ First, all your WordPress websites have to have this plugin installed already. O
    - [ ] Add website / github pages
    - [ ] Add Unit tests
    - [ ] Add CRUD for categories
-   - [ ] Add CRUD for tags
+   - [X] Add CRUD for tags
