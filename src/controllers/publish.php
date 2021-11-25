@@ -90,19 +90,24 @@ class Publish {
    // TODO: Clean up this function //
    //////////////////////////////////
    public function create_post(\WP_REST_Request $request) {
-      $build     = $this->build_post($request);
-      $post      = $build["post"];
-      $post_id   = $build["id"];
-      $is_update = $build["is_update"];
-      $metadata  = $build["metadata"];
-      $tags      = $build["temp_data"]["post_tags"];
-      $file      = $build["temp_data"]["featured_image_url"];
+      $build      = $this->build_post($request);
+      $post       = $build["post"];
+      $post_id    = $build["id"];
+      $is_update  = $build["is_update"];
+      $metadata   = $build["metadata"];
+      $tags       = $build["temp_data"]["post_tags"];
+      $file       = $build["temp_data"]["featured_image_url"];
+      $categories = $build["temp_data"]["post_categories"];
 
       $options = [
          "tags" => [
             // If true, don't delete existing tags, just add on.
             // If false, replace the tags with the new tags.
             "append" => true
+         ],
+         "categories" => [
+            // Same as `tags` explained above.
+            "append" => false
          ]
       ];
 
@@ -128,6 +133,8 @@ class Publish {
                wp_set_post_tags($insert, $tags, $options["tags"]["append"]);
             }
 
+            $created_categories = $this->create_categories($insert, $categories, $options["categories"]["append"]);
+
             // Message to response back
             $message = __("Post successfully created.", "replicant");
             $status  = true;
@@ -146,6 +153,8 @@ class Publish {
             if($tags) {
                wp_set_post_tags($insert, $tags, $options["tags"]["append"]);
             }
+
+            $created_categories = $this->create_categories($insert, $categories, $options["categories"]["append"]);
 
             // Message to response back
             $message = __("Post successfully updated.", "replicant");
@@ -364,6 +373,44 @@ class Publish {
       }
 
       return set_post_thumbnail($post_id, $id);
+   }
+
+   /**
+    * Create categories
+    *
+    * @param  array          $categories  List of categories
+    * @param  bool           $append      If true, don't delete existing categories, just add on.
+    *                                     If false, replace the categories with the new categories.
+    * @param  OBJECT|A_ARRAY $return_type "get_term" return type
+    * @return array                       List of created categories IDs
+    */
+   private function create_categories(int $post_id, array $categories, bool $append = false, $return_type = OBJECT): array {
+      // TODO: Change the function to work with sub categories too.
+
+      if(!function_exists('wp_create_category')) {
+         require_once(ABSPATH . 'wp-admin/includes/taxonomy.php');
+      }
+
+      $filter = 'raw'; // "get_term" sanitize type
+      $ids = [];
+
+      foreach($categories as $category) {
+         $term = get_term($category["slug"], $category["taxonomy"], $return_type, $filter);
+         if(!$term || is_wp_error($term)) {
+            $id = wp_create_category($category["name"]);
+            $ids[] = $id;
+         } else {
+            $ids[] = $category["term_id"]; // TODO: Or maybe use "$term"
+         }
+      }
+
+      $create_categories = wp_set_post_categories($post_id, $ids, $append);
+
+      if(is_wp_error($create_categories)) {
+         return [];
+      }
+
+      return $ids;
    }
 
 }

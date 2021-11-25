@@ -137,12 +137,13 @@ class Post {
       }
 
       $post_metadata = get_post_meta($post->ID);
-
+      $post_categories = get_the_category($post->ID);
       $thumbnail_options = ["size" => "full"];
 
       $temp_data = [
          "featured_image_url" => get_the_post_thumbnail_url($post, $thumbnail_options["size"]),
-         "post_tags" => $this->get_post_tags($post->ID)
+         "post_tags" => $this->get_post_tags($post->ID),
+         "post_categories" => $post_categories
       ];
 
       return [
