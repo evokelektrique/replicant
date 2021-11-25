@@ -1,8 +1,13 @@
-<h1>
-   <img src="./replicant.png" alt="Replicant" />
-</h1>
+<p align="center">
+   <img src="./replicant.png" alt="Replicant" width="546" />
+</p>
 
-An advanced WordPress plugin to synchronize posts and pages across all your websites.
+<p align="center">
+   An advanced WordPress plugin to synchronize posts and pages across all your websites.
+</p>
+
+# Getting started
+This section describes how to install and configure the plugin.
 
 ## Features
 
@@ -11,10 +16,6 @@ An advanced WordPress plugin to synchronize posts and pages across all your webs
    - [ ] Sync WordPress comments
    - [ ] Sync WordPress users
    - [ ] Sync WooCommerce products
-
-# Getting started
-
-This section describes how to install and configure the plugin.
 
 ## Installation
 
