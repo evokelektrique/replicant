@@ -38,5 +38,5 @@ First, all your WordPress websites have to have this plugin installed already. O
    - [ ] Add `Post` publisher check how should current node act based on its `acting_as`
    - [ ] Add website / github pages
    - [ ] Add Unit tests
-   - [ ] Add CRUD for categories
+   - [X] Add CRUD for categories
    - [X] Add CRUD for tags
