@@ -28,16 +28,3 @@ The other way is by cloning the repo with `git clone https://github.com/evokelek
 First, all your WordPress websites have to have this plugin installed already. Once that's set up, you need to configure your nodes according to the **Trust model** and when the target node accepted your request, your content will be synced from now on.
 
 > Note that currently the depth limit of nodes could be only 1 and maybe in futrue updates we will increase the limit.
-
-# TODO
-   - [ ] Improve UI and CSS styles
-   - [ ] Improve logging
-   - [ ] Improve settings
-   - [ ] Add more translations
-   - [ ] Implement logs expiration
-   - [ ] Add `acting as` model
-   - [ ] Add `Post` publisher check how should current node act based on its `acting_as`
-   - [ ] Add website / github pages
-   - [ ] Add Unit tests
-   - [X] Add CRUD for categories
-   - [X] Add CRUD for tags
