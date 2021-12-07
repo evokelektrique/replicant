@@ -1,1 +1,4 @@
-# There will be a build script, maybe not
+# Needs improvement
+
+# Compile assets
+npx mix --production
