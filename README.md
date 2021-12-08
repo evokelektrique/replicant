@@ -4,6 +4,11 @@
 
 <p align="center">
    An advanced WordPress plugin to synchronize posts and pages across all your websites.
+   <br>
+   <br>
+   <a href="https://github.com/evokelektrique/replicant/blob/master/LICENSE.txt"><img alt="GitHub license" src="https://img.shields.io/github/license/evokelektrique/replicant?style=for-the-badge"></a>
+   <img alt="WordPress Plugin Version" src="https://img.shields.io/wordpress/plugin/v/replicant?style=for-the-badge">
+   <img alt="WordPress Plugin Downloads" src="https://img.shields.io/wordpress/plugin/dt/replicant?label=TOTAL%20DOWNLOADS&style=for-the-badge">
 </p>
 
 # Getting started
