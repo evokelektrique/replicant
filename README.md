@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-   An advanced WordPress plugin to synchronize posts and pages across all your websites.
+   <b>An advanced WordPress plugin to synchronize posts and pages across all your websites.</b>
    <br>
    <br>
    <a href="https://github.com/evokelektrique/replicant/blob/master/LICENSE.txt"><img alt="GitHub license" src="https://img.shields.io/github/license/evokelektrique/replicant?style=for-the-badge"></a>
