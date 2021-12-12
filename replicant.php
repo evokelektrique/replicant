@@ -17,6 +17,8 @@
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit;
 
+use \Replicant\Plugin;
+
 require_once __DIR__ . "/vendor/autoload.php";
 
-$GLOBALS["replicant"] = \Replicant\Plugin::get_instance();
+$GLOBALS["replicant"] = Plugin::get_instance();

@@ -128,6 +128,7 @@ class Plugin {
       });
 
       Hooks::add_action("init", function() {
+         // Load languages
          load_plugin_textdomain("replicant", false, dirname(plugin_basename(__FILE__)) . '/../languages');
       });
    }
