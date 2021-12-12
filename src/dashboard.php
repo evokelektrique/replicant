@@ -16,23 +16,40 @@ class Dashboard {
 
       // Admin area table list custom columns
       add_filter( 'manage_post_posts_columns', function($columns) {
-         $columns['replicant'] = __( 'Replicant', 'replicant' );
+         $icon_url = \Replicant\Config::$ROOT_URL . "../dist/images/icon_16x16.png";
+         $columns['replicant'] = "<img src='$icon_url' />";
          return $columns;
       });
 
       add_action( 'manage_post_posts_custom_column', function($column, $post_id) {
          $metadata = get_post_meta( $post_id );
+         $css_styles = "color:white;background:#2196f3;display:block;text-align:center;font-size:13px;padding:5px;border-radius:5px;box-shadow:0px 0px 3px 3px #aed6f7;";
+
          // Replicant column
          if ( 'replicant' === $column ) {
             if(isset($metadata["replicant_node_hash"]) && !empty($metadata["replicant_node_hash"])) {
+               $current_node = new \Replicant\Node();
                $node_hash = $metadata["replicant_node_hash"][0];
-               echo $node_hash;
-               // error_log(print_r(\Replicant\Tables\Nodes\Functions::get_by("hash", $node_hash), true));
+               $node = Tables\Nodes\Functions::get_by("hash", $node_hash);
+               if($current_node->hash === $node_hash) {
+                  echo "<span style='$css_styles'>";
+                  echo __("Sent", "replicant");
+                  echo "<br>";
+                  echo "<b>";
+                  echo "</b>";
+                  echo "<span>";
+               } else {
+                  echo "<span style='$css_styles'>";
+                  echo __("Received from", "replicant");
+                  echo "<br>";
+                  echo "<b>";
+                  echo $node->name;
+                  echo "</b>";
+                  echo "<span>";
+               }
             }
          }
       }, 10, 2);
-
-
    }
 
    /**
@@ -45,7 +62,7 @@ class Dashboard {
    }
 
    /**
-    * Load dashboard css/js files only for Dashboard/Admin area
+    * Load dashboard css/js files only for Dashboard/Replicant Pages
     */
    public static function admin_assets() {
       if ( isset( $_GET["page"] ) && ! empty( $_GET["page"] ) && strpos($_GET["page"], "replicant-") !== false  ) {
