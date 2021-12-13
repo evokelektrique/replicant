@@ -33,3 +33,10 @@ The other way is by cloning the repo with `git clone https://github.com/evokelek
 First, all your WordPress websites have to have this plugin installed already. Once that's set up, you need to configure your nodes according to the **Trust model** and when the target node accepted your request, your content will be synced from now on.
 
 > Note that currently the depth limit of nodes could be only 1 and maybe in futrue updates we will increase the limit.
+
+## Last words of a replicant
+
+<img src="https://c.tenor.com/eoatSRyMGEQAAAAC/blade-runner-rutger-hauer.gif" />
+
+> I've seen things you people wouldn't believe... Attack ships on fire off the shoulder of Orion... I watched C-beams glitter in the dark near the Tannhäuser Gate. All those moments will be lost in time, like tears in rain... Time to die. 
+> ([Source](https://en.wikipedia.org/wiki/Tears_in_rain_monologue))
